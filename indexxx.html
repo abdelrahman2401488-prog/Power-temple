@@ -25,14 +25,16 @@
         </a>
         <nav class="nav">
           <a class="active" href="indexxx.html">Home</a>
+          <a href="#concept">Concept</a>
+          <a href="services.html">Services</a>
           <a href="memberships.html">Memberships</a>
-          <a href="auth/login.html">Login</a>
+          <a href="auth/login.html" data-open-login-modal>Login</a>
           <a href="#features">Features</a>
           <a href="#offers">Offers</a>
           <a href="#pricing">Pricing</a>
         </nav>
         <div class="header-actions" aria-label="Quick actions">
-          <a class="header-icon-link" href="auth/login.html" title="Profile" aria-label="Profile">
+          <a class="header-icon-link" href="auth/login.html" title="Profile" aria-label="Profile" data-open-login-modal>
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M12 12.5c-2.62 0-4.75-2.13-4.75-4.75S9.38 3 12 3s4.75 2.13 4.75 4.75-2.13 4.75-4.75 4.75Zm0-8a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5Z"></path>
               <path d="M19.25 21h-1.5v-1.25c0-2.62-2.13-4.75-4.75-4.75h-2c-2.62 0-4.75 2.13-4.75 4.75V21h-1.5v-1.25c0-3.45 2.8-6.25 6.25-6.25h2c3.45 0 6.25 2.8 6.25 6.25V21Z"></path>
@@ -64,7 +66,19 @@
             <source src="assets/videos/hero-bg.mp4" type="video/mp4">
           </video>
           <div class="hero-video-overlay"></div>
+          <div class="hero-video-text" aria-label="Hero message">INHALE PASSION</div>
         </div>
+        <section class="hero-story" id="concept" aria-label="Power Temple story">
+          <p>
+            Power Temple kick started in 2017 with a game changing mindset to start an evolution in the fitness industry, setting new benchmarks for rapid and outstanding physical and mental transformations.
+          </p>
+          <p>
+            The concept being derived from an Olympic champion and the well-established fitness figure, Lazar Angelov upholds our belief that any transformation starts from within, one trains, disciplines, and strengthens the mind first to boost the body's activity to unlock your highest performance.
+          </p>
+          <p>
+            We strive to influence our clients to do better in all aspects of life as we believe that our membership is not just about a room full equipment. It's providing a better and healthier lifestyle.
+          </p>
+        </section>
         <div class="hero-grid">
           <div class="hero-copy fade-in">
             <span class="eyebrow">Revolutionize Your Fitness</span>
@@ -73,7 +87,7 @@
               Join thousands of elite athletes using Power Temple. Real-time coaching from certified trainers, advanced analytics, and a community obsessed with excellence. Your transformation starts now.
             </p>
             <div class="hero-actions">
-              <a class="btn btn-primary" href="auth/login.html">Start Your Journey</a>
+              <a class="btn btn-primary" href="auth/login.html" data-open-login-modal>Start Your Journey</a>
               <a class="btn btn-secondary" href="member/browse-classes.html">Explore Classes</a>
             </div>
             <div class="chip-row">
@@ -334,7 +348,7 @@
             <h2>Ready to Transform?</h2>
             <p>Join 2,500+ athletes who've already started their journey with Power Temple. Your best self is waiting.</p>
           </div>
-          <a class="btn btn-primary" href="auth/login.html">Get Started Free</a>
+          <a class="btn btn-primary" href="auth/login.html" data-open-login-modal>Get Started Free</a>
         </div>
       </section>
 
@@ -365,5 +379,32 @@
       </section>
     </div>
   </aside>
+
+  <div id="quickLoginModal" class="quick-login-modal hidden" aria-hidden="true">
+    <div class="quick-login-backdrop" data-close-login-modal></div>
+    <section class="quick-login-card" role="dialog" aria-modal="true" aria-label="Quick login">
+      <button class="quick-login-close" type="button" aria-label="Close" data-close-login-modal>×</button>
+      <h2 class="quick-login-title">WELCOME BACK</h2>
+      <p class="quick-login-subtitle">Sign in to your Power Temple account</p>
+
+      <div class="quick-login-roles" role="tablist" aria-label="Account role">
+        <button class="quick-role-pill active" type="button" data-role-choice="admin">ADMIN</button>
+        <button class="quick-role-pill" type="button" data-role-choice="trainer">TRAINER</button>
+        <button class="quick-role-pill" type="button" data-role-choice="member">MEMBER</button>
+      </div>
+
+      <form id="quickLoginForm" class="quick-login-form">
+        <input id="quickLoginRole" type="hidden" value="admin" />
+
+        <label for="quickLoginUsername">EMAIL ADDRESS</label>
+        <input id="quickLoginUsername" type="text" placeholder="you@example.com" required />
+
+        <label for="quickLoginPassword">PASSWORD</label>
+        <input id="quickLoginPassword" type="password" placeholder="••••••••" required />
+
+        <button class="quick-login-submit" type="submit">Sign In →</button>
+      </form>
+    </section>
+  </div>
 </body>
 </html>

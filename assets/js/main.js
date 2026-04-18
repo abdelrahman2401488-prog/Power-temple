@@ -855,6 +855,8 @@ function addClass(e) {
 
 // === COMMON FEATURES ===
 function initializeCommonFeatures() {
+  initializeQuickLoginModal();
+
   // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', function (e) {
@@ -878,6 +880,88 @@ function initializeCommonFeatures() {
   // Form validation
   document.querySelectorAll('form').forEach((form) => {
     form.addEventListener('submit', validateForm);
+  });
+}
+
+function initializeQuickLoginModal() {
+  const modal = document.getElementById('quickLoginModal');
+  if (!modal) return;
+
+  const openTriggers = document.querySelectorAll('[data-open-login-modal]');
+  const closeTriggers = modal.querySelectorAll('[data-close-login-modal]');
+  const form = document.getElementById('quickLoginForm');
+  const roleInput = document.getElementById('quickLoginRole');
+  const roleButtons = modal.querySelectorAll('[data-role-choice]');
+
+  const openModal = () => {
+    modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+  };
+
+  const closeModal = () => {
+    modal.classList.add('hidden');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+  };
+
+  openTriggers.forEach((trigger) => {
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal();
+    });
+  });
+
+  closeTriggers.forEach((trigger) => {
+    trigger.addEventListener('click', closeModal);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+      closeModal();
+    }
+  });
+
+  roleButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const selectedRole = button.getAttribute('data-role-choice');
+      if (roleInput) roleInput.value = selectedRole;
+
+      roleButtons.forEach((item) => item.classList.remove('active'));
+      button.classList.add('active');
+    });
+  });
+
+  if (!form) return;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const identifier = document.getElementById('quickLoginUsername')?.value.trim() || '';
+    const password = document.getElementById('quickLoginPassword')?.value.trim() || '';
+    const selectedRole = roleInput?.value || null;
+
+    if (!identifier || !password) {
+      showNotification('Please fill in all required fields', 'error');
+      return;
+    }
+
+    if (typeof auth === 'undefined') {
+      showNotification('Authentication service is unavailable. Please refresh.', 'error');
+      return;
+    }
+
+    const result = auth.login(identifier, password, selectedRole);
+
+    if (result.success) {
+      showNotification(result.message, 'success', 1200);
+      closeModal();
+      setTimeout(() => {
+        auth.redirectToDashboard();
+      }, 400);
+    } else {
+      showNotification(result.message, 'error');
+    }
   });
 }
 

@@ -30,69 +30,28 @@
       </div>
     </header>
 
-    <main class="container login-grid">
-      <section class="hero-copy fade-in login-side">
-        <span class="eyebrow">Welcome Back</span>
-        <h1>Your Fitness Journey Awaits</h1>
-        <p>Access your personalized dashboard to book premium classes, track elite-level progress, and connect with your community of champions.</p>
-        <div class="chip-row">
-          <span class="pill success">Instant Access</span>
-          <span class="pill success">Real-Time Booking</span>
-          <span class="pill success">Live Classes</span>
-        </div>
-        <div class="hero-actions">
-          <a class="btn btn-secondary" href="../indexxx.html">← Home</a>
-          <a class="btn btn-ghost" href="register.html">Create Account</a>
-        </div>
-      </section>
+    <main class="container auth-shell">
+      <section class="auth-card fade-in" aria-label="Login form">
+        <h1 class="auth-title">WELCOME BACK</h1>
+        <p class="auth-subtitle">Sign in to your Power Temple account</p>
 
-      <section class="form-card login-panel fade-in">
-        <div style="margin-bottom: 28px;">
-          <span class="eyebrow">Sign In</span>
-          <h2>Jump Into Training</h2>
-          <p>Select your account type and sign in to access your personalized fitness hub.</p>
+        <div class="auth-role-switch" role="tablist" aria-label="Account type">
+          <button class="role-pill active" type="button" data-role-choice="admin">ADMIN</button>
+          <button class="role-pill" type="button" data-role-choice="trainer">TRAINER</button>
+          <button class="role-pill" type="button" data-role-choice="member">MEMBER</button>
         </div>
 
-        <form id="loginForm">
-          <label>
-            Account Type
-            <select id="loginRole" required>
-              <option value="member">Member</option>
-              <option value="trainer">Trainer</option>
-              <option value="admin">Administrator</option>
-            </select>
-          </label>
+        <form id="loginForm" class="auth-form">
+          <input id="loginRole" type="hidden" value="admin" />
 
-          <label>
-            Username
-            <input id="loginUsername" type="text" placeholder="your.username" required />
-          </label>
+          <label for="loginUsername">EMAIL ADDRESS</label>
+          <input id="loginUsername" class="auth-input" type="text" placeholder="you@example.com" required />
 
-          <label>
-            Password
-            <input id="loginPassword" type="password" placeholder="••••••••" required />
-          </label>
+          <label for="loginPassword">PASSWORD</label>
+          <input id="loginPassword" class="auth-input" type="password" placeholder="••••••••" required />
 
-          <button class="btn btn-primary" type="submit" style="width: 100%;">Sign In</button>
+          <button class="btn auth-submit" type="submit">Sign In →</button>
         </form>
-
-        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(0, 212, 255, 0.15);">
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;"><strong>Test Demo Accounts:</strong></p>
-          <div style="display: grid; gap: 8px; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">
-            <div>Admin: <code style="background: rgba(0, 212, 255, 0.1); padding: 4px 8px; border-radius: 4px;">admin / admin123</code></div>
-            <div>Trainer: <code style="background: rgba(0, 212, 255, 0.1); padding: 4px 8px; border-radius: 4px;">coach_maya / maya123</code></div>
-            <div>Member: <code style="background: rgba(0, 212, 255, 0.1); padding: 4px 8px; border-radius: 4px;">john_doe / john123</code></div>
-          </div>
-          <div class="chip-row" style="gap: 6px; margin-top: 12px;">
-            <button class="btn btn-secondary" type="button" data-demo="member" style="padding: 10px 14px; font-size: 0.85rem;">Test: Member</button>
-            <button class="btn btn-secondary" type="button" data-demo="trainer" style="padding: 10px 14px; font-size: 0.85rem;">Test: Trainer</button>
-            <button class="btn btn-secondary" type="button" data-demo="admin" style="padding: 10px 14px; font-size: 0.85rem;">Test: Admin</button>
-          </div>
-        </div>
-
-        <p style="margin-top: 16px; font-size: 0.9rem; color: var(--text-secondary);">
-          New to Power Temple? <a href="register.html" style="color: var(--accent); font-weight: 600;">Create your account</a>
-        </p>
       </section>
     </main>
   </div>
