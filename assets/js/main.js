@@ -307,7 +307,7 @@ function renderMarketCart() {
   count.textContent = String(egyptianMarketCart.reduce((sum, item) => sum + item.qty, 0));
 
   const total = getMarketCartTotal();
-  checkoutBtn.textContent = `CHECK OUT — ${formatEGP(total)} EGP`;
+  checkoutBtn.textContent = `CHECK OUT — ${formatEGP(total)}`;
 
   list.querySelectorAll('[data-qty-minus]').forEach((btn) => {
     btn.addEventListener('click', () => changeMarketCartQty(btn.getAttribute('data-qty-minus'), -1));
@@ -1076,10 +1076,7 @@ function toggleMobileMenu() {
 
 // Format currency
 function formatCurrency(amount) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(amount);
+  return formatEGP(amount);
 }
 
 // Format date

@@ -736,6 +736,16 @@ body[data-page="services"] .hero-video-text {
   margin-bottom: 16px;
 }
 
+.class-photo {
+  display: block;
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(112, 147, 192, 0.24);
+}
+
 .panel-head h3,
 .class-card h3,
 .plan-card h3,

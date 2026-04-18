@@ -523,7 +523,17 @@ const PowerTempleAPI = {
       return { success: false, message: 'Class not found' };
     }
 
-    const classFee = 12;
+    const classFeeByClassId = {
+      1: 1000, // Sunrise Power Blast
+      3: 1400, // Mobility Flow
+      4: 1200, // Boxing Supremacy
+    };
+
+    const classFee = classFeeByClassId[classId] || Number(paymentData?.amount || 0);
+    if (!classFee || classFee <= 0) {
+      return { success: false, message: 'Invalid class fee amount' };
+    }
+
     const paymentResult = this.processPayment({
       ...paymentData,
       memberId,
