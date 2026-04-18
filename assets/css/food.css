@@ -227,6 +227,47 @@
   gap: var(--spacing-md);
 }
 
+.food-gallery {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.food-gallery-card {
+  background: var(--glass);
+  backdrop-filter: var(--blur);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  transition: all var(--transition-base);
+}
+
+.food-gallery-card:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  box-shadow: var(--shadow-neon);
+  transform: translateY(-4px);
+}
+
+.food-gallery-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.food-gallery-card h4 {
+  margin: var(--spacing-md) var(--spacing-lg) 0;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+}
+
+.food-gallery-card p {
+  margin: var(--spacing-xs) var(--spacing-lg) var(--spacing-lg);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: 1.7;
+}
+
 .food-item {
   background: var(--glass);
   backdrop-filter: var(--blur);
@@ -311,6 +352,10 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .food-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .meal-plans-grid {
     grid-template-columns: 1fr;
   }
@@ -326,6 +371,10 @@
   }
 
   .nutrition-guide {
+    grid-template-columns: 1fr;
+  }
+
+  .food-gallery {
     grid-template-columns: 1fr;
   }
 
