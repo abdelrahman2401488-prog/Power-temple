@@ -112,7 +112,8 @@ body[data-page="services"] main.container {
 body[data-page="landing"] .header-inner,
 body[data-page="concept"] .header-inner,
 body[data-page="services"] .header-inner {
-  min-height: 92px;
+  min-height: 150px;
+  flex-wrap: nowrap;
 }
 
 body[data-page="landing"] .brand,
@@ -246,7 +247,7 @@ body[data-page="services"] .hero-video-bg {
   position: relative;
   width: min(100%, 420px);
   background: #090a0d;
-  border: 1px solid rgba(205, 230, 52, 0.45);
+  border: 1px solid rgba(120, 145, 177, 0.3);
   border-radius: 14px;
   box-shadow: 0 26px 64px rgba(0, 0, 0, 0.55);
   padding: 24px;
@@ -301,8 +302,8 @@ body[data-page="services"] .hero-video-bg {
 }
 
 .quick-role-pill.active {
-  background: #d8f82e;
-  border-color: #d8f82e;
+  background: #41ceff;
+  border-color: #41ceff;
   color: #101318;
 }
 
@@ -392,15 +393,26 @@ body[data-page="services"] .hero-video-bg {
 }
 
 .brand-mark {
-  width: 38px;
-  height: 38px;
-  font-size: 1rem;
-  color: #071019;
-  box-shadow: 0 10px 24px rgba(39, 194, 255, 0.25);
+  position: relative;
+  top: -50px;
+  width: 150px;
+  height: 150px;
+  font-size: 0;
+  color: transparent;
+  flex-shrink: 0;
+}
+
+.brand > span:not(.brand-mark) {
+  display: none;
 }
 
 .nav {
-  gap: 22px;
+  gap: 28px;
+  align-self: flex-start;
+}
+
+.nav a {
+  font-size: 3.2rem;
 }
 
 .header-actions {
