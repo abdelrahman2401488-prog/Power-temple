@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Healthy Nutrition | Power Temple</title>
+  <link rel="stylesheet" href="../assets/css/variable.css" />
+  <link rel="stylesheet" href="../assets/css/layout.css" />
+  <link rel="stylesheet" href="../assets/css/components.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <link rel="stylesheet" href="../assets/css/food.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+  <link rel="stylesheet" href="../assets/css/pro-theme.css" />
+  <script src="../assets/js/api-mock.js" defer></script>
+  <script src="../assets/js/auth.js" defer></script>
+  <script src="../assets/js/main.js" defer></script>
+</head>
+<body data-page="member">
+  <div class="app">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../indexxx.html">
+          <span class="brand-mark">PT</span>
+          <span>Power Temple</span>
+        </a>
+        <nav class="nav">
+          <a href="browse-classes.html">Classes</a>
+          <a href="my-bookings.html">My Bookings</a>
+          <a href="healthy-food.html" class="active">Nutrition</a>
+          <a href="../auth/login.html">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div>
+            <h2>Elite Nutrition Guide</h2>
+            <p>Fuel your body for peak performance. Science-backed nutrition strategies from industry experts.</p>
+          </div>
+          <a class="btn btn-primary" href="my-bookings.html">Back to Classes</a>
+        </div>
+
+        <div class="section-head" style="margin-bottom: 32px;">
+          <div>
+            <h3>Nutrition Fundamentals</h3>
+            <p>Optimize your diet to support training, recovery, and long-term transformation.</p>
+          </div>
+        </div>
+
+        <div class="feature-grid stagger" style="margin-bottom: 40px;">
+          <article class="feature-card">
+            <div class="icon">🥗</div>
+            <h3>Pre-Workout Fueling</h3>
+            <p>Consume complex carbs and lean protein 2-3 hours before training. Examples: oatmeal with eggs, rice with chicken, sweet potato with lean beef.</p>
+          </article>
+          <article class="feature-card">
+            <div class="icon">🍎</div>
+            <h3>Post-Workout Recovery</h3>
+            <p>Protein and carbs within 30 minutes post-exercise for optimal muscle repair and glycogen replenishment. Protein shakes, Greek yogurt, or solid meals.</p>
+          </article>
+          <article class="feature-card">
+            <div class="icon">💧</div>
+            <h3>Hydration Protocol</h3>
+            <p>Drink half your body weight (in pounds) in ounces daily. Increase during intense training. Electrolyte supplements during long sessions.</p>
+          </article>
+          <article class="feature-card">
+            <div class="icon">📊</div>
+            <h3>Macro Breakdown</h3>
+            <p>50% carbs, 25% protein, 25% fats for muscle building. Adjust based on goals: cut at 40% carbs / 30% protein / 30% fats.</p>
+          </article>
+          <article class="feature-card">
+            <div class="icon">🌙</div>
+            <h3>Sleep Nutrition</h3>
+            <p>Casein protein before bed for sustained amino acid release. Avoid caffeine after 2 PM. Magnesium supplements for deeper sleep.</p>
+          </article>
+          <article class="feature-card">
+            <div class="icon">🏆</div>
+            <h3>Supplement Stack</h3>
+            <p>Creatine monohydrate, BCAAs, whey protein, multivitamin, fish oil. Consult coaches for personalized recommendations.</p>
+          </article>
+        </div>
+
+        <div class="panel-head" style="margin-bottom: 28px;">
+          <div>
+            <h3>Sample Elite Meal Plans</h3>
+            <p>Professional nutrition templates designed by certified nutritionists.</p>
+          </div>
+        </div>
+
+        <div class="class-grid" style="margin-bottom: 40px;">
+          <article class="plan-card">
+            <h3>🔥 Muscle Building</h3>
+            <p>High protein, moderate carbs, lean fats. Perfect for strength and hypertrophy athletes.</p>
+            <div style="margin: 16px 0; padding: 16px; background: rgba(0, 212, 255, 0.08); border-radius: 12px;">
+              <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                <strong>Breakfast:</strong> 3 eggs + oatmeal + berries<br/>
+                <strong>Snack:</strong> Protein shake + banana<br/>
+                <strong>Lunch:</strong> Grilled chicken + rice + broccoli<br/>
+                <strong>Pre-Workout:</strong> Rice cakes + honey<br/>
+                <strong>Post-Workout:</strong> Whey protein + dextrose<br/>
+                <strong>Dinner:</strong> Salmon + sweet potato + asparagus<br/>
+                <strong>Before Bed:</strong> Casein shake
+              </div>
+            </div>
+            <span class="pill success">~3,200 cal</span>
+          </article>
+
+          <article class="plan-card">
+            <h3>⚡ Fat Loss</h3>
+            <p>High protein, moderate carbs, deficit calories. Maximize fat loss while preserving muscle.</p>
+            <div style="margin: 16px 0; padding: 16px; background: rgba(255, 0, 110, 0.08); border-radius: 12px;">
+              <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                <strong>Breakfast:</strong> Egg whites + Greek yogurt<br/>
+                <strong>Snack:</strong> Protein shake + almonds<br/>
+                <strong>Lunch:</strong> Lean turkey + quinoa + salad<br/>
+                <strong>Pre-Workout:</strong> Black coffee + BCAA<br/>
+                <strong>Post-Workout:</strong> Whey isolate<br/>
+                <strong>Dinner:</strong> White fish + vegetables + brown rice<br/>
+                <strong>Before Bed:</strong> Low-fat cottage cheese
+              </div>
+            </div>
+            <span class="pill warning">~1,800 cal</span>
+          </article>
+
+          <article class="plan-card">
+            <h3>💪 Strength Athlete</h3>
+            <p>High protein, high carbs, adequate fats. Fuel maximum performance and power.</p>
+            <div style="margin: 16px 0; padding: 16px; background: rgba(0, 208, 132, 0.08); border-radius: 12px;">
+              <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                <strong>Breakfast:</strong> 4 eggs + pancakes + maple syrup<br/>
+                <strong>Snack:</strong> Protein bar + sports drink<br/>
+                <strong>Lunch:</strong> Beef + pasta + olive oil<br/>
+                <strong>Pre-Workout:</strong> Rice + chicken + banana<br/>
+                <strong>Post-Workout:</strong> Whey + dextrose + creatine<br/>
+                <strong>Dinner:</strong> Salmon + potatoes + vegetables<br/>
+                <strong>Before Bed:</strong> Full-fat milk + casein
+              </div>
+            </div>
+            <span class="pill success">~4,000 cal</span>
+          </article>
+
+          <article class="plan-card">
+            <h3>🧘 Recovery Focus</h3>
+            <p>Balanced macros, anti-inflammatory foods, emphasis on micronutrients and sleep nutrition.</p>
+            <div style="margin: 16px 0; padding: 16px; background: rgba(255, 165, 0, 0.08); border-radius: 12px;">
+              <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                <strong>Breakfast:</strong> Smoothie bowl with berries<br/>
+                <strong>Snack:</strong> Mixed nuts + herbal tea<br/>
+                <strong>Lunch:</strong> Turkey wrap + vegetables<br/>
+                <strong>Snack:</strong> Fruit + nut butter<br/>
+                <strong>Dinner:</strong> Baked chicken + quinoa + salad<br/>
+                <strong>Supplements:</strong> Magnesium + omega-3<br/>
+                <strong>Before Bed:</strong> Warm milk + honey
+              </div>
+            </div>
+            <span class="pill">~2,400 cal</span>
+          </article>
+        </div>
+
+        <div class="panel-head" style="margin-bottom: 28px;">
+          <div>
+            <h3>Foods to Master</h3>
+            <p>High-quality protein and nutrient-dense carbs that fuel elite performance.</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
+          <div class="panel">
+            <h4 style="margin-bottom: 16px;">🥩 Lean Proteins</h4>
+            <ul style="list-style: none; padding: 0; display: grid; gap: 8px;">
+              <li style="display: flex; justify-content: space-between; padding: 8px; background: rgba(0, 212, 255, 0.08); border-radius: 8px;">
+                <span>Chicken Breast</span>
+                <span style="color: var(--text-muted);">31g protein/100g</span>
+              </li>
+              <li style="display: flex; justify-content: space-between; padding: 8px; background: rgba(0, 212, 255, 0.08); border-radius: 8px;">
+                <span>Salmon</span>
+                <span style="color: var(--text-muted);">25g protein/100g</span>
+              </li>
+              <li style="display: flex; justify-content: space-between; padding: 8px; background: rgba(0, 212, 255, 0.08); border-radius: 8px;">
+                <span>Lean Beef</span>
+                <span style="color: var(--text-muted);">26g protein/100g</span>
+              </li>
+              <li style="display: flex; justify-content: space-between; padding: 8px; background: rgba(0, 212, 255, 0.08); border-radius: 8px;">
+                <span>Eggs</span>
+                <span style="color: var(--text-muted);">13g protein/egg</span>
+              </li>
+              <li style="display: flex; justify-content: space-between; padding: 8px; background: rgba(0, 212, 255, 0.08); border-radius: 8px;">
+                <span>Greek Yogurt</span>
+                <span style="color: var(--text-muted);">10g protein/100g</span>
+              </li>
+              <li style="display: flex; justify-content: space-between; padding: 8px; background: rgba(0, 212, 255, 0.08); border-radius: 8px;">
+                <span>Whey Protein</span>
+                <span style="color: var(--text-muted);">25g protein/scoop</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="panel">
+            <h4 style="margin-bottom: 16px;">🥕 Complex Carbs</h4>
+            <ul style="list-style: none; padding: 0; display: grid; gap: 8px;">
+              <li style="display: flex; justify-content: space-between; padding: 8px; background: rgba(255, 165, 0, 0.08); border-radius: 8px;">
+                <span>Oatmeal</span>
+                <span style="color: var(--text-muted);">54g carbs/100g</span>
+              </li>
+              <li style="display: flex; justify-content: space-between; padding: 8px; background: rgba(255, 165, 0, 0.08); border-radius: 8px;">
+                <span>Brown Rice</span>
+                <span style="color: var(--text-muted);">23g carbs/100g</span>
+              </li>
+              <li style="display: flex; justify-content: space-between; padding: 8px; background: rgba(255, 165, 0, 0.08); border-radius: 8px;">
+                <span>Sweet Potato</span>
+                <span style="color: var(--text-muted);">20g carbs/100g</span>
+              </li>
+              <li style="display: flex; justify-content: space-between; padding: 8px; background: rgba(255, 165, 0, 0.08); border-radius: 8px;">
+                <span>Quinoa</span>
+                <span style="color: var(--text-muted);">21g carbs/100g</span>
+              </li>
+              <li style="display: flex; justify-content: space-between; padding: 8px; background: rgba(255, 165, 0, 0.08); border-radius: 8px;">
+                <span>Whole Grain Bread</span>
+                <span style="color: var(--text-muted);">41g carbs/100g</span>
+              </li>
+              <li style="display: flex; justify-content: space-between; padding: 8px; background: rgba(255, 165, 0, 0.08); border-radius: 8px;">
+                <span>Pasta</span>
+                <span style="color: var(--text-muted);">25g carbs/100g</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

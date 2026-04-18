@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Power Temple | Elite Fitness Platform</title>
+  <link rel="stylesheet" href="assets/css/variable.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/dashboard.css" />
+  <link rel="stylesheet" href="assets/css/food.css" />
+  <link rel="stylesheet" href="assets/css/responsive.css" />
+  <link rel="stylesheet" href="assets/css/pro-theme.css" />
+  <script src="assets/js/api-mock.js" defer></script>
+  <script src="assets/js/auth.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+</head>
+<body data-page="landing">
+  <div class="app">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="indexxx.html">
+          <span class="brand-mark">PT</span>
+          <span>Power Temple</span>
+        </a>
+        <nav class="nav">
+          <a class="active" href="indexxx.html">Home</a>
+          <a href="memberships.html">Memberships</a>
+          <a href="auth/login.html">Login</a>
+          <a href="#features">Features</a>
+          <a href="#offers">Offers</a>
+          <a href="#pricing">Pricing</a>
+        </nav>
+        <div class="header-actions" aria-label="Quick actions">
+          <a class="header-icon-link" href="auth/login.html" title="Profile" aria-label="Profile">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 12.5c-2.62 0-4.75-2.13-4.75-4.75S9.38 3 12 3s4.75 2.13 4.75 4.75-2.13 4.75-4.75 4.75Zm0-8a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5Z"></path>
+              <path d="M19.25 21h-1.5v-1.25c0-2.62-2.13-4.75-4.75-4.75h-2c-2.62 0-4.75 2.13-4.75 4.75V21h-1.5v-1.25c0-3.45 2.8-6.25 6.25-6.25h2c3.45 0 6.25 2.8 6.25 6.25V21Z"></path>
+            </svg>
+            <span class="sr-only">Profile</span>
+          </a>
+          <button class="header-icon-link header-cart-icon" type="button" data-open-market-cart title="Cart" aria-label="Cart">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M7.25 20.5a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5Zm0-2a.25.25 0 1 0 0 .5.25.25 0 0 0 0-.5Zm9.5 2a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5Zm0-2a.25.25 0 1 0 0 .5.25.25 0 0 0 0-.5Z"></path>
+              <path d="M6.31 6h14.44l-1.47 7.35a2.25 2.25 0 0 1-2.21 1.8H9.44a2.25 2.25 0 0 1-2.2-1.79L5.18 3.75H3.25v-1.5h3.14l.58 2.25Zm1.18 1.5 1.2 5.17a.75.75 0 0 0 .73.59h7.64a.75.75 0 0 0 .74-.6l1.08-5.16H7.49Z"></path>
+            </svg>
+            <span id="marketCartCount" class="cart-count-badge">0</span>
+            <span class="sr-only">Cart</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <div class="hero-video-bg">
+          <video 
+            class="hero-video-element"
+            autoplay 
+            muted 
+            loop 
+            playsinline
+            aria-hidden="true">
+            <source src="assets/videos/hero-bg.mp4" type="video/mp4">
+          </video>
+          <div class="hero-video-overlay"></div>
+        </div>
+        <div class="hero-grid">
+          <div class="hero-copy fade-in">
+            <span class="eyebrow">Revolutionize Your Fitness</span>
+            <h1>Train Like a Champion. Dominate Your Goals.</h1>
+            <p>
+              Join thousands of elite athletes using Power Temple. Real-time coaching from certified trainers, advanced analytics, and a community obsessed with excellence. Your transformation starts now.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="auth/login.html">Start Your Journey</a>
+              <a class="btn btn-secondary" href="member/browse-classes.html">Explore Classes</a>
+            </div>
+            <div class="chip-row">
+              <span class="pill success">Live Trainers 24/7</span>
+              <span class="pill success">400+ Premium Classes</span>
+              <span class="pill success">Expert Community</span>
+            </div>
+          </div>
+
+          <aside class="hero-card fade-in">
+            <div class="stat-grid" style="margin-bottom: 28px;">
+              <div class="stat">
+                <strong data-landing-stat="classes">50+</strong>
+                <span>Classes Weekly</span>
+              </div>
+              <div class="stat">
+                <strong data-landing-stat="trainers">25+</strong>
+                <span>Expert Trainers</span>
+              </div>
+              <div class="stat">
+                <strong data-landing-stat="bookings">2.5K</strong>
+                <span>Active Members</span>
+              </div>
+              <div class="stat">
+                <strong data-landing-stat="spots">847</strong>
+                <span>Spots Available</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section fade-in" id="features">
+        <div class="section-head">
+          <div>
+            <h2>Why Elite Athletes Choose Power Temple</h2>
+            <p>The most intuitive platform for fitness management, training, and transformation. Built by athletes, for athletes.</p>
+          </div>
+        </div>
+        <div class="feature-grid stagger">
+          <article class="feature-card">
+            <div class="icon">⚡</div>
+            <h3>Real-Time Coaching</h3>
+            <p>Live feedback from certified trainers. Form corrections, motivation, and personalized modifications in every session.</p>
+          </article>
+          <article class="feature-card">
+            <div class="icon">📊</div>
+            <h3>Advanced Analytics</h3>
+            <p>Track every metric. Detailed performance insights, workout history, and AI-powered progress recommendations.</p>
+          </article>
+          <article class="feature-card">
+            <div class="icon">🏆</div>
+            <h3>Community Power</h3>
+            <p>Train alongside champions. Leaderboards, challenges, and group goals that keep you motivated and accountable.</p>
+          </article>
+          <article class="feature-card">
+            <div class="icon">🎯</div>
+            <h3>Personalized Plans</h3>
+            <p>Custom training programs designed by experts. Progressive overload, recovery strategies, and goal-specific progressions.</p>
+          </article>
+          <article class="feature-card">
+            <div class="icon">🔐</div>
+            <h3>Secure Booking</h3>
+            <p>Seamless class management. Real-time availability, instant confirmations, and flexible cancellations.</p>
+          </article>
+          <article class="feature-card">
+            <div class="icon">🌟</div>
+            <h3>Premium Content</h3>
+            <p>Exclusive training videos, nutrition guides, recovery protocols, and lifestyle coaching from industry experts.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section fade-in">
+        <div class="section-head">
+          <div>
+            <h2>Premium Classes Every Day</h2>
+            <p>From intense HIIT blasts to strength mastery. Every class designed by champions, taught by certified experts.</p>
+          </div>
+          <a class="btn btn-primary" href="member/browse-classes.html">View Full Schedule</a>
+        </div>
+        <div id="landingClasses" class="class-grid">
+          <article class="class-card fade-in">
+            <div class="toolbar">
+              <span class="pill success">HIIT</span>
+              <span class="pill success">12 spots</span>
+            </div>
+            <h3>Sunrise Power Blast</h3>
+            <p>45-minute high-intensity interval training. Maximum calorie burn, cardiovascular strength, and explosive power.</p>
+            <div class="meta-row">
+              <span>06:00 AM • Coach Maya</span>
+              <span>Studio A • Intermediate</span>
+            </div>
+          </article>
+
+          <article class="class-card fade-in">
+            <div class="toolbar">
+              <span class="pill success">Strength</span>
+              <span class="pill success">8 spots</span>
+            </div>
+            <h3>Barbell Mastery</h3>
+            <p>Advanced strength training. Olympic lifts, powerlifting technique, and elite performance programming.</p>
+            <div class="meta-row">
+              <span>18:00 PM • Coach Daniel</span>
+              <span>Weights Floor • Advanced</span>
+            </div>
+          </article>
+
+          <article class="class-card fade-in">
+            <div class="toolbar">
+              <span class="pill success">Recovery</span>
+              <span class="pill success">20 spots</span>
+            </div>
+            <h3>Mobility Flow</h3>
+            <p>Deep mobility and flexibility work. Improve movement quality, reduce injury risk, and enhance recovery.</p>
+            <div class="meta-row">
+              <span>09:00 AM • Coach Maya</span>
+              <span>Mind-Body Studio • Beginner</span>
+            </div>
+          </article>
+
+          <article class="class-card fade-in">
+            <div class="toolbar">
+              <span class="pill success">Combat</span>
+              <span class="pill success">14 spots</span>
+            </div>
+            <h3>Boxing Supremacy</h3>
+            <p>Pad work, footwork, and conditioning rounds. Build explosive power and mental toughness.</p>
+            <div class="meta-row">
+              <span>19:00 PM • Coach Daniel</span>
+              <span>Fight Zone • Intermediate</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section fade-in" id="pricing">
+        <div class="section-head">
+          <div>
+            <h2>Choose Your Level</h2>
+            <p>All plans include our app, 24/7 community access, and expert support. Cancel anytime.</p>
+          </div>
+        </div>
+        <div class="list-grid">
+          <article class="plan-card">
+            <div class="toolbar">
+              <h3>Starter</h3>
+              <span class="pill success">$19/mo</span>
+            </div>
+            <p>Begin your transformation. Access to fundamental classes and our growing community.</p>
+            <ul style="margin: 16px 0; padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; list-style: none;">
+              <li style="margin: 10px 0;">✓ 8 classes per month</li>
+              <li style="margin: 10px 0;">✓ Mobile app access</li>
+              <li style="margin: 10px 0;">✓ Community chat & events</li>
+              <li style="margin: 10px 0;">✓ Basic progress tracking</li>
+            </ul>
+            <button class="btn btn-primary pricing-subscribe-btn" type="button" data-subscribe-plan="starter" data-plan-price="19">Subscribe Now</button>
+          </article>
+
+          <article class="plan-card" style="border-color: rgba(0, 212, 255, 0.4); background: linear-gradient(135deg, rgba(0, 212, 255, 0.12) 0%, rgba(255, 0, 110, 0.08) 100%);">
+            <div class="toolbar">
+              <h3>Elite</h3>
+              <span class="pill warning">$59/mo</span>
+            </div>
+            <p>Most popular. Unlimited classes, priority booking, and monthly 1-on-1 coaching sessions.</p>
+            <ul style="margin: 16px 0; padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; list-style: none;">
+              <li style="margin: 10px 0;">✓ Unlimited classes</li>
+              <li style="margin: 10px 0;">✓ Priority early booking</li>
+              <li style="margin: 10px 0;">✓ 2 trainer sessions/mo</li>
+              <li style="margin: 10px 0;">✓ Advanced analytics</li>
+              <li style="margin: 10px 0;">✓ Nutrition guidance</li>
+            </ul>
+            <button class="btn btn-primary pricing-subscribe-btn" type="button" data-subscribe-plan="elite" data-plan-price="59">Subscribe Now</button>
+          </article>
+
+          <article class="plan-card">
+            <div class="toolbar">
+              <h3>Pro</h3>
+              <span class="pill danger">$89/mo</span>
+            </div>
+            <p>For serious athletes. Everything in Elite + custom programs, form analysis, and recovery coaching.</p>
+            <ul style="margin: 16px 0; padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; list-style: none;">
+              <li style="margin: 10px 0;">✓ Unlimited everything</li>
+              <li style="margin: 10px 0;">✓ 4 trainer sessions/mo</li>
+              <li style="margin: 10px 0;">✓ Custom training plans</li>
+              <li style="margin: 10px 0;">✓ Monthly form analysis</li>
+              <li style="margin: 10px 0;">✓ Recovery strategies</li>
+            </ul>
+            <button class="btn btn-primary pricing-subscribe-btn" type="button" data-subscribe-plan="pro" data-plan-price="89">Subscribe Now</button>
+          </article>
+
+          <article class="plan-card">
+            <div class="toolbar">
+              <h3>Champion</h3>
+              <span class="pill success">$149/mo</span>
+            </div>
+            <p>VIP elite experience. 1-on-1 coaching, complete lifestyle transformation, and dedicated support.</p>
+            <ul style="margin: 16px 0; padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; list-style: none;">
+              <li style="margin: 10px 0;">✓ Everything in Pro</li>
+              <li style="margin: 10px 0;">✓ 8 trainer sessions/mo</li>
+              <li style="margin: 10px 0;">✓ VIP recovery sessions</li>
+              <li style="margin: 10px 0;">✓ Dedicated coach support</li>
+              <li style="margin: 10px 0;">✓ Priority access to all</li>
+            </ul>
+            <button class="btn btn-primary pricing-subscribe-btn" type="button" data-subscribe-plan="champion" data-plan-price="149">Subscribe Now</button>
+          </article>
+        </div>
+        <p style="margin-top: 16px; color: var(--text-muted); font-size: 0.9rem;">Secure payment: Visa, Mastercard, Wallet, or Cash at gym reception.</p>
+      </section>
+
+      <section class="section fade-in" id="offers">
+        <div class="section-head">
+          <div>
+            <h2>Egypt Market Offers</h2>
+            <p>Buy membership offers instantly from home page. No sign in required for checkout.</p>
+          </div>
+        </div>
+
+        <div class="membership-showcase-grid">
+          <article class="membership-tile" data-branch="maadi" data-product-id="m1">
+            <div class="membership-tile-media membership-bg-one">
+              <span class="offer-timer" data-countdown-end="2026-05-30T23:59:59">Offer Ends In 00d 00h 00m</span>
+              <h3>1 Month Membership</h3>
+            </div>
+            <div class="membership-tile-body">
+              <strong>LE 2,500.00</strong>
+              <button class="btn btn-primary pricing-subscribe-btn" type="button" data-market-add="m1">Add To Cart</button>
+            </div>
+          </article>
+
+          <article class="membership-tile" data-branch="maadi" data-product-id="m3">
+            <div class="membership-tile-media membership-bg-two">
+              <span class="offer-timer" data-countdown-end="2026-05-22T23:59:59">Offer Ends In 00d 00h 00m</span>
+              <h3>3 Months Membership</h3>
+            </div>
+            <div class="membership-tile-body">
+              <strong>LE 6,000.00</strong>
+              <button class="btn btn-primary pricing-subscribe-btn" type="button" data-market-add="m3">Add To Cart</button>
+            </div>
+          </article>
+
+          <article class="membership-tile" data-branch="maadi" data-product-id="m6">
+            <div class="membership-tile-media membership-bg-three">
+              <span class="offer-timer" data-countdown-end="2026-06-05T23:59:59">Offer Ends In 00d 00h 00m</span>
+              <h3>6 Months Membership</h3>
+            </div>
+            <div class="membership-tile-body">
+              <strong>LE 8,000.00</strong>
+              <button class="btn btn-primary pricing-subscribe-btn" type="button" data-market-add="m6">Add To Cart</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section fade-in">
+        <div class="dashboard-banner">
+          <div>
+            <h2>Ready to Transform?</h2>
+            <p>Join 2,500+ athletes who've already started their journey with Power Temple. Your best self is waiting.</p>
+          </div>
+          <a class="btn btn-primary" href="auth/login.html">Get Started Free</a>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p>© 2026 Power Temple. Your gateway to elite fitness. Built by athletes, for athletes.</p>
+      </footer>
+    </main>
+  </div>
+
+  <div id="marketCartOverlay" class="market-cart-overlay hidden"></div>
+  <aside id="marketCartDrawer" class="market-cart-drawer hidden" aria-label="Shopping cart panel">
+    <button type="button" class="market-cart-close" data-close-market-cart aria-label="Close cart">×</button>
+    <div class="market-cart-layout">
+      <section class="market-reco">
+        <h3>You May Also Like</h3>
+        <div id="marketRecoList" class="market-reco-list"></div>
+      </section>
+
+      <section class="market-cart-main">
+        <h3>Cart</h3>
+        <div id="marketCartList" class="market-cart-list"></div>
+        <div class="market-cart-note-row">
+          <span>Note</span>
+          <span>Shipping</span>
+        </div>
+        <p class="market-cart-meta">Taxes, discounts and shipping calculated at checkout.</p>
+        <button id="marketCheckoutBtn" class="market-checkout-btn" type="button">CHECK OUT — LE 0.00 EGP</button>
+      </section>
+    </div>
+  </aside>
+</body>
+</html>

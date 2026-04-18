@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register | Power Temple</title>
+  <link rel="stylesheet" href="../assets/css/variable.css" />
+  <link rel="stylesheet" href="../assets/css/layout.css" />
+  <link rel="stylesheet" href="../assets/css/components.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <link rel="stylesheet" href="../assets/css/food.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+  <link rel="stylesheet" href="../assets/css/pro-theme.css" />
+  <script src="../assets/js/api-mock.js" defer></script>
+  <script src="../assets/js/auth.js" defer></script>
+  <script src="../assets/js/main.js" defer></script>
+</head>
+<body data-page="register">
+  <div class="app">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../indexxx.html">
+          <span class="brand-mark">PT</span>
+          <span>Power Temple</span>
+        </a>
+        <nav class="nav">
+          <a href="../indexxx.html">Home</a>
+          <a class="active" href="register.html">Register</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container login-grid">
+      <section class="hero-copy fade-in login-side">
+        <span class="eyebrow">Join The Elite</span>
+        <h1>Start Your Transformation</h1>
+        <p>Create your Power Temple account in 60 seconds. Access premium classes, expert trainers, and a community of champions dedicated to excellence.</p>
+        <div class="chip-row">
+          <span class="pill success">No Credit Card Required</span>
+          <span class="pill success">7-Day Free Trial</span>
+          <span class="pill success">Cancel Anytime</span>
+        </div>
+        <div class="hero-actions">
+          <a class="btn btn-secondary" href="login.html">← Back to Login</a>
+          <a class="btn btn-ghost" href="../indexxx.html">Explore First</a>
+        </div>
+      </section>
+
+      <section class="form-card login-panel fade-in">
+        <div style="margin-bottom: 28px;">
+          <span class="eyebrow">Create Account</span>
+          <h2>Begin Your Journey</h2>
+          <p>Join thousands of athletes transforming their bodies and minds at Power Temple.</p>
+        </div>
+
+        <form id="registerForm">
+          <div class="field-grid">
+            <label>
+              Full Name
+              <input id="registerName" type="text" placeholder="Your full name" required />
+            </label>
+            <label>
+              Email Address
+              <input id="registerEmail" type="email" placeholder="you@example.com" required />
+            </label>
+          </div>
+
+          <label>
+            Username
+            <input id="registerUsername" type="text" placeholder="your.username" required />
+          </label>
+
+          <label>
+            Password
+            <input id="registerPassword" type="password" placeholder="••••••••" required />
+          </label>
+
+          <label>
+            Confirm Password
+            <input id="registerConfirm" type="password" placeholder="••••••••" required />
+          </label>
+
+          <label style="display: flex; align-items: center; gap: 12px; margin: 16px 0;">
+            <input id="registerTerms" type="checkbox" required style="width: auto;" />
+            <span style="color: var(--text-secondary); font-size: 0.9rem;">
+              I agree to Power Temple's <a href="#" style="color: var(--accent);">Terms of Service</a> and <a href="#" style="color: var(--accent);">Privacy Policy</a>
+            </span>
+          </label>
+
+          <button class="btn btn-primary" type="submit" style="width: 100%;">Create My Account</button>
+          <div id="registerError" class="notice hidden" style="margin-top: 12px;"></div>
+        </form>
+
+        <p style="margin-top: 16px; font-size: 0.9rem; color: var(--text-secondary); text-align: center;">
+          Already have an account? <a href="login.html" style="color: var(--accent); font-weight: 600;">Sign in here</a>
+        </p>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

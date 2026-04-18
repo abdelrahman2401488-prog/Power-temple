@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memberships & Offers | Power Temple</title>
+  <link rel="stylesheet" href="assets/css/variable.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/dashboard.css" />
+  <link rel="stylesheet" href="assets/css/food.css" />
+  <link rel="stylesheet" href="assets/css/responsive.css" />
+  <link rel="stylesheet" href="assets/css/pro-theme.css" />
+  <script src="assets/js/api-mock.js" defer></script>
+  <script src="assets/js/auth.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+</head>
+<body data-page="memberships">
+  <div class="app">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="indexxx.html">
+          <span class="brand-mark">PT</span>
+          <span>Power Temple</span>
+        </a>
+        <nav class="nav">
+          <a href="indexxx.html">Home</a>
+          <a class="active" href="memberships.html">Memberships</a>
+          <a href="#offers">Offers</a>
+          <a href="member/browse-classes.html">Classes</a>
+          <a href="auth/login.html">Login</a>
+        </nav>
+        <div class="header-actions" aria-label="Quick actions">
+          <a class="header-icon-link" href="auth/login.html" title="Profile" aria-label="Profile">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 12.5c-2.62 0-4.75-2.13-4.75-4.75S9.38 3 12 3s4.75 2.13 4.75 4.75-2.13 4.75-4.75 4.75Zm0-8a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5Z"></path>
+              <path d="M19.25 21h-1.5v-1.25c0-2.62-2.13-4.75-4.75-4.75h-2c-2.62 0-4.75 2.13-4.75 4.75V21h-1.5v-1.25c0-3.45 2.8-6.25 6.25-6.25h2c3.45 0 6.25 2.8 6.25 6.25V21Z"></path>
+            </svg>
+            <span class="sr-only">Profile</span>
+          </a>
+          <button class="header-icon-link header-cart-icon" type="button" data-open-market-cart title="Cart" aria-label="Cart">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M7.25 20.5a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5Zm0-2a.25.25 0 1 0 0 .5.25.25 0 0 0 0-.5Zm9.5 2a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5Zm0-2a.25.25 0 1 0 0 .5.25.25 0 0 0 0-.5Z"></path>
+              <path d="M6.31 6h14.44l-1.47 7.35a2.25 2.25 0 0 1-2.21 1.8H9.44a2.25 2.25 0 0 1-2.2-1.79L5.18 3.75H3.25v-1.5h3.14l.58 2.25Zm1.18 1.5 1.2 5.17a.75.75 0 0 0 .73.59h7.64a.75.75 0 0 0 .74-.6l1.08-5.16H7.49Z"></path>
+            </svg>
+            <span id="marketCartCount" class="cart-count-badge">0</span>
+            <span class="sr-only">Cart</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="section memberships-hero fade-in">
+        <div class="section-head">
+          <div>
+            <h2>Memberships</h2>
+            <p>Choose your commitment level. Prices and offers designed for the Egyptian market.</p>
+          </div>
+        </div>
+
+        <div class="branch-filter-row" aria-label="Branch filter">
+          <span class="branch-chip active">Fifth settlement branch</span>
+        </div>
+
+        <div class="membership-showcase-grid">
+          <article class="membership-tile" data-branch="katameya" data-product-id="m1">
+            <div class="membership-tile-media membership-bg-one">
+              <span class="offer-timer" data-countdown-end="2026-05-30T23:59:59">Offer Ends In 00d 00h 00m</span>
+              <h3>1 Month Membership</h3>
+            </div>
+            <div class="membership-tile-body">
+              <strong>LE 2,500.00</strong>
+              <button class="btn btn-primary pricing-subscribe-btn" type="button" data-market-add="m1">Add To Cart</button>
+            </div>
+          </article>
+
+          <article class="membership-tile" data-branch="maadi" data-product-id="m3">
+            <div class="membership-tile-media membership-bg-two">
+              <span class="offer-timer" data-countdown-end="2026-05-22T23:59:59">Offer Ends In 00d 00h 00m</span>
+              <h3>3 Months Membership</h3>
+            </div>
+            <div class="membership-tile-body">
+              <strong>LE 6,000.00</strong>
+              <button class="btn btn-primary pricing-subscribe-btn" type="button" data-market-add="m3">Add To Cart</button>
+            </div>
+          </article>
+
+          <article class="membership-tile" data-branch="concord" data-product-id="m6">
+            <div class="membership-tile-media membership-bg-three">
+              <span class="offer-timer" data-countdown-end="2026-06-05T23:59:59">Offer Ends In 00d 00h 00m</span>
+              <h3>6 Months Membership</h3>
+            </div>
+            <div class="membership-tile-body">
+              <strong>LE 8,000.00</strong>
+              <button class="btn btn-primary pricing-subscribe-btn" type="button" data-market-add="m6">Add To Cart</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section fade-in" id="offers">
+        <div class="section-head">
+          <div>
+            <h2>Shop By Collection</h2>
+            <p>Explore top branches and active offers. Book your club and lock your membership now.</p>
+          </div>
+        </div>
+
+        <div class="collection-grid">
+          <article class="collection-card" data-branch="katameya">
+            <div class="collection-media membership-bg-one"></div>
+            <div class="collection-overlay">
+              <span class="pill success">15% OFF Annual</span>
+            </div>
+          </article>
+
+          <article class="collection-card" data-branch="maadi">
+            <div class="collection-media membership-bg-two"></div>
+            <div class="collection-overlay">
+              <span class="pill warning">Free PT Session</span>
+            </div>
+          </article>
+
+          <article class="collection-card" data-branch="concord">
+            <div class="collection-media membership-bg-three"></div>
+            <div class="collection-overlay">
+              <span class="pill success">No Joining Fee</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p>© 2026 Power Temple. Memberships crafted for every level.</p>
+      </footer>
+    </main>
+  </div>
+
+  <div id="marketCartOverlay" class="market-cart-overlay hidden"></div>
+  <aside id="marketCartDrawer" class="market-cart-drawer hidden" aria-label="Shopping cart panel">
+    <button type="button" class="market-cart-close" data-close-market-cart aria-label="Close cart">×</button>
+    <div class="market-cart-layout">
+      <section class="market-reco">
+        <h3>You May Also Like</h3>
+        <div id="marketRecoList" class="market-reco-list"></div>
+      </section>
+
+      <section class="market-cart-main">
+        <h3>Cart</h3>
+        <div id="marketCartList" class="market-cart-list"></div>
+        <div class="market-cart-note-row">
+          <span>Note</span>
+          <span>Shipping</span>
+        </div>
+        <p class="market-cart-meta">Taxes, discounts and shipping calculated at checkout.</p>
+        <button id="marketCheckoutBtn" class="market-checkout-btn" type="button">CHECK OUT — LE 0.00 EGP</button>
+      </section>
+    </div>
+  </aside>
+</body>
+</html>

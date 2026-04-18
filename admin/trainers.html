@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Trainers | Power Temple</title>
+  <link rel="stylesheet" href="../assets/css/variable.css" />
+  <link rel="stylesheet" href="../assets/css/layout.css" />
+  <link rel="stylesheet" href="../assets/css/components.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <link rel="stylesheet" href="../assets/css/food.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+  <link rel="stylesheet" href="../assets/css/pro-theme.css" />
+  <script src="../assets/js/api-mock.js" defer></script>
+  <script src="../assets/js/auth.js" defer></script>
+  <script src="../assets/js/main.js" defer></script>
+</head>
+<body data-page="admin">
+  <div class="app">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../indexxx.html">
+          <span class="brand-mark">PT</span>
+          <span>Power Temple</span>
+        </a>
+        <nav class="nav">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="trainers.html" class="active">Trainers</a>
+          <a href="classes.html">Classes</a>
+          <a href="../auth/login.html">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div>
+            <h2>Trainer Management</h2>
+            <p>Recruit, manage, and optimize your trainer roster. Track performance and certifications.</p>
+          </div>
+          <a class="btn btn-primary" href="classes.html">View Classes</a>
+        </div>
+
+        <div class="dashboard-grid" style="gap: 24px; margin-bottom: 40px;">
+          <div class="stack">
+            <!-- Add Trainer Form -->
+            <div class="form-card fade-in">
+              <h3 style="margin-bottom: 16px;">+ Add New Trainer</h3>
+              <form id="adminTrainerForm">
+                <label>
+                  Full Name
+                  <input name="name" type="text" placeholder="Coach name" required />
+                </label>
+                <label>
+                  Username
+                  <input name="username" type="text" placeholder="username" required />
+                </label>
+                <label>
+                  Password
+                  <input name="password" type="password" placeholder="••••••••" required />
+                </label>
+                <label>
+                  Specialty
+                  <select name="specialty" required>
+                    <option>Strength & Power</option>
+                    <option>Cardio & Conditioning</option>
+                    <option>Recovery & Mobility</option>
+                    <option>Combat Sports</option>
+                    <option>General Fitness</option>
+                  </select>
+                </label>
+                <button class="btn btn-primary" type="submit" style="width: 100%;">Add Trainer</button>
+              </form>
+            </div>
+
+            <!-- Search & Filter -->
+            <div style="margin-top: 24px;">
+              <input id="adminTrainerSearch" type="text" placeholder="🔍 Search trainers by name or username..." style="width: 100%; margin-bottom: 20px;" />
+            </div>
+
+            <!-- Trainer List -->
+            <div class="panel-head">
+              <div>
+                <h3>Your Trainer Team</h3>
+                <p>25 active trainers managing 50+ classes weekly</p>
+              </div>
+            </div>
+
+            <div id="adminTrainerList">
+              <article class="row-card fade-in" style="margin-bottom: 12px;">
+                <div class="row-main">
+                  <strong>Coach Maya</strong>
+                  <span class="row-meta">@coach_maya · Strength & Power · 12 sessions</span>
+                </div>
+                <span class="pill success">Active</span>
+              </article>
+
+              <article class="row-card fade-in" style="margin-bottom: 12px;">
+                <div class="row-main">
+                  <strong>Coach Daniel</strong>
+                  <span class="row-meta">@coach_daniel · Cardio & Conditioning · 9 sessions</span>
+                </div>
+                <span class="pill success">Active</span>
+              </article>
+
+              <article class="row-card fade-in" style="margin-bottom: 12px;">
+                <div class="row-main">
+                  <strong>Coach Sarah</strong>
+                  <span class="row-meta">@coach_sarah · Recovery & Mobility · 8 sessions</span>
+                </div>
+                <span class="pill success">Active</span>
+              </article>
+
+              <article class="row-card fade-in" style="margin-bottom: 12px;">
+                <div class="row-main">
+                  <strong>Coach James</strong>
+                  <span class="row-meta">@coach_james · Combat Sports · 7 sessions</span>
+                </div>
+                <span class="pill success">Active</span>
+              </article>
+
+              <article class="row-card fade-in" style="margin-bottom: 12px;">
+                <div class="row-main">
+                  <strong>Coach Emma</strong>
+                  <span class="row-meta">@coach_emma · General Fitness · 6 sessions</span>
+                </div>
+                <span class="pill warning">Part-Time</span>
+              </article>
+
+              <div class="empty-state" style="margin-top: 12px;">
+                Showing 5 of 25 trainers. Use search to find more.
+              </div>
+            </div>
+          </div>
+
+          <aside class="panel">
+            <h3 style="margin-bottom: 20px;">Trainer Stats</h3>
+            <div class="stat-grid" style="gap: 12px; margin-bottom: 24px;">
+              <div class="stat">
+                <strong>25</strong>
+                <span>Total Trainers</span>
+              </div>
+              <div class="stat">
+                <strong>23</strong>
+                <span>Active</span>
+              </div>
+              <div class="stat">
+                <strong>2</strong>
+                <span>Part-Time</span>
+              </div>
+              <div class="stat">
+                <strong>4.8</strong>
+                <span>Avg Rating</span>
+              </div>
+            </div>
+
+            <div style="border-top: 1px solid rgba(0, 212, 255, 0.15); padding-top: 16px;">
+              <h4 style="margin-bottom: 12px;">📋 Specialties</h4>
+              <div style="display: grid; gap: 8px; font-size: 0.9rem; color: var(--text-secondary);">
+                <div style="display: flex; justify-content: space-between;">
+                  <span>Strength & Power</span>
+                  <strong>8</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span>Cardio & Conditioning</span>
+                  <strong>7</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span>Recovery & Mobility</span>
+                  <strong>5</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span>Combat Sports</span>
+                  <strong>3</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span>General Fitness</span>
+                  <strong>2</strong>
+                </div>
+              </div>
+            </div>
+
+            <div id="adminMessage" class="notice hidden" style="margin-top: 20px;"></div>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
