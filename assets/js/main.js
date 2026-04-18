@@ -4,10 +4,24 @@
 
 // Initialize app when DOM is ready
 document.addEventListener('DOMContentLoaded', function () {
+  // Always wire login modal first so Home login works even if another init step fails.
+  try {
+    initializeQuickLoginModal();
+  } catch (error) {
+    console.error('Quick login init error:', error);
+  }
+
   try {
     initializeApp();
   } catch (error) {
     console.error('Initialize app error:', error);
+
+    // Minimal fallback for anchor behavior if full app init failed.
+    try {
+      initializeCommonFeatures();
+    } catch (fallbackError) {
+      console.error('Common features fallback error:', fallbackError);
+    }
   }
 
   // Fallback: always wire pricing subscribe buttons.
@@ -856,10 +870,15 @@ function addClass(e) {
 // === COMMON FEATURES ===
 function initializeCommonFeatures() {
   initializeQuickLoginModal();
+  initializeHomeVideoLoginPanel();
 
   // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', function (e) {
+      if (this.hasAttribute('data-open-login-modal')) {
+        return;
+      }
+
       const href = this.getAttribute('href');
       if (href !== '#') {
         e.preventDefault();
@@ -883,15 +902,54 @@ function initializeCommonFeatures() {
   });
 }
 
+function initializeHomeVideoLoginPanel() {
+  if (document.body.getAttribute('data-page') !== 'landing') return;
+
+  const panel = document.querySelector('.home-video-login');
+  if (!panel) return;
+
+  const openTriggers = document.querySelectorAll('[data-open-home-login]');
+  const closeTriggers = panel.querySelectorAll('[data-close-home-login]');
+
+  const openPanel = () => {
+    panel.classList.remove('hidden');
+    panel.setAttribute('aria-hidden', 'false');
+    document.getElementById('loginUsername')?.focus();
+  };
+
+  const closePanel = () => {
+    panel.classList.add('hidden');
+    panel.setAttribute('aria-hidden', 'true');
+  };
+
+  openTriggers.forEach((trigger) => {
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      openPanel();
+    });
+  });
+
+  closeTriggers.forEach((trigger) => {
+    trigger.addEventListener('click', closePanel);
+  });
+
+  if (window.location.hash === '#login') {
+    openPanel();
+  }
+}
+
 function initializeQuickLoginModal() {
   const modal = document.getElementById('quickLoginModal');
   if (!modal) return;
+  if (modal.dataset.bound === 'true') return;
+  modal.dataset.bound = 'true';
 
   const openTriggers = document.querySelectorAll('[data-open-login-modal]');
   const closeTriggers = modal.querySelectorAll('[data-close-login-modal]');
   const form = document.getElementById('quickLoginForm');
   const roleInput = document.getElementById('quickLoginRole');
   const roleButtons = modal.querySelectorAll('[data-role-choice]');
+  const demoButtons = modal.querySelectorAll('[data-quick-demo]');
 
   const openModal = () => {
     modal.classList.remove('hidden');
@@ -929,6 +987,30 @@ function initializeQuickLoginModal() {
 
       roleButtons.forEach((item) => item.classList.remove('active'));
       button.classList.add('active');
+    });
+  });
+
+  const demoCredentials = {
+    admin: { username: 'admin', password: 'admin123' },
+    trainer: { username: 'coach_maya', password: 'maya123' },
+    member: { username: 'john_doe', password: 'john123' },
+  };
+
+  demoButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const role = button.getAttribute('data-quick-demo');
+      const demo = demoCredentials[role];
+      if (!demo) return;
+
+      const usernameInput = document.getElementById('quickLoginUsername');
+      const passwordInput = document.getElementById('quickLoginPassword');
+      if (usernameInput) usernameInput.value = demo.username;
+      if (passwordInput) passwordInput.value = demo.password;
+      if (roleInput) roleInput.value = role;
+
+      roleButtons.forEach((item) => item.classList.remove('active'));
+      const activeButton = modal.querySelector(`[data-role-choice="${role}"]`);
+      if (activeButton) activeButton.classList.add('active');
     });
   });
 

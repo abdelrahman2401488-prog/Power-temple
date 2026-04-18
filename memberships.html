@@ -51,6 +51,22 @@
     </header>
 
     <main class="container">
+      <section class="hero">
+        <div class="hero-video-bg">
+          <video
+            class="hero-video-element"
+            autoplay
+            muted
+            loop
+            playsinline
+            aria-hidden="true">
+            <source src="assets/videos/hero-bg.mp4" type="video/mp4">
+          </video>
+          <div class="hero-video-overlay"></div>
+          <div class="hero-video-text" aria-label="Hero message">INHALE PASSION</div>
+        </div>
+      </section>
+
       <section class="section memberships-hero fade-in">
         <div class="section-head">
           <div>
@@ -158,5 +174,32 @@
       </section>
     </div>
   </aside>
+
+  <div id="quickLoginModal" class="quick-login-modal hidden" aria-hidden="true">
+    <div class="quick-login-backdrop" data-close-login-modal></div>
+    <section class="quick-login-card" role="dialog" aria-modal="true" aria-label="Quick login">
+      <button class="quick-login-close" type="button" aria-label="Close" data-close-login-modal>×</button>
+      <h2 class="quick-login-title">WELCOME BACK</h2>
+      <p class="quick-login-subtitle">Sign in to your Power Temple account</p>
+
+      <div class="quick-login-roles" role="tablist" aria-label="Account role">
+        <button class="quick-role-pill active" type="button" data-role-choice="admin">ADMIN</button>
+        <button class="quick-role-pill" type="button" data-role-choice="trainer">TRAINER</button>
+        <button class="quick-role-pill" type="button" data-role-choice="member">MEMBER</button>
+      </div>
+
+      <form id="quickLoginForm" class="quick-login-form">
+        <input id="quickLoginRole" type="hidden" value="admin" />
+
+        <label for="quickLoginUsername">EMAIL ADDRESS</label>
+        <input id="quickLoginUsername" type="text" placeholder="you@example.com" required />
+
+        <label for="quickLoginPassword">PASSWORD</label>
+        <input id="quickLoginPassword" type="password" placeholder="••••••••" required />
+
+        <button class="quick-login-submit" type="submit">Sign In →</button>
+      </form>
+    </section>
+  </div>
 </body>
 </html>
