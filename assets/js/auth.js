@@ -7,6 +7,13 @@ class PowerTempleAuth {
     this.currentUser = this.loadFromLocalStorage();
   }
 
+  // Build app-relative paths that work from root and nested folders.
+  getAppPath(targetPath) {
+    const path = window.location.pathname.replace(/\\/g, '/').toLowerCase();
+    const isNested = /(\/admin\/|\/member\/|\/trainer\/|\/auth\/)/.test(path);
+    return `${isNested ? '../' : ''}${targetPath}`;
+  }
+
   // Load user from localStorage
   loadFromLocalStorage() {
     const stored = localStorage.getItem('powertemple_user');
@@ -140,7 +147,7 @@ class PowerTempleAuth {
   // Protect route - redirect if not authenticated or wrong role
   protectRoute(requiredRoles = []) {
     if (!this.isAuthenticated()) {
-      window.location.href = '../auth/login.html';
+      window.location.href = this.getAppPath('indexxx.html#login');
       return false;
     }
 
@@ -160,16 +167,16 @@ class PowerTempleAuth {
 
     switch (role) {
       case 'admin':
-        window.location.href = '../admin/dashboard.html';
+        window.location.href = this.getAppPath('admin/dashboard.html');
         break;
       case 'trainer':
-        window.location.href = '../trainer/my-schedule.html';
+        window.location.href = this.getAppPath('trainer/my-schedule.html');
         break;
       case 'member':
-        window.location.href = '../member/browse-classes.html';
+        window.location.href = this.getAppPath('member/browse-classes.html');
         break;
       default:
-        window.location.href = '../indexxx.html';
+        window.location.href = this.getAppPath('indexxx.html');
     }
   }
 
@@ -224,7 +231,7 @@ function updateNavbarUser() {
     if (userElement) {
       userElement.innerHTML = `
         <span>${user.name}</span>
-        <button onclick="auth.logout(); window.location.href='../indexxx.html';" class="btn btn-ghost" style="font-size: 0.9rem;">
+        <button onclick="auth.logout(); window.location.href='${auth.getAppPath('indexxx.html')}';" class="btn btn-ghost" style="font-size: 0.9rem;">
           Logout
         </button>
       `;
