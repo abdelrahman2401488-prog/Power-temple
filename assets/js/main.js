@@ -141,6 +141,47 @@ function initializePricingSubscribeFallback() {
   });
 }
 
+function openQuickLoginModal() {
+  const modal = document.getElementById('quickLoginModal');
+  if (!modal) return false;
+
+  modal.classList.remove('hidden');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
+  return true;
+}
+
+async function resumePendingSubscriptionCheckout() {
+  const rawPending = localStorage.getItem('powertemple_pending_subscription');
+  if (!rawPending) return false;
+
+  const authService = typeof auth !== 'undefined' ? auth : null;
+  const user = authService && typeof authService.getCurrentUser === 'function'
+    ? authService.getCurrentUser()
+    : null;
+
+  if (!user || user.role !== 'member') return false;
+
+  let pendingData;
+  try {
+    pendingData = JSON.parse(rawPending);
+  } catch (error) {
+    localStorage.removeItem('powertemple_pending_subscription');
+    return false;
+  }
+
+  const planId = pendingData?.planId;
+  const planPrice = Number(pendingData?.planPrice || 0);
+  if (!planId || planPrice <= 0) {
+    localStorage.removeItem('powertemple_pending_subscription');
+    return false;
+  }
+
+  localStorage.removeItem('powertemple_pending_subscription');
+  await handlePlanSubscription(planId, planPrice);
+  return true;
+}
+
 function initializeApp() {
   // Initialize animations
   initializeAnimations();
@@ -576,7 +617,13 @@ async function handlePlanSubscription(planId, planPrice) {
       'powertemple_pending_subscription',
       JSON.stringify({ planId, planPrice })
     );
-    window.location.href = '#login';
+
+    const loginModalOpened = openQuickLoginModal();
+    if (!loginModalOpened) {
+      window.location.href = '#login';
+    }
+
+    showNotification('Please login as a member to continue checkout.', 'error');
     return;
   }
 
@@ -1072,9 +1119,7 @@ function addClass(e) {
   const trainer = formData.get('trainer');
   const category = formData.get('category');
   const level = formData.get('level');
-  const time = formData.get('time');
   const capacity = formData.get('capacity');
-  const room = formData.get('room');
   const description = formData.get('description');
 
   // Validation
@@ -1094,16 +1139,8 @@ function addClass(e) {
     showNotification('Level is required', 'error');
     return;
   }
-  if (!auth.validateDateTime(time)) {
-    showNotification('Please select a valid future date and time', 'error');
-    return;
-  }
   if (!auth.validateCapacity(capacity)) {
     showNotification('Capacity must be a number between 1 and 100', 'error');
-    return;
-  }
-  if (!auth.validateRequired(room)) {
-    showNotification('Room/studio is required', 'error');
     return;
   }
 
@@ -1113,10 +1150,10 @@ function addClass(e) {
     level,
     trainerId: parseInt(trainer),
     trainer: 'Coach ' + trainer,
-    time: time || '18:00 PM',
+    time: 'TBD',
     duration: 60,
     capacity: parseInt(capacity),
-    room,
+    room: 'Main Studio',
     description,
     image: '💪',
   };
@@ -1329,7 +1366,7 @@ function initializeQuickLoginModal() {
 
   const demoCredentials = {
     admin: { username: 'admin', password: 'admin123' },
-    trainer: { username: 'coach_maya', password: 'maya123' },
+    trainer: { username: 'coach_omar', password: 'omar123' },
     member: { username: 'john_doe', password: 'john123' },
   };
 
@@ -1376,8 +1413,11 @@ function initializeQuickLoginModal() {
       showNotification(result.message, 'success', 1200);
       initializeAuthHeaderState();
       closeModal();
-      setTimeout(() => {
-        auth.redirectToDashboard();
+      setTimeout(async () => {
+        const resumed = await resumePendingSubscriptionCheckout();
+        if (!resumed) {
+          auth.redirectToDashboard();
+        }
       }, 400);
     } else {
       showNotification(result.message, 'error');
@@ -1387,6 +1427,8 @@ function initializeQuickLoginModal() {
 
 // Validate forms
 function validateForm(e) {
+  if (e.defaultPrevented) return;
+
   const requiredFields = this.querySelectorAll('[required]');
   let isValid = true;
 

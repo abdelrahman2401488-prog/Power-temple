@@ -186,6 +186,17 @@
   white-space: nowrap;
 }
 
+/* Keep native select lists readable in admin pages. */
+body[data-page="admin"] select option,
+body[data-page="admin"] select optgroup {
+  background: #ffffff;
+  color: #111111;
+}
+
+body[data-page="admin"] select option:disabled {
+  color: #666666;
+}
+
 /* === ATTENDANCE TRACKING === */
 .attendance-list {
   display: flex;

@@ -77,7 +77,8 @@ main.container {
 body[data-page="landing"] .site-header,
 body[data-page="concept"] .site-header,
 body[data-page="services"] .site-header,
-body[data-page="memberships"] .site-header {
+body[data-page="memberships"] .site-header,
+body[data-page="admin"] .site-header {
   position: absolute;
   top: 0;
   left: 0;
@@ -107,14 +108,16 @@ body[data-page="memberships"] .site-header {
 body[data-page="landing"] main.container,
 body[data-page="concept"] main.container,
 body[data-page="services"] main.container,
-body[data-page="memberships"] main.container {
+body[data-page="memberships"] main.container,
+body[data-page="admin"] main.container {
   padding-top: 0;
 }
 
 body[data-page="landing"] .header-inner,
 body[data-page="concept"] .header-inner,
 body[data-page="services"] .header-inner,
-body[data-page="memberships"] .header-inner {
+body[data-page="memberships"] .header-inner,
+body[data-page="admin"] .header-inner {
   min-height: 150px;
   flex-wrap: nowrap;
 }
@@ -157,7 +160,8 @@ body[data-page="memberships"] .header-actions {
 
 body[data-page="landing"] .hero-video-bg,
 body[data-page="services"] .hero-video-bg,
-body[data-page="memberships"] .hero-video-bg {
+body[data-page="memberships"] .hero-video-bg,
+body[data-page="admin"] .hero-video-bg {
   margin-top: -92px;
 }
 
@@ -579,7 +583,8 @@ body[data-page="memberships"] .hero-video-bg {
 }
 
 body[data-page="landing"] .hero-video-text,
-body[data-page="services"] .hero-video-text {
+body[data-page="services"] .hero-video-text,
+body[data-page="admin"] .hero-video-text {
   transform: translateY(12px);
 }
 

@@ -244,7 +244,7 @@ class PowerTempleAuth {
   fillDemoAccount(role) {
     const demoAccounts = {
       member: { username: 'john_doe', password: 'john123' },
-      trainer: { username: 'coach_maya', password: 'maya123' },
+      trainer: { username: 'coach_omar', password: 'omar123' },
       admin: { username: 'admin', password: 'admin123' },
     };
 
