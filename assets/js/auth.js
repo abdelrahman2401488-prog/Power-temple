@@ -142,10 +142,10 @@ class PowerTempleAuth {
       };
     }
 
-    if (password.length < 6) {
+    if (!this.validatePasswordStrength(password)) {
       return {
         success: false,
-        message: 'Password must be at least 6 characters',
+        message: 'Password must be at least 8 characters with uppercase, lowercase, and number',
       };
     }
 
