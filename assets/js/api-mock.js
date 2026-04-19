@@ -143,7 +143,7 @@ const PowerTempleAPI = {
   classes: [
     {
       id: 1,
-      name: 'Sunrise Power Blast',
+      name: 'MMA Championship Training',
       category: 'Cardio',
       level: 'Intermediate',
       trainer: 'Coach Maya',
@@ -256,7 +256,7 @@ const PowerTempleAPI = {
       id: 1,
       memberId: 5,
       classId: 1,
-      className: 'Sunrise Power Blast',
+      className: 'MMA Championship Training',
       trainer: 'Coach Maya',
       date: 'Tomorrow',
       time: '06:00 AM',
@@ -306,7 +306,7 @@ const PowerTempleAPI = {
   attendance: [
     {
       classId: 1,
-      className: 'Sunrise Power Blast',
+      className: 'MMA Championship Training',
       date: '2025-01-18',
       totalSpots: 18,
       attended: 15,
@@ -524,7 +524,7 @@ const PowerTempleAPI = {
     }
 
     const classFeeByClassId = {
-      1: 1000, // Sunrise Power Blast
+      1: 1000, // MMA Championship Training
       3: 1400, // Mobility Flow
       4: 1200, // Boxing Supremacy
     };

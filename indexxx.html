@@ -13,9 +13,11 @@
   <link rel="stylesheet" href="assets/css/food.css" />
   <link rel="stylesheet" href="assets/css/responsive.css" />
   <link rel="stylesheet" href="assets/css/pro-theme.css" />
+  <link rel="stylesheet" href="assets/css/index.css" />
   <script src="assets/js/api-mock.js" defer></script>
   <script src="assets/js/auth.js" defer></script>
   <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/index.js" defer></script>
 </head>
 <body data-page="landing">
   <div class="app">
@@ -103,7 +105,7 @@
           </div>
 
           <aside class="hero-card fade-in">
-            <div class="stat-grid" style="margin-bottom: 28px;">
+            <div class="stat-grid">
               <div class="stat">
                 <strong data-landing-stat="classes">50+</strong>
                 <span>Classes Weekly</span>
@@ -129,9 +131,9 @@
         <div class="section-head">
           <div>
             <h2 class="classes-carousel-title">OUR <span>CLASSES</span></h2>
-            <p style="color:var(--text-secondary);font-size:0.9rem;margin-top:6px;">Elite training programs crafted by world-class coaches</p>
+            <p>Elite training programs crafted by world-class coaches</p>
           </div>
-          <a class="btn btn-secondary" href="member/browse-classes.html" style="white-space:nowrap;flex-shrink:0;">View All Classes →</a>
+          <a class="btn btn-secondary" href="member/browse-classes.html">View All Classes →</a>
         </div>
 
         <!-- Carousel Track -->
@@ -156,7 +158,7 @@
                   <span>🔥 High Intensity</span>
                   <span>👥 Max 15 members</span>
                 </div>
-                <a href="member/browse-classes.html" class="btn btn-primary" style="margin-top:12px;font-size:0.8rem;padding:10px 18px;">Book Class →</a>
+                <a href="member/browse-classes.html" class="btn btn-primary">Book Class →</a>
               </div>
             </div>
 
@@ -178,7 +180,7 @@
                   <span>💪 All Levels</span>
                   <span>👥 Max 12 members</span>
                 </div>
-                <a href="member/browse-classes.html" class="btn btn-primary" style="margin-top:12px;font-size:0.8rem;padding:10px 18px;">Book Class →</a>
+                <a href="member/browse-classes.html" class="btn btn-primary">Book Class →</a>
               </div>
             </div>
 
@@ -200,7 +202,7 @@
                   <span>🧘 Beginner Friendly</span>
                   <span>👥 Max 20 members</span>
                 </div>
-                <a href="member/browse-classes.html" class="btn btn-primary" style="margin-top:12px;font-size:0.8rem;padding:10px 18px;">Book Class →</a>
+                <a href="member/browse-classes.html" class="btn btn-primary">Book Class →</a>
               </div>
             </div>
 
@@ -222,7 +224,7 @@
                   <span>🥊 Intermediate</span>
                   <span>👥 Max 10 members</span>
                 </div>
-                <a href="member/browse-classes.html" class="btn btn-primary" style="margin-top:12px;font-size:0.8rem;padding:10px 18px;">Book Class →</a>
+                <a href="member/browse-classes.html" class="btn btn-primary">Book Class →</a>
               </div>
             </div>
 
@@ -243,7 +245,7 @@
                   <span>🔥 High Intensity</span>
                   <span>👥 Max 15 members</span>
                 </div>
-                <a href="member/browse-classes.html" class="btn btn-primary" style="margin-top:12px;font-size:0.8rem;padding:10px 18px;">Book Class →</a>
+                <a href="member/browse-classes.html" class="btn btn-primary">Book Class →</a>
               </div>
             </div>
 
@@ -263,232 +265,7 @@
         </div>
       </section>
 
-      <style>
-        .classes-carousel-title {
-          font-family: 'Bebas Neue', 'Sora', sans-serif;
-          font-size: clamp(2rem, 5vw, 3rem);
-          letter-spacing: 3px;
-          color: #fff;
-          margin: 0;
-        }
-        .classes-carousel-title span { color: var(--primary-color); }
-
-        .classes-carousel-wrap {
-          position: relative;
-          overflow: hidden;
-          border-radius: 20px;
-          margin-top: 8px;
-          cursor: grab;
-        }
-        .classes-carousel-wrap:active { cursor: grabbing; }
-
-        .classes-carousel-track {
-          display: flex;
-          gap: 20px;
-          transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-          will-change: transform;
-          padding: 4px 0 8px;
-        }
-
-        .classes-slide-card {
-          min-width: 340px;
-          flex-shrink: 0;
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(0,212,255,0.15);
-          border-radius: 18px;
-          overflow: hidden;
-          transition: border-color 0.3s, box-shadow 0.3s;
-        }
-        .classes-slide-card:hover {
-          border-color: rgba(0,212,255,0.4);
-          box-shadow: 0 12px 40px rgba(0,212,255,0.18);
-        }
-
-        .slide-img-wrap {
-          position: relative;
-          height: 210px;
-          overflow: hidden;
-        }
-        .slide-img-wrap img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.5s ease;
-        }
-        .classes-slide-card:hover .slide-img-wrap img {
-          transform: scale(1.06);
-        }
-        .slide-overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to bottom, transparent 40%, rgba(15,15,26,0.85) 100%);
-        }
-        .slide-badges {
-          position: absolute;
-          top: 12px;
-          left: 12px;
-          display: flex;
-          gap: 6px;
-        }
-
-        .slide-info {
-          padding: 18px 20px 20px;
-        }
-        .slide-info h3 {
-          font-family: 'Sora', 'Bebas Neue', sans-serif;
-          font-size: 1.05rem;
-          font-weight: 800;
-          color: #fff;
-          margin-bottom: 8px;
-          letter-spacing: 0.3px;
-        }
-        .slide-info p {
-          font-size: 0.8rem;
-          color: var(--text-secondary);
-          line-height: 1.55;
-          margin-bottom: 0;
-        }
-        .slide-meta {
-          display: flex;
-          gap: 12px;
-          flex-wrap: wrap;
-          margin-top: 12px;
-          font-size: 0.72rem;
-          color: var(--text-muted);
-        }
-        .slide-meta span {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-        }
-
-        /* Carousel Buttons */
-        .carousel-btn {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 44px;
-          height: 44px;
-          border-radius: 50%;
-          border: 1px solid rgba(0,212,255,0.4);
-          background: rgba(15,15,26,0.85);
-          color: #fff;
-          font-size: 1.1rem;
-          cursor: pointer;
-          transition: all 0.2s;
-          z-index: 10;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          backdrop-filter: blur(10px);
-        }
-        .carousel-btn:hover {
-          background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-          color: #000;
-          border-color: transparent;
-          box-shadow: 0 4px 16px rgba(0,212,255,0.4);
-        }
-        .carousel-btn-prev { left: 12px; }
-        .carousel-btn-next { right: 12px; }
-
-        /* Dots */
-        .carousel-dots {
-          display: flex;
-          justify-content: center;
-          gap: 8px;
-          margin-top: 20px;
-        }
-        .carousel-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          border: none;
-          background: rgba(255,255,255,0.2);
-          cursor: pointer;
-          transition: all 0.3s;
-          padding: 0;
-        }
-        .carousel-dot.active {
-          background: var(--primary-color);
-          width: 24px;
-          border-radius: 4px;
-          box-shadow: 0 0 8px rgba(0,212,255,0.6);
-        }
-
-        @media (max-width: 600px) {
-          .classes-slide-card { min-width: 280px; }
-        }
-      </style>
-
-      <script>
-        (function() {
-          const track = document.getElementById('classesCarousel');
-          const cards = track.querySelectorAll('.classes-slide-card');
-          const dots = document.querySelectorAll('.carousel-dot');
-          const TOTAL = 4; // real cards
-          let current = 0;
-          let autoTimer;
-          let isDragging = false, startX = 0, dragDelta = 0;
-
-          function getCardWidth() {
-            if (!cards[0]) return 360;
-            return cards[0].getBoundingClientRect().width + 20; // + gap
-          }
-
-          function goTo(idx, animate = true) {
-            current = ((idx % TOTAL) + TOTAL) % TOTAL;
-            const offset = current * getCardWidth();
-            track.style.transition = animate ? 'transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94)' : 'none';
-            track.style.transform = `translateX(-${offset}px)`;
-            dots.forEach((d, i) => d.classList.toggle('active', i === current));
-          }
-
-          function next() { goTo(current + 1); }
-          function prev() { goTo(current - 1); }
-
-          function startAuto() {
-            clearInterval(autoTimer);
-            autoTimer = setInterval(next, 3500);
-          }
-
-          document.getElementById('carouselNext').addEventListener('click', () => { next(); startAuto(); });
-          document.getElementById('carouselPrev').addEventListener('click', () => { prev(); startAuto(); });
-          dots.forEach(d => d.addEventListener('click', () => { goTo(parseInt(d.dataset.idx)); startAuto(); }));
-
-          // Drag / Swipe
-          track.addEventListener('mousedown', e => { isDragging = true; startX = e.clientX; track.style.transition = 'none'; });
-          window.addEventListener('mousemove', e => {
-            if (!isDragging) return;
-            dragDelta = e.clientX - startX;
-            track.style.transform = `translateX(${-current * getCardWidth() + dragDelta}px)`;
-          });
-          window.addEventListener('mouseup', () => {
-            if (!isDragging) return;
-            isDragging = false;
-            if (dragDelta < -60) next();
-            else if (dragDelta > 60) prev();
-            else goTo(current);
-            dragDelta = 0;
-            startAuto();
-          });
-
-          // Touch
-          track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; track.style.transition = 'none'; }, { passive: true });
-          track.addEventListener('touchend', e => {
-            const diff = e.changedTouches[0].clientX - startX;
-            if (diff < -50) next();
-            else if (diff > 50) prev();
-            else goTo(current);
-            startAuto();
-          });
-
-          goTo(0, false);
-          startAuto();
-        })();
-      </script>
-
-
-          <div>
+      <div>
             <h2>Ready to Transform?</h2>
             <p>Join 2,500+ athletes who've already started their journey with Power Temple. Your best self is waiting.</p>
           </div>
@@ -622,3 +399,5 @@
   </div>
 </body>
 </html>
+
+
