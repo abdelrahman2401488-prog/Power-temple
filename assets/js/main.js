@@ -157,6 +157,9 @@ function initializeApp() {
   // Initialize admin features
   initializeAdminFeatures();
 
+  // Initialize register form
+  initializeRegisterForm();
+
   // Initialize common features
   initializeCommonFeatures();
 
@@ -573,7 +576,7 @@ async function handlePlanSubscription(planId, planPrice) {
       'powertemple_pending_subscription',
       JSON.stringify({ planId, planPrice })
     );
-    window.location.href = 'auth/login.html';
+    window.location.href = '#login';
     return;
   }
 
@@ -626,7 +629,7 @@ function ensurePaymentModal() {
         <div id="cardFields" class="field-grid">
           <label>
             Card Holder Name
-            <input id="cardHolder" type="text" placeholder="John Doe" required />
+            <input id="cardHolder" type="text" placeholder="John Doe" pattern="[A-Za-z]+(?:\\s+[A-Za-z]+)+" title="Please enter your full name (letters and spaces only)" required />
           </label>
           <label>
             Card Number
@@ -700,12 +703,38 @@ function openPaymentModal({ title, itemName, amount }) {
   return new Promise((resolve) => {
     const onSubmit = (e) => {
       e.preventDefault();
+      const method = document.getElementById('paymentMethod')?.value;
+      const cardHolder = document.getElementById('cardHolder')?.value.trim();
+      const cardNumber = document.getElementById('cardNumber')?.value.trim();
+      const cardExpiry = document.getElementById('cardExpiry')?.value.trim();
+      const cardCVV = document.getElementById('cardCVV')?.value.trim();
+
+      // Validation
+      if (method !== 'cash') {
+        if (!auth.validateCardHolderName(cardHolder)) {
+          showNotification('Please enter a valid card holder name (first and last name required)', 'error');
+          return;
+        }
+        if (!auth.validateCardNumber(cardNumber)) {
+          showNotification('Please enter a valid card number (13-19 digits)', 'error');
+          return;
+        }
+        if (!auth.validateCardExpiry(cardExpiry)) {
+          showNotification('Please enter a valid expiry date (MM/YY) that is not expired', 'error');
+          return;
+        }
+        if (!auth.validateCVV(cardCVV)) {
+          showNotification('Please enter a valid CVV (3-4 digits)', 'error');
+          return;
+        }
+      }
+
       const paymentData = {
-        method: document.getElementById('paymentMethod')?.value,
-        cardHolder: document.getElementById('cardHolder')?.value.trim(),
-        cardNumber: document.getElementById('cardNumber')?.value.trim(),
-        cardExpiry: document.getElementById('cardExpiry')?.value.trim(),
-        cardCVV: document.getElementById('cardCVV')?.value.trim(),
+        method,
+        cardHolder,
+        cardNumber,
+        cardExpiry,
+        cardCVV,
       };
 
       cleanup();
@@ -793,13 +822,6 @@ function initializeMemberFeatures() {
     });
   }
 
-  // My Bookings Page
-  if (document.getElementById('memberMessage') && document.querySelector('.booking-item')) {
-    const bookingCancelButtons = document.querySelectorAll('[data-cancel-booking]');
-    bookingCancelButtons.forEach((btn) => {
-      btn.addEventListener('click', cancelBooking);
-    });
-  }
 }
 
 function syncClassBookingVisibility() {
@@ -888,25 +910,6 @@ async function bookClass(e) {
   }
 }
 
-// Cancel a booking
-function cancelBooking(e) {
-  const btn = e.target.closest('[data-cancel-booking]');
-  const bookingId = parseInt(btn.dataset.cancelBooking);
-
-  if (!confirm('Are you sure you want to cancel this booking?')) {
-    return;
-  }
-
-  const result = PowerTempleAPI.cancelBooking(bookingId);
-
-  if (result.success) {
-    btn.closest('.booking-item').remove();
-    showNotification('Booking cancelled', 'success');
-  } else {
-    showNotification(result.message, 'error');
-  }
-}
-
 // === TRAINER DASHBOARD ===
 function initializeTrainerFeatures() {
   // Trainer session search
@@ -978,11 +981,35 @@ function addTrainer(e) {
   e.preventDefault();
 
   const formData = new FormData(e.target);
+  const name = formData.get('name');
+  const username = formData.get('username');
+  const password = formData.get('password');
+  const specialty = formData.get('specialty');
+
+  // Validation
+  if (!auth.validateRequired(name)) {
+    showNotification('Trainer name is required', 'error');
+    return;
+  }
+  if (!auth.validateRequired(username)) {
+    showNotification('Username is required', 'error');
+    return;
+  }
+  if (!auth.validatePasswordStrength(password)) {
+    showNotification('Password must be at least 8 characters with uppercase, lowercase, and number', 'error');
+    return;
+  }
+  if (!auth.validateRequired(specialty)) {
+    showNotification('Specialty is required', 'error');
+    return;
+  }
+
   const trainerData = {
-    name: formData.get('name'),
-    username: formData.get('username'),
-    specialty: formData.get('specialty'),
-    bio: `${formData.get('specialty')} specialist`,
+    name,
+    username,
+    password,
+    specialty,
+    bio: `${specialty} specialist`,
   };
 
   const result = PowerTempleAPI.addTrainer(trainerData);
@@ -1041,17 +1068,56 @@ function addClass(e) {
   e.preventDefault();
 
   const formData = new FormData(e.target);
+  const name = formData.get('name');
+  const trainer = formData.get('trainer');
+  const category = formData.get('category');
+  const level = formData.get('level');
+  const time = formData.get('time');
+  const capacity = formData.get('capacity');
+  const room = formData.get('room');
+  const description = formData.get('description');
+
+  // Validation
+  if (!auth.validateRequired(name)) {
+    showNotification('Class name is required', 'error');
+    return;
+  }
+  if (!auth.validateRequired(trainer)) {
+    showNotification('Please select a trainer', 'error');
+    return;
+  }
+  if (!auth.validateRequired(category)) {
+    showNotification('Category is required', 'error');
+    return;
+  }
+  if (!auth.validateRequired(level)) {
+    showNotification('Level is required', 'error');
+    return;
+  }
+  if (!auth.validateDateTime(time)) {
+    showNotification('Please select a valid future date and time', 'error');
+    return;
+  }
+  if (!auth.validateCapacity(capacity)) {
+    showNotification('Capacity must be a number between 1 and 100', 'error');
+    return;
+  }
+  if (!auth.validateRequired(room)) {
+    showNotification('Room/studio is required', 'error');
+    return;
+  }
+
   const classData = {
-    name: formData.get('name'),
-    category: formData.get('category'),
-    level: formData.get('level'),
-    trainerId: parseInt(formData.get('trainer')),
-    trainer: 'Coach ' + formData.get('trainer'),
-    time: formData.get('time') || '18:00 PM',
+    name,
+    category,
+    level,
+    trainerId: parseInt(trainer),
+    trainer: 'Coach ' + trainer,
+    time: time || '18:00 PM',
     duration: 60,
-    capacity: parseInt(formData.get('capacity')),
-    room: formData.get('room'),
-    description: formData.get('description'),
+    capacity: parseInt(capacity),
+    room,
+    description,
     image: '💪',
   };
 
@@ -1082,6 +1148,60 @@ function addClass(e) {
       classList.insertBefore(newClass, classList.querySelector('.empty-state'));
     }
   }
+}
+
+// === REGISTER FORM ===
+function initializeRegisterForm() {
+  const registerForm = document.getElementById('registerForm');
+  if (!registerForm) return;
+
+  registerForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const fullName = document.getElementById('registerName')?.value.trim();
+    const email = document.getElementById('registerEmail')?.value.trim();
+    const username = document.getElementById('registerUsername')?.value.trim();
+    const password = document.getElementById('registerPassword')?.value;
+    const confirmPassword = document.getElementById('registerConfirm')?.value;
+    const termsAccepted = document.getElementById('registerTerms')?.checked;
+
+    // Validation
+    if (!auth.validateRequired(fullName)) {
+      showNotification('Full name is required', 'error');
+      return;
+    }
+    if (!auth.validateEmailFormat(email)) {
+      showNotification('Please enter a valid email address', 'error');
+      return;
+    }
+    if (!auth.validateRequired(username)) {
+      showNotification('Username is required', 'error');
+      return;
+    }
+    if (!auth.validatePasswordStrength(password)) {
+      showNotification('Password must be at least 8 characters with uppercase, lowercase, and number', 'error');
+      return;
+    }
+    if (password !== confirmPassword) {
+      showNotification('Passwords do not match', 'error');
+      return;
+    }
+    if (!termsAccepted) {
+      showNotification('Please accept the terms of service', 'error');
+      return;
+    }
+
+    const result = auth.register(fullName, email, username, password);
+
+    if (result.success) {
+      showNotification(result.message, 'success');
+      setTimeout(() => {
+        window.location.href = auth.getAppPath('indexxx.html');
+      }, 1500);
+    } else {
+      showNotification(result.message, 'error');
+    }
+  });
 }
 
 // === COMMON FEATURES ===

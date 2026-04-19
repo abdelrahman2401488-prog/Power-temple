@@ -351,8 +351,8 @@ body[data-page="memberships"] .hero-video-bg {
   margin-top: 4px;
   border: none;
   border-radius: 8px;
-  background: #d8f82e;
-  color: #101318;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: #000;
   font-size: 1.05rem;
   font-weight: 800;
   cursor: pointer;

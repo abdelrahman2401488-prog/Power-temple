@@ -236,22 +236,6 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Booking */
-  .booking-item {
-    grid-template-columns: 1fr;
-  }
-
-  .booking-info {
-    order: 1;
-  }
-
-  .booking-actions {
-    order: 2;
-  }
-
-  .booking-actions {
-    width: 100%;
-  }
 
   .booking-actions .btn {
     width: 100%;

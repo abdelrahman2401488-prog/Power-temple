@@ -7,7 +7,67 @@ class PowerTempleAuth {
     this.currentUser = this.loadFromLocalStorage();
   }
 
-  // Build app-relative paths that work from root and nested folders.
+  // Validation methods
+  validateEmailFormat(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  validatePasswordStrength(password) {
+    // At least 8 characters, one uppercase, one lowercase, one number
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/;
+    return strongPasswordRegex.test(password);
+  }
+
+  validateCardNumber(cardNumber) {
+    // Remove spaces and check if it's 13-19 digits
+    const cleaned = cardNumber.replace(/\s+/g, '');
+    const cardRegex = /^\d{13,19}$/;
+    return cardRegex.test(cleaned);
+  }
+
+  validateCardExpiry(expiry) {
+    // MM/YY format
+    const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+    if (!expiryRegex.test(expiry)) return false;
+
+    const [month, year] = expiry.split('/').map(Number);
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear() % 100;
+    const currentMonth = currentDate.getMonth() + 1;
+
+    if (year < currentYear || (year === currentYear && month < currentMonth)) {
+      return false;
+    }
+    return true;
+  }
+
+  validateCVV(cvv) {
+    const cvvRegex = /^\d{3,4}$/;
+    return cvvRegex.test(cvv);
+  }
+
+  validateDateTime(dateTimeString) {
+    const date = new Date(dateTimeString);
+    return date instanceof Date && !isNaN(date) && date > new Date();
+  }
+
+  validateCapacity(capacity) {
+    const num = parseInt(capacity);
+    return !isNaN(num) && num > 0 && num <= 100;
+  }
+
+  validateRequired(value) {
+    return value && value.trim().length > 0;
+  }
+
+  validateCardHolderName(name) {
+    // Must contain at least first and last name, letters and spaces only
+    const nameRegex = /^[a-zA-Z\s]+$/;
+    const trimmed = name.trim();
+    const parts = trimmed.split(/\s+/);
+    return nameRegex.test(trimmed) && parts.length >= 2 && trimmed.length >= 3;
+  }
   getAppPath(targetPath) {
     const path = window.location.pathname.replace(/\\/g, '/').toLowerCase();
     const isNested = /(\/admin\/|\/member\/|\/trainer\/|\/auth\/)/.test(path);
