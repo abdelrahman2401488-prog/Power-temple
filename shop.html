@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop | Power Temple</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/variable.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/responsive.css" />
+  <link rel="stylesheet" href="assets/css/pro-theme.css" />
+  <script src="assets/js/api-mock.js" defer></script>
+  <script src="assets/js/auth.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+  <style>
+    /* ===== SHOP PAGE STYLES ===== */
+
+    .shop-hero {
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 40%, #0d2137 100%);
+      padding: 80px 0 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shop-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 30% 50%, rgba(0,212,255,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 80% 30%, rgba(255,0,110,0.06) 0%, transparent 70%);
+    }
+
+    .shop-hero-label {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 6px;
+      font-size: 0.85rem;
+      color: var(--primary-color);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .shop-hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      letter-spacing: 4px;
+      line-height: 0.95;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+
+    .shop-hero h1 span {
+      color: var(--primary-color);
+    }
+
+    .shop-hero p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      max-width: 480px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 32px 0 0;
+      position: relative;
+    }
+
+    .filter-btn {
+      padding: 8px 20px;
+      border: 1px solid rgba(0,212,255,0.25);
+      background: rgba(255,255,255,0.04);
+      color: var(--text-secondary);
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #000;
+      border-color: transparent;
+      box-shadow: 0 4px 16px rgba(0,212,255,0.3);
+    }
+
+    /* Products Grid */
+    .products-section {
+      padding: 48px 0 80px;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 24px;
+    }
+
+    /* Product Card */
+    .product-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(0,212,255,0.15);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .product-card:hover {
+      border-color: rgba(0,212,255,0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,212,255,0.15);
+    }
+
+    .product-card[data-hidden="true"] {
+      display: none;
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #000;
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 50px;
+      z-index: 2;
+    }
+
+    .product-img-wrap {
+      height: 220px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1a1a2e, #0d2137);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .product-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-img-wrap img {
+      transform: scale(1.05);
+    }
+
+    .product-emoji-fallback {
+      font-size: 5rem;
+      opacity: 0.4;
+    }
+
+    .product-info {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .product-category {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--primary-color);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .product-name {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .product-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .product-flavors {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .flavor-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.15);
+      cursor: pointer;
+      title: attr(data-flavor);
+      transition: border-color 0.2s;
+    }
+
+    .flavor-dot:hover {
+      border-color: var(--primary-color);
+    }
+
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px 18px;
+      border-top: 1px solid rgba(0,212,255,0.1);
+    }
+
+    .product-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+
+    .product-price span {
+      font-size: 0.8rem;
+      font-family: 'Inter', sans-serif;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-left: 2px;
+    }
+
+    .add-to-cart-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #000;
+      border: none;
+      border-radius: 50px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .add-to-cart-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 16px rgba(0,212,255,0.4);
+    }
+
+    .add-to-cart-btn.added {
+      background: var(--success-color);
+    }
+
+    /* Promo Banner */
+    .promo-strip {
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--primary-color));
+      background-size: 200% 100%;
+      animation: shimmerStrip 3s linear infinite;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #000;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      overflow: hidden;
+    }
+
+    @keyframes shimmerStrip {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 200% 0%; }
+    }
+
+    /* Cart Toast */
+    .cart-toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--primary-color);
+      color: #fff;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      box-shadow: 0 8px 32px rgba(0,212,255,0.3);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cart-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Section heading */
+    .shop-section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 3px;
+      color: #fff;
+      margin-bottom: 28px;
+    }
+
+    .shop-section-title span {
+      color: var(--primary-color);
+    }
+  </style>
+</head>
+<body data-page="shop">
+  <div class="app">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="indexxx.html">
+          <span class="brand-mark">PT</span>
+          <span>Power Temple</span>
+        </a>
+        <nav class="nav">
+          <a href="indexxx.html">Home</a>
+          <a href="indexxx.html#concept">Concept</a>
+          <a href="services.html">Services</a>
+          <a href="memberships.html">Memberships</a>
+          <a href="member/browse-classes.html">Classes</a>
+          <a href="shop.html" class="active">Shop</a>
+        </nav>
+        <div class="header-actions" aria-label="Quick actions">
+          <a class="header-icon-link" href="#login" title="Login" aria-label="Login" data-open-login-modal>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 12.5c-2.62 0-4.75-2.13-4.75-4.75S9.38 3 12 3s4.75 2.13 4.75 4.75-2.13 4.75-4.75 4.75Zm0-8a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5Z"/>
+              <path d="M19.25 21h-1.5v-1.25c0-2.62-2.13-4.75-4.75-4.75h-2c-2.62 0-4.75 2.13-4.75 4.75V21h-1.5v-1.25c0-3.45 2.8-6.25 6.25-6.25h2c3.45 0 6.25 2.8 6.25 6.25V21Z"/>
+            </svg>
+          </a>
+          <button class="header-icon-link header-cart-icon" type="button" data-open-market-cart title="Cart" aria-label="Cart">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M7.25 20.5a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5Zm0-2a.25.25 0 1 0 0 .5.25.25 0 0 0 0-.5Zm9.5 2a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5Zm0-2a.25.25 0 1 0 0 .5.25.25 0 0 0 0-.5Z"/>
+              <path d="M6.31 6h14.44l-1.47 7.35a2.25 2.25 0 0 1-2.21 1.8H9.44a2.25 2.25 0 0 1-2.2-1.79L5.18 3.75H3.25v-1.5h3.14l.58 2.25Zm1.18 1.5 1.2 5.17a.75.75 0 0 0 .73.59h7.64a.75.75 0 0 0 .74-.6l1.08-5.16H7.49Z"/>
+            </svg>
+            <span id="marketCartCount" class="cart-count-badge">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Promo Strip -->
+    <div class="promo-strip">
+      🔥 FREE SHIPPING ON ORDERS OVER LE 500 &nbsp;•&nbsp; USE CODE PT20 FOR 20% OFF YOUR FIRST ORDER &nbsp;•&nbsp; 🔥 FREE SHIPPING ON ORDERS OVER LE 500 &nbsp;•&nbsp; USE CODE PT20 FOR 20% OFF
+    </div>
+
+    <!-- Hero -->
+    <section class="shop-hero">
+      <div class="container" style="position:relative;z-index:1;">
+        <span class="shop-hero-label">⚡ Power Temple Nutrition</span>
+        <h1>FUEL YOUR<br><span>GAINS</span></h1>
+        <p>Premium supplements engineered for peak performance. Pre-workout, protein, creatine, and more — gym-tested, elite-approved.</p>
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <button class="filter-btn active" data-filter="all">All Products</button>
+          <button class="filter-btn" data-filter="pre-workout">Pre-Workout</button>
+          <button class="filter-btn" data-filter="protein">Protein</button>
+          <button class="filter-btn" data-filter="creatine">Creatine</button>
+          <button class="filter-btn" data-filter="bars">Protein Bars</button>
+          <button class="filter-btn" data-filter="vitamins">Vitamins</button>
+          <button class="filter-btn" data-filter="recovery">Recovery</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products -->
+    <main class="container">
+      <section class="products-section">
+        <h2 class="shop-section-title">TOP <span>SELLERS</span></h2>
+        <div class="products-grid" id="productsGrid">
+
+          <!-- Pre-Workout 1 -->
+          <article class="product-card" data-category="pre-workout">
+            <div class="product-badge">Best Seller</div>
+            <div class="product-img-wrap">
+              <img src="https://images.unsplash.com/photo-1627467959547-215e60b48f08?w=500&q=80" alt="Nitro Surge Pre-Workout" loading="lazy"/>
+            </div>
+            <div class="product-info">
+              <span class="product-category">Pre-Workout</span>
+              <h3 class="product-name">Nitro Surge Extreme</h3>
+              <p class="product-desc">Max-dosed pre-workout with 350mg caffeine, 6g citrulline malate, and beta-alanine for unstoppable pumps and laser focus.</p>
+              <div class="product-flavors">
+                <div class="flavor-dot" style="background:#e74c3c" title="Watermelon"></div>
+                <div class="flavor-dot" style="background:#3498db" title="Blue Raspberry"></div>
+                <div class="flavor-dot" style="background:#2ecc71" title="Green Apple"></div>
+                <div class="flavor-dot" style="background:#f39c12" title="Mango"></div>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 650 <span>/30 srv</span></div>
+              <button class="add-to-cart-btn" data-product-name="Nitro Surge Extreme" data-product-price="650">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>
+                ADD
+              </button>
+            </div>
+          </article>
+
+          <!-- Pre-Workout 2 -->
+          <article class="product-card" data-category="pre-workout">
+            <div class="product-badge">New</div>
+            <div class="product-img-wrap">
+              <img src="https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?w=500&q=80" alt="Ignite Pre-Workout" loading="lazy"/>
+            </div>
+            <div class="product-info">
+              <span class="product-category">Pre-Workout</span>
+              <h3 class="product-name">Ignite V2 Stim-Free</h3>
+              <p class="product-desc">Caffeine-free formula with peak O2, alpha-GPC, and electrolytes. Train harder, longer — no crash guaranteed.</p>
+              <div class="product-flavors">
+                <div class="flavor-dot" style="background:#9b59b6" title="Grape"></div>
+                <div class="flavor-dot" style="background:#e74c3c" title="Cherry"></div>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 520 <span>/30 srv</span></div>
+              <button class="add-to-cart-btn" data-product-name="Ignite V2 Stim-Free" data-product-price="520">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>
+                ADD
+              </button>
+            </div>
+          </article>
+
+          <!-- Whey Protein -->
+          <article class="product-card" data-category="protein">
+            <div class="product-badge">Top Rated</div>
+            <div class="product-img-wrap">
+              <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500&q=80" alt="Whey Protein" loading="lazy"/>
+            </div>
+            <div class="product-info">
+              <span class="product-category">Protein</span>
+              <h3 class="product-name">PT Whey Gold</h3>
+              <p class="product-desc">25g ultra-pure whey isolate per scoop. Cold-processed for maximum bioavailability. 5g BCAAs, less than 1g sugar.</p>
+              <div class="product-flavors">
+                <div class="flavor-dot" style="background:#5d4037" title="Chocolate Fudge"></div>
+                <div class="flavor-dot" style="background:#f5f5f5;border-color:rgba(255,255,255,0.3)" title="Vanilla Cream"></div>
+                <div class="flavor-dot" style="background:#e91e63" title="Strawberry"></div>
+                <div class="flavor-dot" style="background:#3e2723" title="Double Chocolate"></div>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 1,200 <span>/2kg</span></div>
+              <button class="add-to-cart-btn" data-product-name="PT Whey Gold" data-product-price="1200">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>
+                ADD
+              </button>
+            </div>
+          </article>
+
+          <!-- Casein Protein -->
+          <article class="product-card" data-category="protein">
+            <div class="product-img-wrap">
+              <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&q=80" alt="Casein Protein" loading="lazy"/>
+            </div>
+            <div class="product-info">
+              <span class="product-category">Protein</span>
+              <h3 class="product-name">Night Fuel Casein</h3>
+              <p class="product-desc">Slow-digesting micellar casein for overnight muscle recovery. 24g protein, rich pudding-like texture. Perfect before bed.</p>
+              <div class="product-flavors">
+                <div class="flavor-dot" style="background:#5d4037" title="Chocolate Brownie"></div>
+                <div class="flavor-dot" style="background:#ffe082" title="Banana Cream"></div>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 980 <span>/1.8kg</span></div>
+              <button class="add-to-cart-btn" data-product-name="Night Fuel Casein" data-product-price="980">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>
+                ADD
+              </button>
+            </div>
+          </article>
+
+          <!-- Creatine Monohydrate -->
+          <article class="product-card" data-category="creatine">
+            <div class="product-badge">Essential</div>
+            <div class="product-img-wrap">
+              <img src="https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=500&q=80" alt="Creatine Monohydrate" loading="lazy"/>
+            </div>
+            <div class="product-info">
+              <span class="product-category">Creatine</span>
+              <h3 class="product-name">Pure Creatine Mono</h3>
+              <p class="product-desc">5g pharmaceutical-grade creatine monohydrate per serving. Micronized for instant dissolve. Unflavored — stack with anything.</p>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 320 <span>/500g</span></div>
+              <button class="add-to-cart-btn" data-product-name="Pure Creatine Mono" data-product-price="320">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>
+                ADD
+              </button>
+            </div>
+          </article>
+
+          <!-- Creatine HCL -->
+          <article class="product-card" data-category="creatine">
+            <div class="product-img-wrap">
+              <img src="https://images.unsplash.com/photo-1584735175315-9d5df23be07e?w=500&q=80" alt="Creatine HCL" loading="lazy"/>
+            </div>
+            <div class="product-info">
+              <span class="product-category">Creatine</span>
+              <h3 class="product-name">Creatine HCL Advanced</h3>
+              <p class="product-desc">More soluble than monohydrate, less bloating. 3g per serving for maximum strength output and rapid ATP regeneration.</p>
+              <div class="product-flavors">
+                <div class="flavor-dot" style="background:#e74c3c" title="Fruit Punch"></div>
+                <div class="flavor-dot" style="background:#1abc9c" title="Lemon-Lime"></div>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 480 <span>/90 srv</span></div>
+              <button class="add-to-cart-btn" data-product-name="Creatine HCL Advanced" data-product-price="480">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>
+                ADD
+              </button>
+            </div>
+          </article>
+
+          <!-- Protein Bar 1 -->
+          <article class="product-card" data-category="bars">
+            <div class="product-badge">Fan Fav</div>
+            <div class="product-img-wrap">
+              <img src="https://images.unsplash.com/photo-1588964895597-cfccd6e2dbf9?w=500&q=80" alt="Protein Bar" loading="lazy"/>
+            </div>
+            <div class="product-info">
+              <span class="product-category">Protein Bars</span>
+              <h3 class="product-name">Power Bar Crunch</h3>
+              <p class="product-desc">20g protein, crunchy peanut coating, real chocolate. Only 220 calories. No sugar alcohols — actually tastes amazing.</p>
+              <div class="product-flavors">
+                <div class="flavor-dot" style="background:#5d4037" title="Chocolate Peanut"></div>
+                <div class="flavor-dot" style="background:#f57f17" title="Caramel Almond"></div>
+                <div class="flavor-dot" style="background:#c0392b" title="Red Velvet"></div>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 75 <span>/bar</span></div>
+              <button class="add-to-cart-btn" data-product-name="Power Bar Crunch" data-product-price="75">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>
+                ADD
+              </button>
+            </div>
+          </article>
+
+          <!-- Protein Bar Box -->
+          <article class="product-card" data-category="bars">
+            <div class="product-badge">Bundle Deal</div>
+            <div class="product-img-wrap">
+              <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&q=80" alt="Protein Bar Box" loading="lazy"/>
+            </div>
+            <div class="product-info">
+              <span class="product-category">Protein Bars</span>
+              <h3 class="product-name">Box of 12 — Mixed</h3>
+              <p class="product-desc">Pick any flavors from our full bar lineup. 12 bars, 20g protein each. Best value for gym-goers training 4+ days a week.</p>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 780 <span>/12 bars</span></div>
+              <button class="add-to-cart-btn" data-product-name="Power Bar Box x12" data-product-price="780">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>
+                ADD
+              </button>
+            </div>
+          </article>
+
+          <!-- Multivitamin -->
+          <article class="product-card" data-category="vitamins">
+            <div class="product-img-wrap">
+              <img src="https://images.unsplash.com/photo-1550572017-edd951b55104?w=500&q=80" alt="Multivitamin" loading="lazy"/>
+            </div>
+            <div class="product-info">
+              <span class="product-category">Vitamins</span>
+              <h3 class="product-name">Elite Multi Daily</h3>
+              <p class="product-desc">30+ essential vitamins and minerals optimized for athletes. Vitamin D3, K2, zinc, magnesium, B-complex in one daily pack.</p>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 390 <span>/60 caps</span></div>
+              <button class="add-to-cart-btn" data-product-name="Elite Multi Daily" data-product-price="390">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>
+                ADD
+              </button>
+            </div>
+          </article>
+
+          <!-- Omega 3 -->
+          <article class="product-card" data-category="vitamins">
+            <div class="product-img-wrap">
+              <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=500&q=80" alt="Omega 3 Fish Oil" loading="lazy"/>
+            </div>
+            <div class="product-info">
+              <span class="product-category">Vitamins</span>
+              <h3 class="product-name">Omega-3 Ultra Strength</h3>
+              <p class="product-desc">3000mg EPA/DHA per serving. Molecularly distilled, mercury-free. Supports joint health, brain function, and recovery speed.</p>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 450 <span>/90 caps</span></div>
+              <button class="add-to-cart-btn" data-product-name="Omega-3 Ultra Strength" data-product-price="450">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>
+                ADD
+              </button>
+            </div>
+          </article>
+
+          <!-- BCAA Recovery -->
+          <article class="product-card" data-category="recovery">
+            <div class="product-badge">Popular</div>
+            <div class="product-img-wrap">
+              <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&q=80" alt="BCAA Recovery" loading="lazy"/>
+            </div>
+            <div class="product-info">
+              <span class="product-category">Recovery</span>
+              <h3 class="product-name">BCAA 2:1:1 Intra</h3>
+              <p class="product-desc">10g BCAAs in the clinical 2:1:1 ratio. Added electrolytes and glutamine for hydration and muscle preservation during training.</p>
+              <div class="product-flavors">
+                <div class="flavor-dot" style="background:#e74c3c" title="Watermelon Splash"></div>
+                <div class="flavor-dot" style="background:#3498db" title="Blue Raspberry"></div>
+                <div class="flavor-dot" style="background:#1abc9c" title="Tropical"></div>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 540 <span>/30 srv</span></div>
+              <button class="add-to-cart-btn" data-product-name="BCAA 2:1:1 Intra" data-product-price="540">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>
+                ADD
+              </button>
+            </div>
+          </article>
+
+          <!-- Glutamine -->
+          <article class="product-card" data-category="recovery">
+            <div class="product-img-wrap">
+              <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&q=80" alt="Glutamine" loading="lazy"/>
+            </div>
+            <div class="product-info">
+              <span class="product-category">Recovery</span>
+              <h3 class="product-name">L-Glutamine Pure</h3>
+              <p class="product-desc">5g pure pharmaceutical glutamine per serving. Supports gut health, immune system, and reduces post-workout soreness significantly.</p>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 280 <span>/300g</span></div>
+              <button class="add-to-cart-btn" data-product-name="L-Glutamine Pure" data-product-price="280">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>
+                ADD
+              </button>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-grid">
+          <div class="footer-col footer-about">
+            <div class="footer-brand-row">
+              <a class="brand footer-brand" href="indexxx.html"><span class="brand-mark">PT</span></a>
+            </div>
+            <p class="footer-copy">Power Temple helps you build strength and confidence with expert trainers, performance-driven plans, and a community built for real results.</p>
+          </div>
+          <div class="footer-col">
+            <h3 class="footer-head">Shop</h3>
+            <ul class="footer-list">
+              <li><a href="#">Pre-Workout</a></li>
+              <li><a href="#">Proteins</a></li>
+              <li><a href="#">Creatine</a></li>
+              <li><a href="#">Protein Bars</a></li>
+              <li><a href="#">Vitamins</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h3 class="footer-head">Quick Links</h3>
+            <ul class="footer-list">
+              <li><a href="indexxx.html">Home</a></li>
+              <li><a href="member/browse-classes.html">Classes</a></li>
+              <li><a href="memberships.html">Memberships</a></li>
+              <li><a href="services.html">Services</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h3 class="footer-head">Contact</h3>
+            <div class="footer-contact">
+              <p><strong>Phone:</strong> <a href="tel:0101234567">0101234567</a></p>
+              <p><strong>Email:</strong> <a href="mailto:powertemple@gmail.com">powertemple@gmail.com</a></p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Cart Toast -->
+  <div id="cartToast" class="cart-toast">
+    <span>✅</span>
+    <span id="cartToastMsg">Item added to cart!</span>
+  </div>
+
+  <!-- Existing modals from main project -->
+  <div id="marketCartOverlay" class="market-cart-overlay hidden"></div>
+  <aside id="marketCartDrawer" class="market-cart-drawer hidden" aria-label="Shopping cart panel">
+    <button type="button" class="market-cart-close" data-close-market-cart aria-label="Close cart">×</button>
+    <div class="market-cart-layout">
+      <section class="market-reco">
+        <h3>You May Also Like</h3>
+        <div id="marketRecoList" class="market-reco-list"></div>
+      </section>
+      <section class="market-cart-main">
+        <h3>Cart</h3>
+        <div id="marketCartList" class="market-cart-list"></div>
+        <div class="market-cart-note-row"><span>Note</span><span>Shipping</span></div>
+        <p class="market-cart-meta">Taxes, discounts and shipping calculated at checkout.</p>
+        <button id="marketCheckoutBtn" class="market-checkout-btn" type="button">CHECK OUT — LE 0.00 EGP</button>
+      </section>
+    </div>
+  </aside>
+
+  <div id="quickLoginModal" class="quick-login-modal hidden" aria-hidden="true">
+    <div class="quick-login-backdrop" data-close-login-modal></div>
+    <section class="quick-login-card" role="dialog" aria-modal="true" aria-label="Quick login">
+      <button class="quick-login-close" type="button" aria-label="Close" data-close-login-modal>×</button>
+      <h2 class="quick-login-title">WELCOME BACK</h2>
+      <p class="quick-login-subtitle">Sign in to your Power Temple account</p>
+      <div class="quick-login-roles" role="tablist">
+        <button class="quick-role-pill active" type="button" data-role-choice="admin">ADMIN</button>
+        <button class="quick-role-pill" type="button" data-role-choice="trainer">TRAINER</button>
+        <button class="quick-role-pill" type="button" data-role-choice="member">MEMBER</button>
+      </div>
+      <form id="quickLoginForm" class="quick-login-form">
+        <input id="quickLoginRole" type="hidden" value="admin"/>
+        <label for="quickLoginUsername">EMAIL ADDRESS</label>
+        <input id="quickLoginUsername" type="text" placeholder="you@example.com" required/>
+        <label for="quickLoginPassword">PASSWORD</label>
+        <input id="quickLoginPassword" type="password" placeholder="••••••••" required/>
+        <button class="btn btn-primary" type="submit">Sign In →</button>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    // === Filter Logic ===
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const productCards = document.querySelectorAll('.product-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        productCards.forEach(card => {
+          if (filter === 'all' || card.dataset.category === filter) {
+            card.removeAttribute('data-hidden');
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // === Add to Cart Toast ===
+    const toast = document.getElementById('cartToast');
+    const toastMsg = document.getElementById('cartToastMsg');
+    let toastTimer;
+
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const name = btn.dataset.productName;
+        const price = parseInt(btn.dataset.productPrice);
+
+        // Show toast
+        toastMsg.textContent = `${name} added to cart!`;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+
+        // Update badge count
+        const badge = document.getElementById('marketCartCount');
+        if (badge) badge.textContent = parseInt(badge.textContent || 0) + 1;
+
+        // Flash button
+        btn.classList.add('added');
+        btn.textContent = '✓ ADDED';
+        setTimeout(() => {
+          btn.classList.remove('added');
+          btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg> ADD`;
+        }, 1500);
+      });
+    });
+  </script>
+</body>
+</html>
