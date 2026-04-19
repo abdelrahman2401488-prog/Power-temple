@@ -207,7 +207,7 @@ class PowerTempleAuth {
   // Protect route - redirect if not authenticated or wrong role
   protectRoute(requiredRoles = []) {
     if (!this.isAuthenticated()) {
-      window.location.href = this.getAppPath('indexxx.html#login');
+      window.location.href = this.getAppPath('index.html#login');
       return false;
     }
 
@@ -236,7 +236,7 @@ class PowerTempleAuth {
         window.location.href = this.getAppPath('member/browse-classes.html');
         break;
       default:
-        window.location.href = this.getAppPath('indexxx.html');
+        window.location.href = this.getAppPath('index.html');
     }
   }
 
@@ -294,7 +294,7 @@ function updateNavbarUser() {
     if (userElement) {
       userElement.innerHTML = `
         <span>${user.name}</span>
-        <button onclick="auth.logout(); window.location.href='${auth.getAppPath('indexxx.html')}';" class="btn btn-ghost" style="font-size: 0.9rem;">
+        <button onclick="auth.logout(); window.location.href='${auth.getAppPath('index.html')}';" class="btn btn-ghost" style="font-size: 0.9rem;">
           Logout
         </button>
       `;

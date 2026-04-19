@@ -49,8 +49,8 @@ function initializeAuthHeaderState() {
 
     const path = window.location.pathname.replace(/\\/g, '/').toLowerCase();
     const homePath = /(\/admin\/|\/member\/|\/trainer\/|\/auth\/)/.test(path)
-      ? '../indexxx.html'
-      : 'indexxx.html';
+      ? '../index.html'
+      : 'index.html';
 
     setTimeout(() => {
       window.location.href = homePath;
@@ -1233,7 +1233,7 @@ function initializeRegisterForm() {
     if (result.success) {
       showNotification(result.message, 'success');
       setTimeout(() => {
-        window.location.href = auth.getAppPath('indexxx.html');
+        window.location.href = auth.getAppPath('index.html');
       }, 1500);
     } else {
       showNotification(result.message, 'error');
