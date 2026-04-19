@@ -192,11 +192,17 @@ const egyptianMarketProducts = [
 ];
 
 let egyptianMarketCart = [];
+let currentVoucherCode = null;
+const voucherDefinitions = {
+  SAVE10: { amount: 0.1, minTotal: 0, label: '10% off' },
+  POWER15: { amount: 0.15, minTotal: 1000, label: '15% off orders LE 1000+' },
+  WELCOME20: { amount: 0.2, minTotal: 2000, label: '20% off orders LE 2000+' },
+};
 
 function initializeEgyptianMarketPage() {
   const page = document.body.getAttribute('data-page');
   const hasMarketUI = !!document.getElementById('marketCartDrawer');
-  if (!(page === 'memberships' || page === 'landing') || !hasMarketUI) return;
+  if (!(['memberships', 'landing', 'shop'].includes(page)) || !hasMarketUI) return;
 
   egyptianMarketCart = loadMarketCart();
   wireMarketCartActions();
@@ -259,8 +265,36 @@ function wireMarketCartActions() {
   document.querySelectorAll('[data-market-add]').forEach((btn) => {
     btn.addEventListener('click', function () {
       addProductToMarketCart(this.getAttribute('data-market-add'));
-      openMarketCart();
     });
+  });
+
+  document.querySelectorAll('.add-to-cart-btn:not([data-market-add])').forEach((btn) => {
+    btn.addEventListener('click', function () {
+      const productId = this.dataset.productName
+        ? this.dataset.productName.trim().replace(/\s+/g, '-').toLowerCase()
+        : `shop-${Math.random().toString(36).slice(2, 8)}`;
+      addProductToMarketCart(productId, this);
+    });
+  });
+
+  document.getElementById('marketApplyVoucherBtn')?.addEventListener('click', () => {
+    const input = document.getElementById('marketVoucherInput');
+    const message = document.getElementById('marketVoucherMessage');
+    if (!input || !message) return;
+
+    const code = input.value.trim().toUpperCase();
+    const result = applyMarketVoucher(code);
+    message.textContent = result.message;
+    message.classList.toggle('success', result.success);
+    message.classList.toggle('error', !result.success);
+    renderMarketCart();
+  });
+
+  document.getElementById('shopNewsletterBtn')?.addEventListener('click', () => {
+    const emailInput = document.getElementById('shopNewsletterEmail');
+    if (!emailInput) return;
+    subscribeToMarketNewsletter(emailInput.value.trim());
+    emailInput.value = '';
   });
 
   document.getElementById('marketCheckoutBtn')?.addEventListener('click', async () => {
@@ -301,8 +335,17 @@ function wireMarketCartActions() {
   });
 }
 
-function addProductToMarketCart(productId) {
-  const item = egyptianMarketProducts.find((product) => product.id === productId);
+function addProductToMarketCart(productId, button = null) {
+  let item = egyptianMarketProducts.find((product) => product.id === productId);
+  if (!item && button) {
+    const card = button.closest('.product-card');
+    const name = button.dataset.marketName || button.dataset.productName || card?.querySelector('.product-name')?.textContent?.trim() || '';
+    const price = Number(button.dataset.marketPrice || button.dataset.productPrice || 0);
+    const image = button.dataset.marketImage || card?.querySelector('.product-img-wrap img')?.src || '';
+    if (!name || !price) return;
+    item = { id: productId, name, price, image };
+  }
+
   if (!item) return;
 
   const existing = egyptianMarketCart.find((cartItem) => cartItem.id === productId);
@@ -400,7 +443,24 @@ function renderMarketCart() {
 
   count.textContent = String(egyptianMarketCart.reduce((sum, item) => sum + item.qty, 0));
 
-  const total = getMarketCartTotal();
+  const subtotal = getMarketCartTotal();
+  const discount = getMarketCartDiscountAmount();
+  const total = subtotal - discount;
+
+  const existingDiscount = document.querySelector('.market-cart-discount');
+  if (discount > 0) {
+    if (existingDiscount) {
+      existingDiscount.textContent = `Voucher ${currentVoucherCode}: -${formatEGP(discount)}`;
+    } else {
+      const discountRow = document.createElement('p');
+      discountRow.className = 'market-cart-discount';
+      discountRow.textContent = `Voucher ${currentVoucherCode}: -${formatEGP(discount)}`;
+      list.parentNode?.insertBefore(discountRow, list.nextSibling);
+    }
+  } else {
+    existingDiscount?.remove();
+  }
+
   checkoutBtn.textContent = `CHECK OUT — ${formatEGP(total)}`;
 
   list.querySelectorAll('[data-qty-minus]').forEach((btn) => {
@@ -418,6 +478,49 @@ function renderMarketCart() {
 
 function getMarketCartTotal() {
   return egyptianMarketCart.reduce((sum, item) => sum + item.price * item.qty, 0);
+}
+
+function getMarketCartDiscountAmount() {
+  if (!currentVoucherCode) return 0;
+  const voucher = voucherDefinitions[currentVoucherCode];
+  if (!voucher) return 0;
+
+  const subtotal = getMarketCartTotal();
+  if (subtotal < voucher.minTotal) return 0;
+  return Math.round(subtotal * voucher.amount);
+}
+
+function applyMarketVoucher(code) {
+  if (!code) {
+    currentVoucherCode = null;
+    return { success: false, message: 'Please enter a voucher code.' };
+  }
+
+  const normalized = code.replace(/\s+/g, '').toUpperCase();
+  const voucher = voucherDefinitions[normalized];
+  if (!voucher) {
+    currentVoucherCode = null;
+    return { success: false, message: 'Invalid voucher code. Try SAVE10, POWER15, or WELCOME20.' };
+  }
+
+  const subtotal = getMarketCartTotal();
+  if (subtotal < voucher.minTotal) {
+    currentVoucherCode = null;
+    return { success: false, message: `Minimum order LE ${voucher.minTotal} required for this voucher.` };
+  }
+
+  currentVoucherCode = normalized;
+  return { success: true, message: `Voucher applied: ${voucher.label}` };
+}
+
+function subscribeToMarketNewsletter(email) {
+  if (!email || !email.includes('@')) {
+    showNotification('Please enter a valid email address.', 'error');
+    return;
+  }
+
+  localStorage.setItem('powertemple_news_subscriber', email);
+  showNotification('Thank you! Latest news and offers will be sent to your inbox.', 'success');
 }
 
 function openMarketCart() {

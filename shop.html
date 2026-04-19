@@ -19,7 +19,7 @@
 
     .shop-hero {
       background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 40%, #0d2137 100%);
-      padding: 80px 0 60px;
+      padding: 60px 0 40px;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -37,20 +37,20 @@
     .shop-hero-label {
       font-family: 'Bebas Neue', sans-serif;
       letter-spacing: 6px;
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       color: var(--primary-color);
       text-transform: uppercase;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       display: block;
     }
 
     .shop-hero h1 {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3rem, 8vw, 6rem);
-      letter-spacing: 4px;
-      line-height: 0.95;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      letter-spacing: 3px;
+      line-height: 1;
       color: #fff;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .shop-hero h1 span {
@@ -59,19 +59,19 @@
 
     .shop-hero p {
       color: var(--text-secondary);
-      font-size: 1rem;
-      max-width: 480px;
-      margin: 0 auto 32px;
+      font-size: 0.95rem;
+      max-width: 420px;
+      margin: 0 auto 24px;
       line-height: 1.6;
     }
 
     /* Filter Bar */
     .filter-bar {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
       justify-content: center;
-      padding: 32px 0 0;
+      padding: 24px 0 0;
       position: relative;
     }
 
@@ -100,20 +100,22 @@
 
     /* Products Grid */
     .products-section {
-      padding: 48px 0 80px;
+      padding: 36px 0 60px;
     }
 
     .products-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      max-width: 1280px;
+      margin: 0 auto;
     }
 
     /* Product Card */
     .product-card {
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(0,212,255,0.15);
-      border-radius: 20px;
+      border-radius: 18px;
       overflow: hidden;
       transition: all 0.3s ease;
       display: flex;
@@ -147,7 +149,7 @@
     }
 
     .product-img-wrap {
-      height: 220px;
+      height: 180px;
       overflow: hidden;
       background: linear-gradient(135deg, #1a1a2e, #0d2137);
       display: flex;
@@ -173,17 +175,17 @@
     }
 
     .product-info {
-      padding: 20px;
+      padding: 16px;
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
     .product-category {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
-      letter-spacing: 2px;
+      letter-spacing: 1.8px;
       text-transform: uppercase;
       color: var(--primary-color);
       font-family: 'Inter', sans-serif;
@@ -191,14 +193,14 @@
 
     .product-name {
       font-family: 'Sora', sans-serif;
-      font-size: 1.05rem;
+      font-size: 0.98rem;
       font-weight: 700;
       color: #fff;
       line-height: 1.3;
     }
 
     .product-desc {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--text-secondary);
       line-height: 1.5;
       flex: 1;
@@ -229,19 +231,19 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 20px 18px;
+      padding: 12px 16px 14px;
       border-top: 1px solid rgba(0,212,255,0.1);
     }
 
     .product-price {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.5rem;
+      font-size: 1.35rem;
       color: #fff;
       letter-spacing: 1px;
     }
 
     .product-price span {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-family: 'Inter', sans-serif;
       color: var(--text-muted);
       font-weight: 400;
@@ -252,12 +254,12 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 9px 16px;
+      padding: 8px 14px;
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: #000;
       border: none;
       border-radius: 50px;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 800;
       cursor: pointer;
       transition: all 0.2s;
@@ -333,6 +335,120 @@
     .shop-section-title span {
       color: var(--primary-color);
     }
+
+    .market-voucher-panel {
+      margin-bottom: 18px;
+    }
+
+    .market-voucher-panel label {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+    }
+
+    .voucher-input-wrapper {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .voucher-input-wrapper input,
+    .newsletter-form input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      font-size: 0.95rem;
+    }
+
+    .voucher-input-wrapper button,
+    .newsletter-form button {
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #000;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .voucher-input-wrapper button:hover,
+    .newsletter-form button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(0,212,255,0.18);
+    }
+
+    .market-voucher-message {
+      font-size: 0.82rem;
+      margin: 0;
+      min-height: 1.2rem;
+      color: var(--text-secondary);
+    }
+
+    .market-voucher-message.success {
+      color: var(--success-color);
+    }
+
+    .market-voucher-message.error {
+      color: var(--danger-color);
+    }
+
+    .shop-newsletter {
+      margin: 40px 0 0;
+    }
+
+    .newsletter-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,212,255,0.15);
+      border-radius: 22px;
+      padding: 28px 32px;
+      backdrop-filter: blur(10px);
+    }
+
+    .newsletter-copy h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      margin: 0 0 10px;
+      color: #fff;
+    }
+
+    .newsletter-copy p {
+      margin: 0;
+      color: var(--text-secondary);
+      max-width: 520px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .newsletter-form {
+      display: grid;
+      grid-template-columns: minmax(240px, 1fr) auto;
+      gap: 12px;
+      width: 100%;
+      max-width: 560px;
+    }
+
+    @media (max-width: 768px) {
+      .newsletter-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .newsletter-form {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body data-page="shop">
@@ -403,7 +519,7 @@
           <article class="product-card" data-category="pre-workout">
             <div class="product-badge">Best Seller</div>
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1627467959547-215e60b48f08?w=500&q=80" alt="Nitro Surge Pre-Workout" loading="lazy"/>
+              <img src="https://tse1.mm.bing.net/th/id/OIP.pAFfcYnkE5t4X_PylLlFWwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Nitro Surge Extreme" loading="lazy"/>
             </div>
             <div class="product-info">
               <span class="product-category">Pre-Workout</span>
@@ -429,7 +545,7 @@
           <article class="product-card" data-category="pre-workout">
             <div class="product-badge">New</div>
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?w=500&q=80" alt="Ignite Pre-Workout" loading="lazy"/>
+              <img src="https://i5.walmartimages.com/asr/085a6524-c3e0-4d88-98a8-856bcc58466e.a81bfe065e50c8d70dea9da3f1b7b9b4.jpeg?odnHeight=784&odnWidth=580&odnBg=FFFFFF" alt="Ignite V2 Stim-Free" loading="lazy"/>
             </div>
             <div class="product-info">
               <span class="product-category">Pre-Workout</span>
@@ -453,7 +569,7 @@
           <article class="product-card" data-category="protein">
             <div class="product-badge">Top Rated</div>
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500&q=80" alt="Whey Protein" loading="lazy"/>
+              <img src="https://i.pinimg.com/736x/52/c3/0a/52c30aeeb8ea2e358fcc91656fe147bf.jpg" alt="PT Whey Gold" loading="lazy"/>
             </div>
             <div class="product-info">
               <span class="product-category">Protein</span>
@@ -478,7 +594,7 @@
           <!-- Casein Protein -->
           <article class="product-card" data-category="protein">
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&q=80" alt="Casein Protein" loading="lazy"/>
+              <img src="https://www.proteini.si/en/image/original/1244/usn-casein-night-time-protein-908g" alt="Night Fuel Casein" loading="lazy"/>
             </div>
             <div class="product-info">
               <span class="product-category">Protein</span>
@@ -502,7 +618,7 @@
           <article class="product-card" data-category="creatine">
             <div class="product-badge">Essential</div>
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=500&q=80" alt="Creatine Monohydrate" loading="lazy"/>
+              <img src="https://i.pinimg.com/1200x/4e/dc/2d/4edc2d9014915f13029978d1610bf030.jpg" alt="Pure Creatine Mono" loading="lazy"/>
             </div>
             <div class="product-info">
               <span class="product-category">Creatine</span>
@@ -521,7 +637,7 @@
           <!-- Creatine HCL -->
           <article class="product-card" data-category="creatine">
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1584735175315-9d5df23be07e?w=500&q=80" alt="Creatine HCL" loading="lazy"/>
+              <img src="https://supplementsource.ca/cdn/shop/products/SSca-Creatine-HCL-421698_1200x1200.jpg?v=1625854115" alt="Creatine HCL Advanced" loading="lazy"/>
             </div>
             <div class="product-info">
               <span class="product-category">Creatine</span>
@@ -545,7 +661,7 @@
           <article class="product-card" data-category="bars">
             <div class="product-badge">Fan Fav</div>
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1588964895597-cfccd6e2dbf9?w=500&q=80" alt="Protein Bar" loading="lazy"/>
+              <img src="https://i.pinimg.com/736x/5d/d3/e9/5dd3e9cd50689af61e9d06cf7da1f93d.jpg" alt="Power Bar Crunch" loading="lazy"/>
             </div>
             <div class="product-info">
               <span class="product-category">Protein Bars</span>
@@ -566,30 +682,9 @@
             </div>
           </article>
 
-          <!-- Protein Bar Box -->
-          <article class="product-card" data-category="bars">
-            <div class="product-badge">Bundle Deal</div>
-            <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&q=80" alt="Protein Bar Box" loading="lazy"/>
-            </div>
-            <div class="product-info">
-              <span class="product-category">Protein Bars</span>
-              <h3 class="product-name">Box of 12 — Mixed</h3>
-              <p class="product-desc">Pick any flavors from our full bar lineup. 12 bars, 20g protein each. Best value for gym-goers training 4+ days a week.</p>
-            </div>
-            <div class="product-footer">
-              <div class="product-price">LE 780 <span>/12 bars</span></div>
-              <button class="add-to-cart-btn" data-product-name="Power Bar Box x12" data-product-price="780">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>
-                ADD
-              </button>
-            </div>
-          </article>
-
-          <!-- Multivitamin -->
           <article class="product-card" data-category="vitamins">
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1550572017-edd951b55104?w=500&q=80" alt="Multivitamin" loading="lazy"/>
+              <img src="https://i.pinimg.com/736x/3c/7c/fe/3c7cfe1aed9035f1e3d10fcf1405784b.jpg" alt="Elite Multi Daily" loading="lazy"/>
             </div>
             <div class="product-info">
               <span class="product-category">Vitamins</span>
@@ -608,7 +703,7 @@
           <!-- Omega 3 -->
           <article class="product-card" data-category="vitamins">
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=500&q=80" alt="Omega 3 Fish Oil" loading="lazy"/>
+              <img src="https://flex.darrelwilson.com/nutranest/storage/sites/140/2024/06/High-Strength-Omega-3.png" alt="Omega-3 Ultra Strength" loading="lazy"/>
             </div>
             <div class="product-info">
               <span class="product-category">Vitamins</span>
@@ -628,7 +723,7 @@
           <article class="product-card" data-category="recovery">
             <div class="product-badge">Popular</div>
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&q=80" alt="BCAA Recovery" loading="lazy"/>
+              <img src="https://i.pinimg.com/1200x/e4/50/78/e450785f058c7841976529d4c537b9c6.jpg" alt="BCAA 2:1:1 Intra" loading="lazy"/>
             </div>
             <div class="product-info">
               <span class="product-category">Recovery</span>
@@ -652,7 +747,7 @@
           <!-- Glutamine -->
           <article class="product-card" data-category="recovery">
             <div class="product-img-wrap">
-              <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&q=80" alt="Glutamine" loading="lazy"/>
+              <img src="https://i.pinimg.com/1200x/9a/79/70/9a7970c56cfb78347c28f8b3bd6d08c9.jpg" alt="L-Glutamine Pure" loading="lazy"/>
             </div>
             <div class="product-info">
               <span class="product-category">Recovery</span>
@@ -708,6 +803,19 @@
           </div>
         </div>
       </footer>
+      <section class="shop-newsletter">
+        <div class="newsletter-card">
+          <div class="newsletter-copy">
+            <span class="eyebrow">LATEST NEWS</span>
+            <h2>Subscribe for exclusive offers and updates</h2>
+            <p>Get the newest product launches, workout tips, and discount codes sent directly to your inbox.</p>
+          </div>
+          <div class="newsletter-form">
+            <input id="shopNewsletterEmail" type="email" placeholder="Enter your email address" />
+            <button id="shopNewsletterBtn" type="button">Subscribe</button>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -728,6 +836,14 @@
       </section>
       <section class="market-cart-main">
         <h3>Cart</h3>
+        <div class="market-voucher-panel">
+          <label for="marketVoucherInput">Voucher Code</label>
+          <div class="voucher-input-wrapper">
+            <input id="marketVoucherInput" type="text" placeholder="Enter voucher code" />
+            <button id="marketApplyVoucherBtn" type="button">Apply</button>
+          </div>
+          <p id="marketVoucherMessage" class="market-voucher-message"></p>
+        </div>
         <div id="marketCartList" class="market-cart-list"></div>
         <div class="market-cart-note-row"><span>Note</span><span>Shipping</span></div>
         <p class="market-cart-meta">Taxes, discounts and shipping calculated at checkout.</p>
