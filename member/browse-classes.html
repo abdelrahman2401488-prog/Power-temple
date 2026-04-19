@@ -15,7 +15,7 @@
   <script src="../assets/js/auth.js" defer></script>
   <script src="../assets/js/main.js" defer></script>
 </head>
-<body data-page="member">
+<body data-page="memberships">
   <div class="app">
     <header class="site-header">
       <div class="container header-inner">
@@ -24,163 +24,107 @@
           <span>Power Temple</span>
         </a>
         <nav class="nav">
+          <a href="../indexxx.html">Home</a>
+          <a href="../indexxx.html#concept">Concept</a>
+          <a href="../services.html">Services</a>
+          <a href="../memberships.html">Memberships</a>
           <a href="browse-classes.html" class="active">Classes</a>
-          <a href="my-bookings.html">My Bookings</a>
-          <a href="healthy-food.html">Nutrition</a>
-          <a href="../indexxx.html">Logout</a>
         </nav>
+        <div class="header-actions" aria-label="Quick actions">
+          <a class="header-icon-link" href="../auth/login.html" title="Login" aria-label="Login">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 12.5c-2.62 0-4.75-2.13-4.75-4.75S9.38 3 12 3s4.75 2.13 4.75 4.75-2.13 4.75-4.75 4.75Zm0-8a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5Z"></path>
+              <path d="M19.25 21h-1.5v-1.25c0-2.62-2.13-4.75-4.75-4.75h-2c-2.62 0-4.75 2.13-4.75 4.75V21h-1.5v-1.25c0-3.45 2.8-6.25 6.25-6.25h2c3.45 0 6.25 2.8 6.25 6.25V21Z"></path>
+            </svg>
+            <span class="sr-only">Login</span>
+          </a>
+          <button class="header-icon-link header-cart-icon" type="button" title="Cart" aria-label="Cart">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M7.25 20.5a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5Zm0-2a.25.25 0 1 0 0 .5.25.25 0 0 0 0-.5Zm9.5 2a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5Zm0-2a.25.25 0 1 0 0 .5.25.25 0 0 0 0-.5Z"></path>
+              <path d="M6.31 6h14.44l-1.47 7.35a2.25 2.25 0 0 1-2.21 1.8H9.44a2.25 2.25 0 0 1-2.2-1.79L5.18 3.75H3.25v-1.5h3.14l.58 2.25Zm1.18 1.5 1.2 5.17a.75.75 0 0 0 .73.59h7.64a.75.75 0 0 0 .74-.6l1.08-5.16H7.49Z"></path>
+            </svg>
+            <span class="cart-count-badge">0</span>
+            <span class="sr-only">Cart</span>
+          </button>
+        </div>
       </div>
     </header>
 
     <main class="container">
-      <section class="dashboard-layout">
-        <div class="dashboard-banner fade-in">
+      <section class="hero">
+        <div class="hero-video-bg">
+          <video
+            class="hero-video-element"
+            autoplay
+            muted
+            loop
+            playsinline
+            aria-hidden="true">
+            <source src="../assets/videos/hero-bg.mp4" type="video/mp4">
+          </video>
+          <div class="hero-video-overlay"></div>
+          <div class="hero-video-text" aria-label="Hero message">INHALE PASSION</div>
+        </div>
+      </section>
+
+      <section class="section fade-in">
+        <div class="section-head">
           <div>
-            <h2>Browse Premium Classes</h2>
-            <p>Search and book from our extensive library of expert-led training sessions.</p>
-          </div>
-          <a class="btn btn-primary" href="my-bookings.html">View My Bookings</a>
-        </div>
-
-        <div style="display: grid; gap: 20px; margin-bottom: 32px;">
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
-            <label style="display: grid;">
-              <span style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px;">🔍 Search Classes</span>
-              <input id="memberSearch" type="text" placeholder="Class name, trainer, or style..." style="width: 100%;" />
-            </label>
-            <label style="display: grid;">
-              <span style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px;">📂 Category</span>
-              <select id="memberCategory">
-                <option>All Categories</option>
-                <option>Cardio</option>
-                <option>Strength</option>
-                <option>Recovery</option>
-                <option>Combat</option>
-              </select>
-            </label>
-            <label style="display: grid;">
-              <span style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px;">🎯 Level</span>
-              <select id="memberLevel">
-                <option>All Levels</option>
-                <option>Beginner</option>
-                <option>Intermediate</option>
-                <option>Advanced</option>
-              </select>
-            </label>
+            <h2>Class Offers</h2>
           </div>
         </div>
-
-        <div style="display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: start;">
-          <div class="stack">
-            <div class="panel-head">
-              <div>
-                <h3>Available Classes</h3>
-                <p data-member-stat="available">0</p> spots available across all classes
-              </div>
+        <div class="class-grid">
+          <article class="class-card fade-in">
+            <div class="toolbar">
+              <span class="pill success">HIIT</span>
+              <span class="pill success">Offer</span>
             </div>
-            <div id="memberClassList" class="class-grid">
-              <article class="class-card fade-in">
-                <div class="toolbar">
-                  <span class="pill success">HIIT</span>
-                  <span class="pill warning">5 spots</span>
-                </div>
-                <img class="class-photo" src="https://www.trxtraining.com/cdn/shop/articles/mma-fighter-workout-training-plan_e5c7f6f7-c3d0-4410-8af7-e2a02397c967.jpg?v=1775795865" alt="Sunrise Power Blast class" loading="lazy" />
-                <h3>MMA Championship Training</h3>
-                <p>Master the art of combat. Our MMA program combines the best of Muay Thai, Brazilian Jiu-Jitsu, and Wrestling into one cohesive system. Whether you're looking to step into the cage or just train like a pro, this class focuses on high-level technique, live drills, and explosive conditioning.</p>
-                <div class="meta-row">
-                  <span>06:00 AM</span>
-                  <span>Coach Maya</span>
-                  <span>Studio A</span>
-                  <span>Intermediate</span>
-                </div>
-                <div class="inline-actions">
-                  <button class="btn btn-primary" data-book-class="1" data-class-fee="1000" style="flex: 1;">Book & Pay LE 1000</button>
-                </div>
-              </article>
-
-              <article class="class-card fade-in">
-                <div class="toolbar">
-                  <span class="pill success">Strength</span>
-                  <span class="pill danger">Full</span>
-                </div>
-                <img class="class-photo" src="https://trugrit-fitness.com/cdn/shop/articles/Fo7_-Q0g.jpg?crop=center&height=1200&v=1638407838&width=1200" alt="Barbell Mastery class" loading="lazy" />
-                <h3>Barbell Mastery</h3>
-                <p>Take your lifting to the next level. This class is dedicated to mastering the mechanics of the barbell. Our coaches break down the Squat, Bench Press, and Deadlift to ensure perfect form, maximum safety, and consistent progress. Whether you're a beginner or looking to break a plateau, this is where champions are built.</p>
-                <div class="meta-row">
-                  <span>18:00 PM</span>
-                  <span>Coach Daniel</span>
-                  <span>Weights Floor</span>
-                  <span>Advanced</span>
-                </div>
-                <div class="inline-actions">
-                  <button class="btn btn-secondary" disabled style="flex: 1;">Class Full</button>
-                </div>
-              </article>
-
-              <article class="class-card fade-in">
-                <div class="toolbar">
-                  <span class="pill success">Recovery</span>
-                  <span class="pill success">18 spots</span>
-                </div>
-                <img class="class-photo" src="../assets/images/mobility-flow.jpg" alt="Mobility Flow class" loading="lazy" />
-                <h3>Mobility Flow</h3>
-                <p>Unlock your body’s full potential. Mobility Flow is a dynamic movement session designed to increase joint health, flexibility, and functional range of motion. We combine controlled articular rotations (CARs) with fluid transitions to help you eliminate stiffness.</p>
-                <div class="meta-row">
-                  <span>09:00 AM</span>
-                  <span>Coach Maya</span>
-                  <span>Mind-Body Studio</span>
-                  <span>Beginner</span>
-                </div>
-                <div class="inline-actions">
-                  <button class="btn btn-primary" data-book-class="3" data-class-fee="1400" style="flex: 1;">Book & Pay LE 1400</button>
-                </div>
-              </article>
-
-              <article class="class-card fade-in">
-                <div class="toolbar">
-                  <span class="pill success">Combat</span>
-                  <span class="pill success">10 spots</span>
-                </div>
-                <img class="class-photo" src="https://americangym.com/wp-content/uploads/boxing7.webp" alt="Boxing Supremacy class" loading="lazy" />
-                <h3>Boxing Supremacy</h3>
-                <p>Speed, power, and relentless energy. This class pushes your cardiovascular limits while sharpening your boxing fundamentals. Expect a grueling mix of shadowboxing, technical pad work, and conditioning circuits that will leave you lean, fast, and ready for anything. Master the jab, cross, and hook with supreme confidence.</p>
-                <div class="meta-row">
-                  <span>19:00 PM</span>
-                  <span>Coach Daniel</span>
-                  <span>Fight Zone</span>
-                  <span>Intermediate</span>
-                </div>
-                <div class="inline-actions">
-                  <button class="btn btn-primary" data-book-class="4" data-class-fee="1200" style="flex: 1;">Book & Pay LE 1200</button>
-                </div>
-              </article>
+            <img class="class-photo" src="https://www.trxtraining.com/cdn/shop/articles/mma-fighter-workout-training-plan_e5c7f6f7-c3d0-4410-8af7-e2a02397c967.jpg?v=1775795865" alt="MMA Championship Training" loading="lazy" />
+            <h3>MMA Championship Training</h3>
+            <p style="color: var(--text-primary); font-weight: 700; margin-top: 6px;">Price: LE 1200</p>
+            <div class="inline-actions">
+              <button class="btn btn-primary" data-book-class="1" data-class-fee="1200" style="flex: 1;">Book & Pay LE 1200</button>
             </div>
-          </div>
+          </article>
 
-          <aside class="panel" style="min-height: 400px; width: 280px;">
-            <div style="margin-bottom: 24px;">
-              <h3>Your Stats</h3>
+          <article class="class-card fade-in">
+            <div class="toolbar">
+              <span class="pill success">Strength</span>
+              <span class="pill success">Offer</span>
             </div>
-            <div class="stat-grid" style="gap: 12px;">
-              <div class="stat">
-                <strong data-member-stat="booked">0</strong>
-                <span>Booked</span>
-              </div>
-              <div class="stat">
-                <strong data-member-stat="available">0</strong>
-                <span>Available</span>
-              </div>
-              <div class="stat">
-                <strong data-member-stat="classes">0</strong>
-                <span>Total Classes</span>
-              </div>
-              <div class="stat">
-                <strong data-member-stat="spots">0</strong>
-                <span>Open Spots</span>
-              </div>
+            <img class="class-photo" src="https://trugrit-fitness.com/cdn/shop/articles/Fo7_-Q0g.jpg?crop=center&height=1200&v=1638407838&width=1200" alt="Barbell Mastery" loading="lazy" />
+            <h3>Barbell Mastery</h3>
+            <p style="color: var(--text-primary); font-weight: 700; margin-top: 6px;">Price: LE 1000</p>
+            <div class="inline-actions">
+              <button class="btn btn-primary" data-book-class="2" data-class-fee="1000" style="flex: 1;">Book & Pay LE 1000</button>
             </div>
-            <div id="memberMessage" class="notice hidden" style="margin-top: 20px;"></div>
-          </aside>
+          </article>
+
+          <article class="class-card fade-in">
+            <div class="toolbar">
+              <span class="pill success">Recovery</span>
+              <span class="pill success">Offer</span>
+            </div>
+            <img class="class-photo" src="../assets/images/mobility-flow.jpg" alt="Mobility Flow" loading="lazy" />
+            <h3>Mobility Flow</h3>
+            <p style="color: var(--text-primary); font-weight: 700; margin-top: 6px;">Price: LE 1000</p>
+            <div class="inline-actions">
+              <button class="btn btn-primary" data-book-class="3" data-class-fee="1000" style="flex: 1;">Book & Pay LE 1000</button>
+            </div>
+          </article>
+
+          <article class="class-card fade-in">
+            <div class="toolbar">
+              <span class="pill success">Combat</span>
+              <span class="pill success">Offer</span>
+            </div>
+            <img class="class-photo" src="https://americangym.com/wp-content/uploads/boxing7.webp" alt="Boxing Supremacy" loading="lazy" />
+            <h3>Boxing Supremacy</h3>
+            <p style="color: var(--text-primary); font-weight: 700; margin-top: 6px;">Price: LE 1500</p>
+            <div class="inline-actions">
+              <button class="btn btn-primary" data-book-class="4" data-class-fee="1500" style="flex: 1;">Book & Pay LE 1500</button>
+            </div>
+          </article>
         </div>
       </section>
     </main>

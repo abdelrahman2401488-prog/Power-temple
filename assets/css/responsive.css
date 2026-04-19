@@ -176,6 +176,13 @@
     padding: 0 16px 34px;
     font-size: 0.97rem;
     line-height: 1.56;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .concept-media {
+    max-width: 640px;
+    margin: 0 auto;
   }
 
   .chip-row {

@@ -76,7 +76,8 @@ main.container {
 
 body[data-page="landing"] .site-header,
 body[data-page="concept"] .site-header,
-body[data-page="services"] .site-header {
+body[data-page="services"] .site-header,
+body[data-page="memberships"] .site-header {
   position: absolute;
   top: 0;
   left: 0;
@@ -105,13 +106,15 @@ body[data-page="services"] .site-header {
 
 body[data-page="landing"] main.container,
 body[data-page="concept"] main.container,
-body[data-page="services"] main.container {
+body[data-page="services"] main.container,
+body[data-page="memberships"] main.container {
   padding-top: 0;
 }
 
 body[data-page="landing"] .header-inner,
 body[data-page="concept"] .header-inner,
-body[data-page="services"] .header-inner {
+body[data-page="services"] .header-inner,
+body[data-page="memberships"] .header-inner {
   min-height: 150px;
   flex-wrap: nowrap;
 }
@@ -124,7 +127,10 @@ body[data-page="concept"] .nav a,
 body[data-page="concept"] .header-icon-link,
 body[data-page="services"] .brand,
 body[data-page="services"] .nav a,
-body[data-page="services"] .header-icon-link {
+body[data-page="services"] .header-icon-link,
+body[data-page="memberships"] .brand,
+body[data-page="memberships"] .nav a,
+body[data-page="memberships"] .header-icon-link {
   color: #f7fbff;
 }
 
@@ -133,18 +139,25 @@ body[data-page="landing"] .nav a.active,
 body[data-page="concept"] .nav a:hover,
 body[data-page="concept"] .nav a.active,
 body[data-page="services"] .nav a:hover,
-body[data-page="services"] .nav a.active {
+body[data-page="services"] .nav a.active,
+body[data-page="memberships"] .nav a:hover,
+body[data-page="memberships"] .nav a.active {
   color: #ffffff;
 }
 
 body[data-page="landing"] .header-actions,
 body[data-page="concept"] .header-actions,
-body[data-page="services"] .header-actions {
-  display: none;
+body[data-page="services"] .header-actions,
+body[data-page="memberships"] .header-actions {
+  display: flex;
+  margin-left: auto;
+  align-items: center;
+  gap: 10px;
 }
 
 body[data-page="landing"] .hero-video-bg,
-body[data-page="services"] .hero-video-bg {
+body[data-page="services"] .hero-video-bg,
+body[data-page="memberships"] .hero-video-bg {
   margin-top: -92px;
 }
 
@@ -582,14 +595,35 @@ body[data-page="services"] .hero-video-text {
   line-height: 1.62;
   letter-spacing: 0.01em;
   scroll-margin-top: 110px;
+  display: grid;
+  grid-template-columns: minmax(260px, 0.9fr) minmax(320px, 1.1fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: center;
 }
 
-.hero-story p {
-  max-width: 1540px;
-  margin: 0 auto 10px;
+.concept-media {
+  margin: 0;
+  width: 100%;
 }
 
-.hero-story p:last-child {
+.concept-media img {
+  width: 100%;
+  display: block;
+  border-radius: 16px;
+  border: 1px solid rgba(145, 168, 201, 0.35);
+  box-shadow: 0 20px 46px rgba(0, 0, 0, 0.36);
+}
+
+.concept-copy {
+  width: 100%;
+}
+
+.concept-copy p {
+  max-width: 74ch;
+  margin: 0 0 12px;
+}
+
+.concept-copy p:last-child {
   margin-bottom: 0;
 }
 

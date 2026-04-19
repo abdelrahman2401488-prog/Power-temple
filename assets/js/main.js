@@ -26,7 +26,101 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Fallback: always wire pricing subscribe buttons.
   initializePricingSubscribeFallback();
+
+  // Reflect current auth state in the shared header controls.
+  initializeAuthHeaderState();
 });
+
+function initializeAuthHeaderState() {
+  if (typeof auth === 'undefined' || typeof auth.getCurrentUser !== 'function') return;
+
+  const loginLinks = document.querySelectorAll('.header-actions a.header-icon-link');
+  if (!loginLinks.length) return;
+
+  const currentUser = auth.getCurrentUser();
+  const userChip = document.getElementById('headerAuthUserChip');
+  const headerActions = loginLinks[0]?.closest('.header-actions');
+  let logoutTextBtn = document.getElementById('headerLogoutTextBtn');
+  if (userChip) userChip.remove();
+
+  const performLogout = () => {
+    auth.logout();
+    showNotification('Logged out successfully', 'success', 900);
+
+    const path = window.location.pathname.replace(/\\/g, '/').toLowerCase();
+    const homePath = /(\/admin\/|\/member\/|\/trainer\/|\/auth\/)/.test(path)
+      ? '../indexxx.html'
+      : 'indexxx.html';
+
+    setTimeout(() => {
+      window.location.href = homePath;
+    }, 200);
+  };
+
+  if (currentUser && headerActions) {
+    if (!logoutTextBtn) {
+      logoutTextBtn = document.createElement('button');
+      logoutTextBtn.id = 'headerLogoutTextBtn';
+      logoutTextBtn.type = 'button';
+      logoutTextBtn.className = 'btn btn-ghost';
+      logoutTextBtn.textContent = 'Logout';
+      logoutTextBtn.style.minHeight = '36px';
+      logoutTextBtn.style.padding = '8px 12px';
+      logoutTextBtn.style.fontSize = '0.92rem';
+      logoutTextBtn.style.lineHeight = '1';
+      logoutTextBtn.style.whiteSpace = 'nowrap';
+      headerActions.prepend(logoutTextBtn);
+    }
+
+    if (logoutTextBtn.dataset.bound !== 'true') {
+      logoutTextBtn.addEventListener('click', performLogout);
+      logoutTextBtn.dataset.bound = 'true';
+    }
+  } else if (logoutTextBtn) {
+    logoutTextBtn.remove();
+  }
+
+  loginLinks.forEach((link) => {
+    const srLabel = link.querySelector('.sr-only');
+
+    if (!link.dataset.loginHref) link.dataset.loginHref = link.getAttribute('href') || '#login';
+    if (!link.dataset.loginTitle) link.dataset.loginTitle = link.getAttribute('title') || 'Login';
+    if (!link.dataset.loginAria) link.dataset.loginAria = link.getAttribute('aria-label') || 'Login';
+    if (srLabel && !srLabel.dataset.loginText) {
+      srLabel.dataset.loginText = srLabel.textContent || 'Login';
+    }
+
+    if (link.dataset.logoutBound !== 'true') {
+      link.addEventListener(
+        'click',
+        (e) => {
+          if (link.dataset.authState !== 'logged-in') return;
+
+          e.preventDefault();
+          e.stopPropagation();
+
+          performLogout();
+        },
+        true
+      );
+      link.dataset.logoutBound = 'true';
+    }
+
+    if (currentUser) {
+      link.dataset.authState = 'logged-in';
+      link.setAttribute('href', '#logout');
+      link.setAttribute('title', `Logout (${currentUser.name})`);
+      link.setAttribute('aria-label', `Logout (${currentUser.name})`);
+      if (srLabel) srLabel.textContent = 'Logout';
+    } else {
+      link.dataset.authState = 'logged-out';
+      link.setAttribute('href', link.dataset.loginHref);
+      link.setAttribute('title', link.dataset.loginTitle);
+      link.setAttribute('aria-label', link.dataset.loginAria);
+      if (srLabel) srLabel.textContent = srLabel.dataset.loginText || 'Login';
+    }
+  });
+}
 
 function initializePricingSubscribeFallback() {
   const subscribeButtons = document.querySelectorAll('[data-subscribe-plan]');
@@ -572,7 +666,9 @@ function initializeAnimations() {
 
 // === MEMBER DASHBOARD ===
 function initializeMemberFeatures() {
-  // Browse Classes Page
+  syncClassBookingVisibility();
+
+  // Browse Classes filters (optional)
   if (document.getElementById('memberSearch')) {
     const searchInput = document.getElementById('memberSearch');
     const categoryFilter = document.getElementById('memberCategory');
@@ -581,10 +677,16 @@ function initializeMemberFeatures() {
     searchInput?.addEventListener('input', filterClasses);
     categoryFilter?.addEventListener('change', filterClasses);
     levelFilter?.addEventListener('change', filterClasses);
+  }
 
-    // Book class buttons
+  // Browse Classes booking buttons
+  const currentUser = typeof auth !== 'undefined' ? auth.getCurrentUser() : null;
+  const canBook = !!currentUser && currentUser.role === 'member';
+  if (canBook && document.querySelector('[data-book-class]')) {
     document.querySelectorAll('[data-book-class]').forEach((btn) => {
+      if (btn.dataset.bookBound === 'true') return;
       btn.addEventListener('click', bookClass);
+      btn.dataset.bookBound = 'true';
     });
   }
 
@@ -595,6 +697,18 @@ function initializeMemberFeatures() {
       btn.addEventListener('click', cancelBooking);
     });
   }
+}
+
+function syncClassBookingVisibility() {
+  const bookingRows = document.querySelectorAll('.inline-actions');
+  if (!bookingRows.length) return;
+
+  const currentUser = typeof auth !== 'undefined' ? auth.getCurrentUser() : null;
+  const canBook = !!currentUser && currentUser.role === 'member';
+
+  bookingRows.forEach((row) => {
+    row.style.display = canBook ? '' : 'none';
+  });
 }
 
 // Filter classes by search and filters
@@ -614,10 +728,10 @@ function filterClasses() {
     const searchMatch = !search || name.includes(search) || text.includes(search);
 
     if (categoryMatch && levelMatch && searchMatch) {
-      card.parentElement.style.display = 'block';
+      card.style.display = '';
       visibleCount++;
     } else {
-      card.parentElement.style.display = 'none';
+      card.style.display = 'none';
     }
   });
 
@@ -1037,6 +1151,7 @@ function initializeQuickLoginModal() {
 
     if (result.success) {
       showNotification(result.message, 'success', 1200);
+      initializeAuthHeaderState();
       closeModal();
       setTimeout(() => {
         auth.redirectToDashboard();

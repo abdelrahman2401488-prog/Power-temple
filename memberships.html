@@ -25,18 +25,18 @@
         </a>
         <nav class="nav">
           <a href="indexxx.html">Home</a>
+          <a href="indexxx.html#concept">Concept</a>
+          <a href="services.html">Services</a>
           <a class="active" href="memberships.html">Memberships</a>
-          <a href="#offers">Offers</a>
           <a href="member/browse-classes.html">Classes</a>
-          <a href="auth/login.html">Login</a>
         </nav>
         <div class="header-actions" aria-label="Quick actions">
-          <a class="header-icon-link" href="auth/login.html" title="Profile" aria-label="Profile">
+          <a class="header-icon-link" href="auth/login.html" title="Login" aria-label="Login">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M12 12.5c-2.62 0-4.75-2.13-4.75-4.75S9.38 3 12 3s4.75 2.13 4.75 4.75-2.13 4.75-4.75 4.75Zm0-8a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5Z"></path>
               <path d="M19.25 21h-1.5v-1.25c0-2.62-2.13-4.75-4.75-4.75h-2c-2.62 0-4.75 2.13-4.75 4.75V21h-1.5v-1.25c0-3.45 2.8-6.25 6.25-6.25h2c3.45 0 6.25 2.8 6.25 6.25V21Z"></path>
             </svg>
-            <span class="sr-only">Profile</span>
+            <span class="sr-only">Login</span>
           </a>
           <button class="header-icon-link header-cart-icon" type="button" data-open-market-cart title="Cart" aria-label="Cart">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -147,6 +147,80 @@
         </div>
       </section>
 
+      <section class="section fade-in" id="pricing">
+        <div class="section-head">
+          <div>
+            <h2>Choose Your Level</h2>
+            <p>All plans include our app, 24/7 community access, and expert support. Cancel anytime.</p>
+          </div>
+        </div>
+        <div class="list-grid">
+          <article class="plan-card">
+            <div class="toolbar">
+              <h3>Starter</h3>
+              <span class="pill success">LE 600/mo</span>
+            </div>
+            <p>Begin your transformation. Access to fundamental classes and our growing community.</p>
+            <ul style="margin: 16px 0; padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; list-style: none;">
+              <li style="margin: 10px 0;">✓ 8 classes per month</li>
+              <li style="margin: 10px 0;">✓ Mobile app access</li>
+              <li style="margin: 10px 0;">✓ Community chat & events</li>
+              <li style="margin: 10px 0;">✓ Basic progress tracking</li>
+            </ul>
+            <button class="btn btn-primary pricing-subscribe-btn" type="button" data-subscribe-plan="starter" data-plan-price="600">Subscribe Now</button>
+          </article>
+
+          <article class="plan-card" style="border-color: rgba(0, 212, 255, 0.4); background: linear-gradient(135deg, rgba(0, 212, 255, 0.12) 0%, rgba(255, 0, 110, 0.08) 100%);">
+            <div class="toolbar">
+              <h3>Elite</h3>
+              <span class="pill warning">LE 900/mo</span>
+            </div>
+            <p>Most popular. Unlimited classes, priority booking, and monthly 1-on-1 coaching sessions.</p>
+            <ul style="margin: 16px 0; padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; list-style: none;">
+              <li style="margin: 10px 0;">✓ Unlimited classes</li>
+              <li style="margin: 10px 0;">✓ Priority early booking</li>
+              <li style="margin: 10px 0;">✓ 2 trainer sessions/mo</li>
+              <li style="margin: 10px 0;">✓ Advanced analytics</li>
+              <li style="margin: 10px 0;">✓ Nutrition guidance</li>
+            </ul>
+            <button class="btn btn-primary pricing-subscribe-btn" type="button" data-subscribe-plan="elite" data-plan-price="900">Subscribe Now</button>
+          </article>
+
+          <article class="plan-card">
+            <div class="toolbar">
+              <h3>Pro</h3>
+              <span class="pill danger">LE 1200/mo</span>
+            </div>
+            <p>For serious athletes. Everything in Elite + custom programs, form analysis, and recovery coaching.</p>
+            <ul style="margin: 16px 0; padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; list-style: none;">
+              <li style="margin: 10px 0;">✓ Unlimited everything</li>
+              <li style="margin: 10px 0;">✓ 4 trainer sessions/mo</li>
+              <li style="margin: 10px 0;">✓ Custom training plans</li>
+              <li style="margin: 10px 0;">✓ Monthly form analysis</li>
+              <li style="margin: 10px 0;">✓ Recovery strategies</li>
+            </ul>
+            <button class="btn btn-primary pricing-subscribe-btn" type="button" data-subscribe-plan="pro" data-plan-price="1200">Subscribe Now</button>
+          </article>
+
+          <article class="plan-card">
+            <div class="toolbar">
+              <h3>Champion</h3>
+              <span class="pill success">LE 1500/mo</span>
+            </div>
+            <p>VIP elite experience. 1-on-1 coaching, complete lifestyle transformation, and dedicated support.</p>
+            <ul style="margin: 16px 0; padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; list-style: none;">
+              <li style="margin: 10px 0;">✓ Everything in Pro</li>
+              <li style="margin: 10px 0;">✓ 8 trainer sessions/mo</li>
+              <li style="margin: 10px 0;">✓ VIP recovery sessions</li>
+              <li style="margin: 10px 0;">✓ Dedicated coach support</li>
+              <li style="margin: 10px 0;">✓ Priority access to all</li>
+            </ul>
+            <button class="btn btn-primary pricing-subscribe-btn" type="button" data-subscribe-plan="champion" data-plan-price="1500">Subscribe Now</button>
+          </article>
+        </div>
+        <p style="margin-top: 16px; color: var(--text-muted); font-size: 0.9rem;">Secure payment: Visa, Mastercard, Wallet, or Cash at gym reception.</p>
+      </section>
+
       <footer class="footer">
         <div class="footer-grid">
           <div class="footer-col footer-about">
@@ -180,7 +254,7 @@
           <div class="footer-col">
             <h3 class="footer-head">Company</h3>
             <ul class="footer-list">
-              <li><a href="#about">About Us</a></li>
+              <li><a href="indexxx.html#concept">About Us</a></li>
               <li><a href="services.html">Our Services</a></li>
               <li><a href="#">Careers</a></li>
               <li><a href="#">Blog</a></li>

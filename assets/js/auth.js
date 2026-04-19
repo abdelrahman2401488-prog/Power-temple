@@ -202,21 +202,24 @@ const auth = new PowerTempleAuth();
 // Page load protection - check role access
 document.addEventListener('DOMContentLoaded', function () {
   const page = document.body.getAttribute('data-page');
+  const path = window.location.pathname.replace(/\\/g, '/').toLowerCase();
 
-  // Check if page requires authentication
-  if (
-    page === 'admin' ||
-    page === 'trainer' ||
-    page === 'member' ||
-    page === 'landing'
-  ) {
-    if (page === 'admin') {
-      auth.protectRoute(['admin']);
-    } else if (page === 'trainer') {
-      auth.protectRoute(['trainer']);
-    } else if (page === 'member') {
+  // Route protection by URL path is more reliable than page flags.
+  if (/\/admin\//.test(path)) {
+    auth.protectRoute(['admin']);
+  } else if (/\/trainer\//.test(path)) {
+    auth.protectRoute(['trainer']);
+  } else if (/\/member\//.test(path)) {
+    const isPublicClassesPage = /\/member\/browse-classes\.html$/.test(path);
+    if (!isPublicClassesPage) {
       auth.protectRoute(['member']);
     }
+  } else if (page === 'admin') {
+    auth.protectRoute(['admin']);
+  } else if (page === 'trainer') {
+    auth.protectRoute(['trainer']);
+  } else if (page === 'member') {
+    auth.protectRoute(['member']);
   }
 
   // Update navbar if user is logged in
