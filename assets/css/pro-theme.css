@@ -859,8 +859,8 @@ textarea:focus {
 }
 
 .footer {
-  margin-top: 52px;
-  color: #91a2bb;
+  margin-top: var(--spacing-3xl);
+  color: var(--text-muted);
 }
 
 /* tighter mobile spacing but still breathable */
