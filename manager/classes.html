@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Class Management | Power Temple</title>
+  <link rel="stylesheet" href="../assets/css/variable.css" />
+  <link rel="stylesheet" href="../assets/css/layout.css" />
+  <link rel="stylesheet" href="../assets/css/components.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+  <link rel="stylesheet" href="../assets/css/pro-theme.css" />
+  <script src="../assets/js/api-mock.js" defer></script>
+  <script src="../assets/js/auth.js" defer></script>
+  <script src="../assets/js/main.js" defer></script>
+</head>
+<body data-page="manager">
+  <div class="app">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark">PT</span>
+          <span>Power Temple</span>
+        </a>
+        <nav class="nav">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="members.html">Members</a>
+          <a href="classes.html" class="active">Classes</a>
+          <a href="payments.html">Payments</a>
+          <a href="reports.html">Reports</a>
+          <a href="../index.html">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div>
+            <h2>Class & Trainer Scheduling</h2>
+            <p>Create classes, schedule slots, assign trainers, set capacity, and update trainer info.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-grid" style="gap: 24px; margin-bottom: 32px;">
+          <div class="stack">
+            <div class="form-card fade-in">
+              <h3 style="margin-bottom: 16px;">+ Create / Schedule Class</h3>
+              <form id="mgrClassForm">
+                <label>
+                  Class Name
+                  <input name="name" type="text" placeholder="e.g., Morning HIIT" required />
+                </label>
+                <div class="field-grid">
+                  <label>
+                    Trainer
+                    <select name="trainer" id="mgrTrainerSel" required></select>
+                  </label>
+                  <label>
+                    Room
+                    <input name="room" type="text" placeholder="Studio A" required />
+                  </label>
+                </div>
+                <div class="field-grid">
+                  <label>
+                    Time
+                    <input name="time" type="text" placeholder="06:00 AM" required />
+                  </label>
+                  <label>
+                    Capacity
+                    <input name="capacity" type="number" min="1" max="100" required />
+                  </label>
+                </div>
+                <div class="field-grid">
+                  <label>
+                    Category
+                    <select name="category">
+                      <option>Cardio</option><option>Strength</option><option>Recovery</option><option>Combat</option>
+                    </select>
+                  </label>
+                  <label>
+                    Level
+                    <select name="level">
+                      <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
+                    </select>
+                  </label>
+                </div>
+                <label>
+                  Description
+                  <textarea name="description" placeholder="What members can expect..."></textarea>
+                </label>
+                <button class="btn btn-primary" type="submit" style="width: 100%;">Publish Class</button>
+              </form>
+            </div>
+
+            <div class="panel-head" style="margin-top: 24px;">
+              <div><h3>Scheduled Classes</h3><p>Manage bookings and capacity per class.</p></div>
+            </div>
+            <div id="mgrClassList"></div>
+          </div>
+
+          <aside class="panel">
+            <h3 style="margin-bottom: 16px;">Edit Trainer Info</h3>
+            <form id="mgrTrainerEditForm" style="display: grid; gap: 12px;">
+              <label>
+                Trainer
+                <select id="trainerEditSel"></select>
+              </label>
+              <label>
+                Specialty
+                <input id="trainerEditSpecialty" type="text" />
+              </label>
+              <label>
+                Bio
+                <textarea id="trainerEditBio"></textarea>
+              </label>
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PowerTempleAPI === 'undefined') return;
+
+      function fillTrainerSelects() {
+        ['mgrTrainerSel', 'trainerEditSel'].forEach((id) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.innerHTML = PowerTempleAPI.trainers.map((t) => `<option value="${t.id}">${t.name} — ${t.specialty}</option>`).join('');
+        });
+      }
+
+      function renderClasses() {
+        const list = document.getElementById('mgrClassList');
+        list.innerHTML = PowerTempleAPI.classes.map((c) => {
+          const pct = Math.round((c.booked / c.capacity) * 100);
+          return `
+          <article class="class-card fade-in" style="margin-bottom: 16px;">
+            <div class="toolbar">
+              <span class="pill success">${c.category}</span>
+              <span class="pill ${pct >= 100 ? 'danger' : 'success'}">${c.booked}/${c.capacity}</span>
+            </div>
+            <h3>${c.name}</h3>
+            <p>${c.description || ''}</p>
+            <div class="meta-row">
+              <span>${c.time}</span>
+              <span>${c.trainer}</span>
+              <span>${c.room}</span>
+              <span>${c.level}</span>
+            </div>
+          </article>`;
+        }).join('');
+      }
+
+      fillTrainerSelects();
+      renderClasses();
+
+      document.getElementById('mgrClassForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const trainerId = Number(fd.get('trainer'));
+        const trainer = PowerTempleAPI.trainers.find((t) => t.id === trainerId);
+        const cls = {
+          name: fd.get('name'),
+          category: fd.get('category'),
+          level: fd.get('level'),
+          trainer: trainer ? trainer.name : '',
+          trainerId,
+          time: fd.get('time'),
+          duration: 60,
+          capacity: Number(fd.get('capacity')),
+          room: fd.get('room'),
+          description: fd.get('description'),
+          image: '💪',
+        };
+        PowerTempleAPI.addClass(cls);
+        showNotification('Class scheduled successfully', 'success');
+        e.target.reset();
+        renderClasses();
+      });
+
+      const editSel = document.getElementById('trainerEditSel');
+      const editSpec = document.getElementById('trainerEditSpecialty');
+      const editBio = document.getElementById('trainerEditBio');
+      function loadTrainerEdit() {
+        const t = PowerTempleAPI.trainers.find((x) => x.id === Number(editSel.value));
+        if (!t) return;
+        editSpec.value = t.specialty || '';
+        editBio.value = t.bio || '';
+      }
+      editSel.addEventListener('change', loadTrainerEdit);
+      loadTrainerEdit();
+
+      document.getElementById('mgrTrainerEditForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const t = PowerTempleAPI.trainers.find((x) => x.id === Number(editSel.value));
+        if (!t) return;
+        t.specialty = editSpec.value;
+        t.bio = editBio.value;
+        showNotification('Trainer info updated', 'success');
+        renderClasses();
+      });
+    });
+  </script>
+</body>
+</html>

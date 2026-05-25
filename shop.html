@@ -25,7 +25,7 @@
           <span class="brand-mark">PT</span>
           <span>Power Temple</span>
         </a>
-        <nav class="nav">
+        <nav class="nav" id="shopNav">
           <a href="index.html">Home</a>
           <a href="index.html#concept">Concept</a>
           <a href="services.html">Services</a>
@@ -33,6 +33,23 @@
           <a href="member/browse-classes.html">Classes</a>
           <a href="shop.html" class="active">Shop</a>
         </nav>
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            if (typeof auth === 'undefined') return;
+            const u = auth.getCurrentUser && auth.getCurrentUser();
+            if (u?.role === 'member') {
+              document.getElementById('shopNav').innerHTML = `
+                <a href="member/membership.html">My Membership</a>
+                <a href="member/browse-classes.html">Classes</a>
+                <a href="member/my-bookings.html">My Bookings</a>
+                <a href="member/personal-training.html">Personal Training</a>
+                <a href="shop.html" class="active">Shop</a>
+                <a href="member/profile.html">Profile</a>
+                <a href="index.html">Logout</a>
+              `;
+            }
+          });
+        </script>
         <div class="header-actions" aria-label="Quick actions">
           <a class="header-icon-link" href="#login" title="Login" aria-label="Login" data-open-login-modal>
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -81,7 +98,7 @@
         <h2 class="shop-section-title">TOP <span>SELLERS</span></h2>
         <div class="products-grid" id="productsGrid">
 
-          <!-- Pre-Workout 1 -->
+          <!-- Pre-Workout 1 (kept as static fallback; JS will replace with API data on load) -->
           <article class="product-card" data-category="pre-workout">
             <div class="product-badge">Best Seller</div>
             <div class="product-img-wrap">

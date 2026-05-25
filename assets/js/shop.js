@@ -1,51 +1,151 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const productCards = document.querySelectorAll('.product-card');
+  const CAT_LABELS = {
+    'pre-workout': 'Pre-Workout',
+    'protein': 'Protein',
+    'creatine': 'Creatine',
+    'bars': 'Protein Bars',
+    'vitamins': 'Vitamins',
+    'recovery': 'Recovery',
+  };
 
-  filterBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
+  const grid = document.getElementById('productsGrid');
 
-      const filter = btn.dataset.filter;
-      productCards.forEach((card) => {
-        if (filter === 'all' || card.dataset.category === filter) {
-          card.removeAttribute('data-hidden');
-          card.style.display = '';
-        } else {
-          card.style.display = 'none';
-        }
+  function escapeHtml(str) {
+    return String(str || '').replace(/[&<>"']/g, (s) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+  }
+
+  function productIdFromName(name) {
+    return String(name || '').trim().replace(/\s+/g, '-').toLowerCase();
+  }
+
+  function getMarketCart() {
+    try { return JSON.parse(localStorage.getItem('powertemple_market_cart') || '[]'); }
+    catch (e) { return []; }
+  }
+
+  function getCartQty(productId) {
+    const item = getMarketCart().find((it) => it.id === productId);
+    return item ? item.qty : 0;
+  }
+
+  function buildFooterMarkup(product) {
+    const pid = productIdFromName(product.name);
+    const qty = getCartQty(pid);
+    const priceHtml = `<div class="product-price">LE ${Number(product.price).toLocaleString()} <span>${escapeHtml(product.unit || '')}</span></div>`;
+    if (qty > 0) {
+      return priceHtml + `
+        <div class="product-qty-stepper" role="group" aria-label="Quantity for ${escapeHtml(product.name)}">
+          <button type="button" data-qty-dec="${escapeHtml(pid)}" aria-label="Decrease">−</button>
+          <span class="qty-display">${qty}</span>
+          <button type="button" data-qty-inc="${escapeHtml(pid)}" aria-label="Increase">+</button>
+        </div>`;
+    }
+    return priceHtml + `
+      <button class="add-to-cart-btn" data-product-name="${escapeHtml(product.name)}" data-product-price="${product.price}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>
+        ADD
+      </button>`;
+  }
+
+  function renderProductsFromAPI() {
+    if (!grid || typeof PowerTempleAPI === 'undefined' || typeof PowerTempleAPI.getAllProducts !== 'function') return;
+    const products = PowerTempleAPI.getAllProducts();
+    if (!products || !products.length) return;
+
+    grid.innerHTML = products.map((p) => `
+      <article class="product-card" data-category="${escapeHtml(p.category)}" data-product-name="${escapeHtml(p.name)}" data-product-price="${p.price}" data-product-unit="${escapeHtml(p.unit || '')}">
+        ${p.badge ? `<div class="product-badge">${escapeHtml(p.badge)}</div>` : ''}
+        <div class="product-img-wrap">
+          <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy" />
+        </div>
+        <div class="product-info">
+          <span class="product-category">${escapeHtml(CAT_LABELS[p.category] || p.category)}</span>
+          <h3 class="product-name">${escapeHtml(p.name)}</h3>
+          <p class="product-desc">${escapeHtml(p.description)}</p>
+        </div>
+        <div class="product-footer">${buildFooterMarkup(p)}</div>
+      </article>
+    `).join('');
+  }
+
+  function refreshAllCardFooters() {
+    document.querySelectorAll('.product-card[data-product-name]').forEach((card) => {
+      const product = {
+        name: card.dataset.productName,
+        price: Number(card.dataset.productPrice),
+        unit: card.dataset.productUnit,
+      };
+      const footer = card.querySelector('.product-footer');
+      if (!footer) return;
+      footer.innerHTML = buildFooterMarkup(product);
+    });
+    wireFooterActions();
+  }
+
+  function wireFilters() {
+    document.querySelectorAll('.filter-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        document.querySelectorAll('.product-card').forEach((card) => {
+          card.style.display = (filter === 'all' || card.dataset.category === filter) ? '' : 'none';
+        });
       });
     });
-  });
+  }
 
-  const toast = document.getElementById('cartToast');
-  const toastMsg = document.getElementById('cartToastMsg');
-  let toastTimer;
-
-  document.querySelectorAll('.add-to-cart-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const name = btn.dataset.productName;
-      const price = parseInt(btn.dataset.productPrice, 10);
-
-      if (toast && toastMsg) {
-        toastMsg.textContent = `${name} added to cart!`;
-        toast.classList.add('show');
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
-      }
-
-      const badge = document.getElementById('marketCartCount');
-      if (badge) {
-        badge.textContent = String((parseInt(badge.textContent || '0', 10) || 0) + 1);
-      }
-
-      btn.classList.add('added');
-      btn.textContent = '✓ ADDED';
-      setTimeout(() => {
-        btn.classList.remove('added');
-        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg> ADD`;
-      }, 1500);
+  function wireFooterActions() {
+    // ADD buttons → push into market cart (main.js)
+    document.querySelectorAll('.add-to-cart-btn').forEach((btn) => {
+      if (btn.dataset.bound === 'true') return;
+      btn.dataset.bound = 'true';
+      btn.addEventListener('click', () => {
+        const name = btn.dataset.productName || 'Item';
+        const productId = productIdFromName(name);
+        if (typeof addProductToMarketCart === 'function') {
+          addProductToMarketCart(productId, btn);
+        }
+        showToast(`${name} added to cart!`);
+      });
     });
-  });
+
+    // Stepper +
+    document.querySelectorAll('[data-qty-inc]').forEach((btn) => {
+      if (btn.dataset.bound === 'true') return;
+      btn.dataset.bound = 'true';
+      btn.addEventListener('click', () => {
+        const pid = btn.dataset.qtyInc;
+        if (typeof changeMarketCartQty === 'function') changeMarketCartQty(pid, 1);
+      });
+    });
+
+    // Stepper −
+    document.querySelectorAll('[data-qty-dec]').forEach((btn) => {
+      if (btn.dataset.bound === 'true') return;
+      btn.dataset.bound = 'true';
+      btn.addEventListener('click', () => {
+        const pid = btn.dataset.qtyDec;
+        if (typeof changeMarketCartQty === 'function') changeMarketCartQty(pid, -1);
+      });
+    });
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('cartToast');
+    const toastMsg = document.getElementById('cartToastMsg');
+    if (!toast || !toastMsg) return;
+    toastMsg.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  // Sync card footers whenever the market cart changes (from card, drawer, or checkout reset).
+  window.addEventListener('market-cart-changed', refreshAllCardFooters);
+
+  // Initial render → filters → action wiring
+  renderProductsFromAPI();
+  wireFilters();
+  wireFooterActions();
 });

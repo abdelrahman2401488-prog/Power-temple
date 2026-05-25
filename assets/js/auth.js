@@ -229,11 +229,14 @@ class PowerTempleAuth {
       case 'admin':
         window.location.href = this.getAppPath('admin/dashboard.html');
         break;
+      case 'manager':
+        window.location.href = this.getAppPath('manager/dashboard.html');
+        break;
       case 'trainer':
         window.location.href = this.getAppPath('trainer/my-schedule.html');
         break;
       case 'member':
-        window.location.href = this.getAppPath('member/browse-classes.html');
+        window.location.href = this.getAppPath('member/membership.html');
         break;
       default:
         window.location.href = this.getAppPath('index.html');
@@ -245,6 +248,7 @@ class PowerTempleAuth {
     const demoAccounts = {
       member: { username: 'john_doe', password: 'john123' },
       trainer: { username: 'coach_omar', password: 'omar123' },
+      manager: { username: 'manager', password: 'Manager123' },
       admin: { username: 'admin', password: 'admin123' },
     };
 
@@ -267,6 +271,8 @@ document.addEventListener('DOMContentLoaded', function () {
   // Route protection by URL path is more reliable than page flags.
   if (/\/admin\//.test(path)) {
     auth.protectRoute(['admin']);
+  } else if (/\/manager\//.test(path)) {
+    auth.protectRoute(['manager']);
   } else if (/\/trainer\//.test(path)) {
     auth.protectRoute(['trainer']);
   } else if (/\/member\//.test(path)) {
@@ -276,6 +282,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   } else if (page === 'admin') {
     auth.protectRoute(['admin']);
+  } else if (page === 'manager') {
+    auth.protectRoute(['manager']);
   } else if (page === 'trainer') {
     auth.protectRoute(['trainer']);
   } else if (page === 'member') {

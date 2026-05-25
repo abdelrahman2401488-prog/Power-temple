@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Membership Management | Power Temple</title>
+  <link rel="stylesheet" href="../assets/css/variable.css" />
+  <link rel="stylesheet" href="../assets/css/layout.css" />
+  <link rel="stylesheet" href="../assets/css/components.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+  <link rel="stylesheet" href="../assets/css/pro-theme.css" />
+  <script src="../assets/js/api-mock.js" defer></script>
+  <script src="../assets/js/auth.js" defer></script>
+  <script src="../assets/js/main.js" defer></script>
+</head>
+<body data-page="admin">
+  <div class="app">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark">PT</span>
+          <span>Power Temple</span>
+        </a>
+        <nav class="nav">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="trainers.html">Trainers</a>
+          <a href="classes.html">Classes</a>
+          <a href="memberships.html" class="active">Memberships</a>
+          <a href="shop.html">Shop</a>
+          <a href="financials.html">Financials</a>
+          <a href="roles.html">Roles</a>
+          <a href="../index.html">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div>
+            <h2>Membership Management</h2>
+            <p>Create plans, configure pricing, run promotions, and manage individual member subscriptions.</p>
+          </div>
+        </div>
+
+        <!-- PLAN MANAGEMENT -->
+        <div class="dashboard-grid" style="gap: 24px; margin-bottom: 40px;">
+          <div class="stack">
+            <div class="form-card fade-in">
+              <h3 style="margin-bottom: 16px;">+ Create Membership Plan</h3>
+              <form id="planForm">
+                <div class="field-grid">
+                  <label>
+                    Plan Name
+                    <input name="name" type="text" placeholder="e.g., Premium" required />
+                  </label>
+                  <label>
+                    Monthly Price (LE)
+                    <input name="monthlyPrice" type="number" min="0" placeholder="e.g., 199" required />
+                  </label>
+                </div>
+                <button class="btn btn-primary" type="submit" style="width: 100%;">Publish Plan</button>
+              </form>
+            </div>
+
+            <div class="panel-head" style="margin-top: 24px;">
+              <div>
+                <h3>Existing Plans</h3>
+                <p>Edit pricing inline. Changes apply immediately to new subscriptions.</p>
+              </div>
+            </div>
+            <div id="planList"></div>
+          </div>
+
+          <aside class="panel">
+            <h3 style="margin-bottom: 20px;">Plan Stats</h3>
+            <div class="stat-grid" style="gap: 12px;">
+              <div class="stat"><strong id="statTotalPlans">0</strong><span>Active Plans</span></div>
+              <div class="stat"><strong id="statTotalSubscribers">0</strong><span>Subscribers</span></div>
+              <div class="stat"><strong id="statTotalMrr">LE 0</strong><span>Monthly MRR</span></div>
+              <div class="stat"><strong id="statSuspended">0</strong><span>Suspended</span></div>
+            </div>
+          </aside>
+        </div>
+
+        <!-- DISCOUNTS / PROMOTIONS -->
+        <div class="dashboard-grid" style="gap: 24px; margin-bottom: 40px;">
+          <div class="stack">
+            <div class="form-card fade-in">
+              <h3 style="margin-bottom: 16px;">+ Create Discount Code</h3>
+              <form id="discountForm">
+                <div class="field-grid">
+                  <label>
+                    Code
+                    <input name="code" type="text" placeholder="e.g., NEWYEAR" required />
+                  </label>
+                  <label>
+                    Discount %
+                    <input name="amount" type="number" min="1" max="90" placeholder="e.g., 15" required />
+                  </label>
+                </div>
+                <div class="field-grid">
+                  <label>
+                    Minimum Order (LE)
+                    <input name="minOrder" type="number" min="0" value="0" />
+                  </label>
+                  <label>
+                    Description
+                    <input name="description" type="text" placeholder="Short label" />
+                  </label>
+                </div>
+                <button class="btn btn-primary" type="submit" style="width: 100%;">Publish Promotion</button>
+              </form>
+            </div>
+
+            <div class="panel-head" style="margin-top: 24px;">
+              <div><h3>Promotions</h3><p>Activate, pause, or remove discount codes.</p></div>
+            </div>
+            <div id="discountList"></div>
+          </div>
+
+          <aside class="panel">
+            <h3 style="margin-bottom: 20px;">Promotion Stats</h3>
+            <div class="stat-grid" style="gap: 12px;">
+              <div class="stat"><strong id="statActiveDiscounts">0</strong><span>Active Codes</span></div>
+              <div class="stat"><strong id="statDiscountUses">0</strong><span>Total Uses</span></div>
+            </div>
+          </aside>
+        </div>
+
+        <!-- MEMBER MEMBERSHIPS (FREEZE / CANCEL) -->
+        <div class="panel-head" style="margin-bottom: 16px;">
+          <div>
+            <h3>Member Subscriptions</h3>
+            <p>Freeze, resume, or cancel individual member memberships.</p>
+          </div>
+        </div>
+        <div id="memberMembershipList"></div>
+
+        <div id="adminMessage" class="notice hidden" style="margin-top: 20px;"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PowerTempleAPI === 'undefined') return;
+
+      function renderPlans() {
+        const list = document.getElementById('planList');
+        list.innerHTML = PowerTempleAPI.membershipPlans.map((p) => `
+          <article class="row-card fade-in" style="margin-bottom: 12px;">
+            <div class="row-main">
+              <strong>${p.name}</strong>
+              <span class="row-meta">ID: ${p.id} · LE <input data-edit-price="${p.id}" type="number" value="${p.monthlyPrice}" style="width: 80px; padding: 4px 8px; margin: 0 4px;" />/mo</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary" data-save-price="${p.id}" style="padding: 6px 12px; font-size: 0.85rem;">Save</button>
+              <button class="btn btn-ghost" data-remove-plan="${p.id}" style="padding: 6px 12px; font-size: 0.85rem; color: var(--danger-color);">Remove</button>
+            </div>
+          </article>
+        `).join('');
+
+        list.querySelectorAll('[data-save-price]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const id = btn.dataset.savePrice;
+            const input = document.querySelector(`[data-edit-price="${id}"]`);
+            const result = PowerTempleAPI.updateMembershipPlanPrice(id, input.value);
+            if (result.success) showNotification('Price updated', 'success');
+          });
+        });
+        list.querySelectorAll('[data-remove-plan]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            if (!confirm('Remove this plan?')) return;
+            PowerTempleAPI.removeMembershipPlan(btn.dataset.removePlan);
+            renderPlans();
+            renderStats();
+            showNotification('Plan removed', 'success');
+          });
+        });
+      }
+
+      function renderDiscounts() {
+        const list = document.getElementById('discountList');
+        list.innerHTML = PowerTempleAPI.discounts.map((d) => `
+          <article class="row-card fade-in" style="margin-bottom: 12px;">
+            <div class="row-main">
+              <strong>${d.code}</strong>
+              <span class="row-meta">${d.amount}% off · min LE ${d.minOrder} · ${d.uses} uses · ${d.description || ''}</span>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span class="pill ${d.active ? 'success' : 'warning'}">${d.active ? 'Active' : 'Paused'}</span>
+              <button class="btn btn-secondary" data-toggle-discount="${d.id}" style="padding: 6px 12px; font-size: 0.85rem;">${d.active ? 'Pause' : 'Activate'}</button>
+              <button class="btn btn-ghost" data-remove-discount="${d.id}" style="padding: 6px 12px; font-size: 0.85rem; color: var(--danger-color);">Remove</button>
+            </div>
+          </article>
+        `).join('');
+
+        list.querySelectorAll('[data-toggle-discount]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            PowerTempleAPI.toggleDiscount(btn.dataset.toggleDiscount);
+            renderDiscounts(); renderStats();
+          });
+        });
+        list.querySelectorAll('[data-remove-discount]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            if (!confirm('Remove this promotion?')) return;
+            PowerTempleAPI.removeDiscount(btn.dataset.removeDiscount);
+            renderDiscounts(); renderStats();
+          });
+        });
+      }
+
+      function renderMemberMemberships() {
+        const list = document.getElementById('memberMembershipList');
+        list.innerHTML = PowerTempleAPI.memberMemberships.map((m) => {
+          const statusPill = m.status === 'active' ? 'success' : (m.status === 'frozen' ? 'warning' : 'danger');
+          return `
+          <article class="row-card fade-in" style="margin-bottom: 12px;">
+            <div class="row-main">
+              <strong>${m.memberName}</strong>
+              <span class="row-meta">${m.planName} · ${m.branch} · LE ${m.monthlyPrice}/mo · Ends ${m.endDate}</span>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <span class="pill ${statusPill}">${m.status}</span>
+              <button class="btn btn-secondary" data-freeze="${m.memberId}" style="padding: 6px 12px; font-size: 0.85rem;">Freeze</button>
+              <button class="btn btn-secondary" data-resume="${m.memberId}" style="padding: 6px 12px; font-size: 0.85rem;">Resume</button>
+              <button class="btn btn-ghost" data-cancel="${m.memberId}" style="padding: 6px 12px; font-size: 0.85rem; color: var(--danger-color);">Cancel</button>
+            </div>
+          </article>`;
+        }).join('');
+
+        list.querySelectorAll('[data-freeze]').forEach((b) => b.addEventListener('click', () => {
+          PowerTempleAPI.setMembershipStatus(b.dataset.freeze, 'frozen'); renderMemberMemberships(); renderStats();
+          showNotification('Membership frozen', 'success');
+        }));
+        list.querySelectorAll('[data-resume]').forEach((b) => b.addEventListener('click', () => {
+          PowerTempleAPI.setMembershipStatus(b.dataset.resume, 'active'); renderMemberMemberships(); renderStats();
+          showNotification('Membership resumed', 'success');
+        }));
+        list.querySelectorAll('[data-cancel]').forEach((b) => b.addEventListener('click', () => {
+          if (!confirm('Cancel this membership?')) return;
+          PowerTempleAPI.setMembershipStatus(b.dataset.cancel, 'cancelled'); renderMemberMemberships(); renderStats();
+          showNotification('Membership cancelled', 'success');
+        }));
+      }
+
+      function renderStats() {
+        document.getElementById('statTotalPlans').textContent = PowerTempleAPI.membershipPlans.length;
+        document.getElementById('statTotalSubscribers').textContent = PowerTempleAPI.memberMemberships.filter((m) => m.status === 'active').length;
+        const mrr = PowerTempleAPI.memberMemberships.filter((m) => m.status === 'active').reduce((s, m) => s + m.monthlyPrice, 0);
+        document.getElementById('statTotalMrr').textContent = `LE ${mrr.toLocaleString()}`;
+        document.getElementById('statSuspended').textContent = PowerTempleAPI.memberMemberships.filter((m) => m.status !== 'active').length;
+        document.getElementById('statActiveDiscounts').textContent = PowerTempleAPI.discounts.filter((d) => d.active).length;
+        document.getElementById('statDiscountUses').textContent = PowerTempleAPI.discounts.reduce((s, d) => s + d.uses, 0);
+      }
+
+      document.getElementById('planForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        PowerTempleAPI.addMembershipPlan({ name: fd.get('name'), monthlyPrice: fd.get('monthlyPrice') });
+        e.target.reset(); renderPlans(); renderStats();
+        showNotification('Plan created', 'success');
+      });
+
+      document.getElementById('discountForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        PowerTempleAPI.addDiscount({
+          code: fd.get('code'),
+          amount: fd.get('amount'),
+          minOrder: fd.get('minOrder'),
+          description: fd.get('description'),
+        });
+        e.target.reset(); renderDiscounts(); renderStats();
+        showNotification('Promotion created', 'success');
+      });
+
+      renderPlans();
+      renderDiscounts();
+      renderMemberMemberships();
+      renderStats();
+    });
+  </script>
+</body>
+</html>

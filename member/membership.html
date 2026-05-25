@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Membership | Power Temple</title>
+  <link rel="stylesheet" href="../assets/css/variable.css" />
+  <link rel="stylesheet" href="../assets/css/layout.css" />
+  <link rel="stylesheet" href="../assets/css/components.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+  <link rel="stylesheet" href="../assets/css/pro-theme.css" />
+  <script src="../assets/js/api-mock.js" defer></script>
+  <script src="../assets/js/auth.js" defer></script>
+  <script src="../assets/js/main.js" defer></script>
+</head>
+<body data-page="member">
+  <div class="app">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark">PT</span>
+          <span>Power Temple</span>
+        </a>
+        <nav class="nav">
+          <a href="membership.html" class="active">My Membership</a>
+          <a href="browse-classes.html">Classes</a>
+          <a href="my-bookings.html">My Bookings</a>
+          <a href="personal-training.html">Personal Training</a>
+          <a href="../shop.html">Shop</a>
+          <a href="profile.html">Profile</a>
+          <a href="../index.html">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div>
+            <h2 id="memberWelcome">Welcome Back</h2>
+            <p>Track your membership, renew, or upgrade to a higher tier with more perks.</p>
+          </div>
+          <a class="btn btn-primary" href="browse-classes.html">Book a Class</a>
+        </div>
+
+        <div class="dashboard-grid" style="gap: 24px; margin-bottom: 32px;">
+          <div class="panel" id="currentPlanPanel">
+            <h3 style="margin-bottom: 12px;">Current Plan</h3>
+            <div id="currentPlanInfo"></div>
+            <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+              <button class="btn btn-primary" id="renewBtn">Renew (12 months)</button>
+            </div>
+          </div>
+
+          <aside class="panel">
+            <h3 style="margin-bottom: 12px;">Membership Stats</h3>
+            <div class="stat-grid" style="gap: 12px;">
+              <div class="stat"><strong id="statBookings">0</strong><span>Bookings</span></div>
+              <div class="stat"><strong id="statSince">—</strong><span>Member Since</span></div>
+            </div>
+          </aside>
+        </div>
+
+        <div class="panel-head" style="margin-bottom: 16px;">
+          <div><h3>Upgrade Your Plan</h3><p>Unlock more classes, premium trainers, and exclusive perks.</p></div>
+        </div>
+        <div id="upgradeOptions" class="dashboard-grid" style="gap: 16px;"></div>
+
+        <div id="adminMessage" class="notice hidden" style="margin-top: 20px;"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PowerTempleAPI === 'undefined' || typeof auth === 'undefined') return;
+      const user = auth.getCurrentUser();
+      if (!user) return;
+
+      document.getElementById('memberWelcome').textContent = `Welcome, ${user.name}`;
+
+      function renderCurrent() {
+        const record = PowerTempleAPI.memberMemberships.find((m) => m.memberId === user.id);
+        const info = document.getElementById('currentPlanInfo');
+        if (!record) {
+          info.innerHTML = '<p style="color: var(--text-secondary);">No active membership found. Subscribe to a plan below.</p>';
+          return;
+        }
+        const status = record.status;
+        const statusPill = status === 'active' ? 'success' : (status === 'frozen' ? 'warning' : 'danger');
+        info.innerHTML = `
+          <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 12px;">
+            <h2 style="margin: 0;">${record.planName}</h2>
+            <span class="pill ${statusPill}">${status}</span>
+          </div>
+          <p style="color: var(--text-secondary); margin-bottom: 8px;">LE ${record.monthlyPrice}/month · ${record.branch} branch</p>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Started: ${record.startDate} · Expires: ${record.endDate}</p>
+        `;
+      }
+
+      document.getElementById('statBookings').textContent = user.totalBookings || 0;
+      document.getElementById('statSince').textContent = user.joiningDate || '—';
+
+      function renderUpgrades() {
+        const container = document.getElementById('upgradeOptions');
+        container.innerHTML = PowerTempleAPI.membershipPlans.map((p) => `
+          <article class="form-card fade-in">
+            <h3 style="margin-bottom: 8px;">${p.name}</h3>
+            <p style="color: var(--primary-color); font-size: 1.4rem; font-weight: 700; margin-bottom: 12px;">LE ${p.monthlyPrice}/mo</p>
+            <button class="btn btn-primary" data-upgrade="${p.id}" style="width: 100%;">Upgrade to ${p.name}</button>
+          </article>
+        `).join('');
+
+        container.querySelectorAll('[data-upgrade]').forEach((b) => b.addEventListener('click', () => {
+          const r = PowerTempleAPI.upgradeMembership(user.id, b.dataset.upgrade);
+          if (r.success) {
+            showNotification(`Upgraded to ${r.record.planName}`, 'success');
+            renderCurrent();
+          } else {
+            showNotification(r.message || 'Could not upgrade', 'error');
+          }
+        }));
+      }
+
+      document.getElementById('renewBtn').addEventListener('click', () => {
+        const r = PowerTempleAPI.renewMembership(user.id, 12);
+        if (r.success) { showNotification('Membership renewed for 12 months', 'success'); renderCurrent(); }
+        else showNotification(r.message || 'Renewal failed', 'error');
+      });
+
+      renderCurrent();
+      renderUpgrades();
+    });
+  </script>
+</body>
+</html>

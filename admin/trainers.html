@@ -26,6 +26,10 @@
           <a href="dashboard.html">Dashboard</a>
           <a href="trainers.html" class="active">Trainers</a>
           <a href="classes.html">Classes</a>
+          <a href="memberships.html">Memberships</a>
+          <a href="shop.html">Shop</a>
+          <a href="financials.html">Financials</a>
+          <a href="roles.html">Roles</a>
           <a href="../index.html">Logout</a>
         </nav>
       </div>
@@ -102,51 +106,38 @@
               </div>
             </div>
 
-            <div id="adminTrainerList">
-              <article class="row-card fade-in" style="margin-bottom: 12px;">
-                <div class="row-main">
-                  <strong>Coach Omar</strong>
-                  <span class="row-meta">@coach_omar · Strength & Power · 12 sessions</span>
-                </div>
-                <span class="pill success">Active</span>
-              </article>
+            <div id="adminTrainerList"></div>
+            <script>
+              document.addEventListener('DOMContentLoaded', function () {
+                function renderTrainers(filter = '') {
+                  const list = document.getElementById('adminTrainerList');
+                  if (!list || typeof PowerTempleAPI === 'undefined') return;
+                  const q = filter.toLowerCase();
+                  const items = PowerTempleAPI.trainers.filter((t) => !q || t.name.toLowerCase().includes(q) || t.username.toLowerCase().includes(q));
+                  list.innerHTML = items.map((t) => `
+                    <article class="row-card fade-in" style="margin-bottom: 12px;">
+                      <div class="row-main">
+                        <strong>${t.name}</strong>
+                        <span class="row-meta">@${t.username} · ${t.specialty} · ${t.sessionsPerWeek} sessions</span>
+                      </div>
+                      <div style="display: flex; gap: 8px; align-items: center;">
+                        <span class="pill ${t.status === 'active' ? 'success' : 'warning'}">${t.status}</span>
+                        <button class="btn btn-ghost" data-remove-trainer="${t.id}" style="padding: 6px 12px; font-size: 0.85rem; color: var(--danger-color);">Remove</button>
+                      </div>
+                    </article>`).join('') || '<div class="empty-state">No trainers match.</div>';
 
-              <article class="row-card fade-in" style="margin-bottom: 12px;">
-                <div class="row-main">
-                  <strong>Coach Yasmine</strong>
-                  <span class="row-meta">@coach_yasmine · Cardio & Conditioning · 9 sessions</span>
-                </div>
-                <span class="pill success">Active</span>
-              </article>
-
-              <article class="row-card fade-in" style="margin-bottom: 12px;">
-                <div class="row-main">
-                  <strong>Coach Zeyad</strong>
-                  <span class="row-meta">@coach_zeyad · Recovery & Mobility · 8 sessions</span>
-                </div>
-                <span class="pill success">Active</span>
-              </article>
-
-              <article class="row-card fade-in" style="margin-bottom: 12px;">
-                <div class="row-main">
-                  <strong>Coach Ahmed</strong>
-                  <span class="row-meta">@coach_ahmed · Combat Sports · 7 sessions</span>
-                </div>
-                <span class="pill success">Active</span>
-              </article>
-
-              <article class="row-card fade-in" style="margin-bottom: 12px;">
-                <div class="row-main">
-                  <strong>Coach Hana</strong>
-                  <span class="row-meta">@coach_hana · General Fitness · 6 sessions</span>
-                </div>
-                <span class="pill warning">Part-Time</span>
-              </article>
-
-              <div class="empty-state" style="margin-top: 12px;">
-                Showing 5 of 25 trainers. Use search to find more.
-              </div>
-            </div>
+                  list.querySelectorAll('[data-remove-trainer]').forEach((b) => b.addEventListener('click', () => {
+                    if (!confirm('Remove this trainer from the roster?')) return;
+                    const r = PowerTempleAPI.removeTrainer(b.dataset.removeTrainer);
+                    if (r.success) { showNotification(r.message, 'success'); renderTrainers(document.getElementById('adminTrainerSearch')?.value || ''); }
+                  }));
+                }
+                renderTrainers();
+                document.getElementById('adminTrainerSearch')?.addEventListener('input', (e) => renderTrainers(e.target.value));
+                // Re-render after addTrainer form submission
+                document.getElementById('adminTrainerForm')?.addEventListener('submit', () => setTimeout(renderTrainers, 100));
+              });
+            </script>
           </div>
 
           <aside class="panel">

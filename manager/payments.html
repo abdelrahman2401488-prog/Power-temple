@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payments | Power Temple</title>
+  <link rel="stylesheet" href="../assets/css/variable.css" />
+  <link rel="stylesheet" href="../assets/css/layout.css" />
+  <link rel="stylesheet" href="../assets/css/components.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+  <link rel="stylesheet" href="../assets/css/pro-theme.css" />
+  <script src="../assets/js/api-mock.js" defer></script>
+  <script src="../assets/js/auth.js" defer></script>
+  <script src="../assets/js/main.js" defer></script>
+</head>
+<body data-page="manager">
+  <div class="app">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark">PT</span>
+          <span>Power Temple</span>
+        </a>
+        <nav class="nav">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="members.html">Members</a>
+          <a href="classes.html">Classes</a>
+          <a href="payments.html" class="active">Payments</a>
+          <a href="reports.html">Reports</a>
+          <a href="../index.html">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div>
+            <h2>Payments & Transactions</h2>
+            <p>Record cash payments, view all transactions, and track membership renewals.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-grid" style="gap: 24px; margin-bottom: 32px;">
+          <div class="stack">
+            <div class="form-card fade-in">
+              <h3 style="margin-bottom: 16px;">+ Record Cash Payment</h3>
+              <form id="cashForm">
+                <label>
+                  Member
+                  <select id="cashMember" name="memberId" required></select>
+                </label>
+                <div class="field-grid">
+                  <label>
+                    Amount (LE)
+                    <input name="amount" type="number" min="1" required />
+                  </label>
+                  <label>
+                    Description
+                    <input name="description" type="text" placeholder="e.g., Elite Renewal" required />
+                  </label>
+                </div>
+                <button class="btn btn-primary" type="submit" style="width: 100%;">Record Payment</button>
+              </form>
+            </div>
+
+            <div class="panel-head" style="margin-top: 24px;">
+              <div><h3>Recent Transactions</h3><p>All payments through the branch.</p></div>
+            </div>
+            <div id="cashList"></div>
+          </div>
+
+          <aside class="panel">
+            <h3 style="margin-bottom: 16px;">Payment Stats</h3>
+            <div class="stat-grid" style="gap: 12px;">
+              <div class="stat"><strong id="payCntCash">0</strong><span>Cash Txns</span></div>
+              <div class="stat"><strong id="payCntCard">0</strong><span>Card Txns</span></div>
+              <div class="stat"><strong id="payTotal">LE 0</strong><span>Total Today</span></div>
+              <div class="stat"><strong id="payRenewals">0</strong><span>Renewals</span></div>
+            </div>
+
+            <h4 style="margin-top: 20px; margin-bottom: 12px;">Membership Renewals</h4>
+            <div id="renewalsList" style="display: grid; gap: 8px; font-size: 0.9rem;"></div>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PowerTempleAPI === 'undefined') return;
+      const fmt = (n) => 'LE ' + Number(n || 0).toLocaleString();
+
+      function fillMembers() {
+        const sel = document.getElementById('cashMember');
+        sel.innerHTML = PowerTempleAPI.users.filter((u) => u.role === 'member').map((m) => `<option value="${m.id}">${m.name} (${m.email})</option>`).join('');
+      }
+
+      function renderStats() {
+        const paid = PowerTempleAPI.payments.filter((p) => p.status === 'paid');
+        document.getElementById('payCntCash').textContent = paid.filter((p) => p.method === 'cash').length;
+        document.getElementById('payCntCard').textContent = paid.filter((p) => p.method !== 'cash').length;
+        document.getElementById('payTotal').textContent = fmt(paid.reduce((s, p) => s + Number(p.amount), 0));
+        document.getElementById('payRenewals').textContent = PowerTempleAPI.getRenewalsThisMonth().length;
+      }
+
+      function renderTxns() {
+        const list = document.getElementById('cashList');
+        list.innerHTML = PowerTempleAPI.payments.slice().reverse().map((p) => `
+          <article class="row-card fade-in" style="margin-bottom: 12px;">
+            <div class="row-main">
+              <strong>${p.memberName || 'Member'} — ${fmt(p.amount)}</strong>
+              <span class="row-meta">${new Date(p.paidAt).toLocaleString()} · ${p.method.toUpperCase()} · ${p.description}</span>
+            </div>
+            <span class="pill ${p.status === 'paid' ? 'success' : 'warning'}">${p.status}</span>
+          </article>
+        `).join('');
+      }
+
+      function renderRenewals() {
+        const r = PowerTempleAPI.getRenewalsThisMonth();
+        const list = document.getElementById('renewalsList');
+        list.innerHTML = r.map((m) => `<div style="display: flex; justify-content: space-between;"><span>${m.memberName}</span><strong>${m.endDate}</strong></div>`).join('') || '<p style="color: var(--text-muted);">No renewals this month.</p>';
+      }
+
+      document.getElementById('cashForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        PowerTempleAPI.recordCashPayment({
+          memberId: fd.get('memberId'),
+          amount: fd.get('amount'),
+          description: fd.get('description'),
+        });
+        showNotification('Cash payment recorded', 'success');
+        e.target.reset();
+        renderStats(); renderTxns();
+      });
+
+      fillMembers(); renderStats(); renderTxns(); renderRenewals();
+    });
+  </script>
+</body>
+</html>

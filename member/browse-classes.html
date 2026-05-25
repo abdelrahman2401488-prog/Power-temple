@@ -22,13 +22,28 @@
           <span class="brand-mark">PT</span>
           <span>Power Temple</span>
         </a>
-        <nav class="nav">
+        <nav class="nav" id="memberNav">
           <a href="../index.html">Home</a>
           <a href="../index.html#concept">Concept</a>
           <a href="../services.html">Services</a>
           <a href="../memberships.html">Memberships</a>
           <a href="browse-classes.html" class="active">Classes</a>
         </nav>
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            if (typeof auth !== 'undefined' && auth.getCurrentUser && auth.getCurrentUser()?.role === 'member') {
+              document.getElementById('memberNav').innerHTML = `
+                <a href="membership.html">My Membership</a>
+                <a href="browse-classes.html" class="active">Classes</a>
+                <a href="my-bookings.html">My Bookings</a>
+                <a href="personal-training.html">Personal Training</a>
+                <a href="../shop.html">Shop</a>
+                <a href="profile.html">Profile</a>
+                <a href="../index.html">Logout</a>
+              `;
+            }
+          });
+        </script>
         <div class="header-actions" aria-label="Quick actions">
           <a class="header-icon-link" href="#login" title="Login" aria-label="Login" data-open-login-modal>
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reports | Power Temple</title>
+  <link rel="stylesheet" href="../assets/css/variable.css" />
+  <link rel="stylesheet" href="../assets/css/layout.css" />
+  <link rel="stylesheet" href="../assets/css/components.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+  <link rel="stylesheet" href="../assets/css/pro-theme.css" />
+  <script src="../assets/js/api-mock.js" defer></script>
+  <script src="../assets/js/auth.js" defer></script>
+  <script src="../assets/js/main.js" defer></script>
+</head>
+<body data-page="manager">
+  <div class="app">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark">PT</span>
+          <span>Power Temple</span>
+        </a>
+        <nav class="nav">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="members.html">Members</a>
+          <a href="classes.html">Classes</a>
+          <a href="payments.html">Payments</a>
+          <a href="reports.html" class="active">Reports</a>
+          <a href="../index.html">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div>
+            <h2>Operations Reports</h2>
+            <p>Daily attendance, revenue, membership renewals, and trainer schedules.</p>
+          </div>
+        </div>
+
+        <div class="stat-grid" style="margin-bottom: 32px;">
+          <div class="stat fade-in"><strong id="rptAttended">0</strong><span>Today's Check-ins</span></div>
+          <div class="stat fade-in"><strong id="rptNoshow">0</strong><span>No-shows</span></div>
+          <div class="stat fade-in"><strong id="rptRevenue">LE 0</strong><span>Daily Revenue</span></div>
+          <div class="stat fade-in"><strong id="rptRenewals">0</strong><span>Renewals This Month</span></div>
+        </div>
+
+        <div class="dashboard-grid" style="gap: 24px; margin-bottom: 32px;">
+          <div class="panel">
+            <h3 style="margin-bottom: 16px;">Daily Attendance</h3>
+            <div id="attendanceReport"></div>
+          </div>
+          <div class="panel">
+            <h3 style="margin-bottom: 16px;">Membership Renewals</h3>
+            <div id="renewalsReport"></div>
+          </div>
+        </div>
+
+        <div class="panel-head" style="margin-bottom: 16px;">
+          <div><h3>Trainer Schedules</h3><p>Sessions assigned to each trainer this week.</p></div>
+        </div>
+        <div id="trainerSchedules"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PowerTempleAPI === 'undefined') return;
+      const fmt = (n) => 'LE ' + Number(n || 0).toLocaleString();
+
+      const att = PowerTempleAPI.attendance.reduce((acc, a) => ({ attended: acc.attended + a.attended, noShow: acc.noShow + a.noShow }), { attended: 0, noShow: 0 });
+      document.getElementById('rptAttended').textContent = att.attended;
+      document.getElementById('rptNoshow').textContent = att.noShow;
+      document.getElementById('rptRevenue').textContent = fmt(PowerTempleAPI.payments.filter((p) => p.status === 'paid').reduce((s, p) => s + Number(p.amount), 0));
+      document.getElementById('rptRenewals').textContent = PowerTempleAPI.getRenewalsThisMonth().length;
+
+      const attList = document.getElementById('attendanceReport');
+      attList.innerHTML = PowerTempleAPI.getDailyAttendance().map((a) => {
+        const pct = Math.round((a.attended / a.total) * 100);
+        return `
+        <div style="margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <strong>${a.className}</strong>
+            <span style="color: var(--text-secondary);">${a.attended}/${a.total} (${pct}%)</span>
+          </div>
+          <div style="height: 8px; background: var(--glass); border-radius: 4px; overflow: hidden;">
+            <div style="height: 100%; width: ${pct}%; background: linear-gradient(90deg, var(--success-color), var(--primary-color));"></div>
+          </div>
+          <small style="color: var(--text-muted);">${a.date} · ${a.noShow} no-show · ${a.cancelled} cancelled</small>
+        </div>`;
+      }).join('') || '<p style="color: var(--text-muted);">No attendance recorded.</p>';
+
+      const renew = document.getElementById('renewalsReport');
+      const renewals = PowerTempleAPI.getRenewalsThisMonth();
+      renew.innerHTML = renewals.map((m) => `
+        <article class="row-card fade-in" style="margin-bottom: 12px;">
+          <div class="row-main">
+            <strong>${m.memberName}</strong>
+            <span class="row-meta">${m.planName} · ${fmt(m.monthlyPrice)}/mo · expires ${m.endDate}</span>
+          </div>
+          <span class="pill ${m.status === 'active' ? 'success' : 'warning'}">${m.status}</span>
+        </article>
+      `).join('') || '<p style="color: var(--text-muted);">No renewals this month.</p>';
+
+      const schedules = document.getElementById('trainerSchedules');
+      schedules.innerHTML = PowerTempleAPI.trainers.map((t) => {
+        const cls = PowerTempleAPI.getTrainerSchedule(t.id);
+        return `
+        <article class="form-card fade-in" style="margin-bottom: 16px;">
+          <h3 style="margin-bottom: 8px;">${t.name} <span style="font-size: 0.85rem; color: var(--text-muted);">— ${t.specialty}</span></h3>
+          <div style="display: grid; gap: 6px; font-size: 0.9rem;">
+            ${cls.length ? cls.map((c) => `<div style="display: flex; justify-content: space-between;"><span>${c.name}</span><strong>${c.time} · ${c.room}</strong></div>`).join('') : '<p style="color: var(--text-muted);">No classes scheduled.</p>'}
+          </div>
+        </article>`;
+      }).join('');
+    });
+  </script>
+</body>
+</html>

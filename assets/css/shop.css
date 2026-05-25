@@ -265,6 +265,47 @@
   background: var(--success-color);
 }
 
+/* Quantity stepper that replaces the ADD button after a product is in the cart */
+.product-qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: #000;
+  border-radius: 50px;
+  padding: 2px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  user-select: none;
+}
+
+.product-qty-stepper button {
+  background: transparent;
+  border: none;
+  color: #000;
+  width: 28px;
+  height: 28px;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  transition: background 0.15s;
+}
+
+.product-qty-stepper button:hover {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.product-qty-stepper .qty-display {
+  min-width: 26px;
+  text-align: center;
+  font-size: 0.85rem;
+  padding: 0 4px;
+}
+
 /* Promo Banner */
 .promo-strip {
   background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--primary-color));

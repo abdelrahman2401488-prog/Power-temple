@@ -174,6 +174,33 @@
   gap: 4px;
 }
 
+/* Cart Toast (shared) */
+.cart-toast {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--primary-color);
+  color: #fff;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cart-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
 /* Plan Cards */
 .plan-card {
   padding: var(--spacing-xl);

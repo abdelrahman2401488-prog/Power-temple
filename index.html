@@ -366,13 +366,15 @@
       <p class="quick-login-subtitle">Sign in to your Power Temple account</p>
 
       <div class="quick-login-roles" role="tablist" aria-label="Account role">
-        <button class="quick-role-pill active" type="button" data-role-choice="admin">ADMIN</button>
+        <button class="quick-role-pill active" type="button" data-role-choice="">ANY</button>
+        <button class="quick-role-pill" type="button" data-role-choice="admin">ADMIN</button>
+        <button class="quick-role-pill" type="button" data-role-choice="manager">MANAGER</button>
         <button class="quick-role-pill" type="button" data-role-choice="trainer">TRAINER</button>
         <button class="quick-role-pill" type="button" data-role-choice="member">MEMBER</button>
       </div>
 
       <form id="quickLoginForm" class="quick-login-form">
-        <input id="quickLoginRole" type="hidden" value="admin" />
+        <input id="quickLoginRole" type="hidden" value="" />
 
         <label for="quickLoginUsername">Username</label>
         <input id="quickLoginUsername" type="text" placeholder="Enter your username" required />
@@ -386,10 +388,12 @@
       <div class="quick-login-demo-info">
         <strong>Demo logins:</strong>
         <p>Admin: admin / admin123</p>
+        <p>Manager: manager / Manager123</p>
         <p>Trainer: coach_omar / omar123</p>
         <p>Member: john_doe / john123</p>
         <div class="quick-login-demo-actions">
           <button type="button" data-quick-demo="admin">Use Admin</button>
+          <button type="button" data-quick-demo="manager">Use Manager</button>
           <button type="button" data-quick-demo="trainer">Use Trainer</button>
           <button type="button" data-quick-demo="member">Use Member</button>
         </div>

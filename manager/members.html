@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Member Management | Power Temple</title>
+  <link rel="stylesheet" href="../assets/css/variable.css" />
+  <link rel="stylesheet" href="../assets/css/layout.css" />
+  <link rel="stylesheet" href="../assets/css/components.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+  <link rel="stylesheet" href="../assets/css/pro-theme.css" />
+  <script src="../assets/js/api-mock.js" defer></script>
+  <script src="../assets/js/auth.js" defer></script>
+  <script src="../assets/js/main.js" defer></script>
+</head>
+<body data-page="manager">
+  <div class="app">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark">PT</span>
+          <span>Power Temple</span>
+        </a>
+        <nav class="nav">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="members.html" class="active">Members</a>
+          <a href="classes.html">Classes</a>
+          <a href="payments.html">Payments</a>
+          <a href="reports.html">Reports</a>
+          <a href="../index.html">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div>
+            <h2>Member Management</h2>
+            <p>Register new members, update info, renew memberships, and suspend accounts.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-grid" style="gap: 24px; margin-bottom: 32px;">
+          <div class="stack">
+            <div class="form-card fade-in">
+              <h3 style="margin-bottom: 16px;">+ Register New Member</h3>
+              <form id="mgrMemberForm">
+                <div class="field-grid">
+                  <label>
+                    Full Name
+                    <input name="name" type="text" required />
+                  </label>
+                  <label>
+                    Email
+                    <input name="email" type="email" required />
+                  </label>
+                </div>
+                <div class="field-grid">
+                  <label>
+                    Username
+                    <input name="username" type="text" required />
+                  </label>
+                  <label>
+                    Initial Password
+                    <input name="password" type="text" value="TempPass1" required />
+                  </label>
+                </div>
+                <div class="field-grid">
+                  <label>
+                    Plan
+                    <select name="tier" required>
+                      <option value="starter">Starter</option>
+                      <option value="elite">Elite</option>
+                      <option value="pro">Pro</option>
+                      <option value="champion">Champion</option>
+                    </select>
+                  </label>
+                  <label>
+                    Branch
+                    <select name="branch" required>
+                      <option>Maadi</option>
+                      <option>Zamalek</option>
+                      <option>New Cairo</option>
+                    </select>
+                  </label>
+                </div>
+                <button class="btn btn-primary" type="submit" style="width: 100%;">Register Member</button>
+              </form>
+            </div>
+
+            <div style="margin-top: 24px;">
+              <input id="mgrMemberSearch" type="text" placeholder="🔍 Search members..." style="width: 100%; margin-bottom: 20px;" />
+            </div>
+
+            <div class="panel-head">
+              <div><h3>Members</h3><p>Update info, renew, or suspend membership.</p></div>
+            </div>
+            <div id="mgrMemberList"></div>
+          </div>
+
+          <aside class="panel">
+            <h3 style="margin-bottom: 16px;">Member Stats</h3>
+            <div class="stat-grid" style="gap: 12px;">
+              <div class="stat"><strong id="memCntTotal">0</strong><span>Total</span></div>
+              <div class="stat"><strong id="memCntActive">0</strong><span>Active</span></div>
+              <div class="stat"><strong id="memCntSuspended">0</strong><span>Suspended</span></div>
+              <div class="stat"><strong id="memCntNew">0</strong><span>New (30d)</span></div>
+            </div>
+          </aside>
+        </div>
+
+        <div id="adminMessage" class="notice hidden"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PowerTempleAPI === 'undefined') return;
+
+      function renderStats() {
+        const members = PowerTempleAPI.users.filter((u) => u.role === 'member');
+        document.getElementById('memCntTotal').textContent = members.length;
+        document.getElementById('memCntActive').textContent = members.filter((m) => m.membershipStatus !== 'suspended' && m.membershipStatus !== 'cancelled').length;
+        document.getElementById('memCntSuspended').textContent = members.filter((m) => m.membershipStatus === 'suspended').length;
+        const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
+        document.getElementById('memCntNew').textContent = members.filter((m) => m.joiningDate && new Date(m.joiningDate).getTime() > cutoff).length;
+      }
+
+      function renderMembers(filter = '') {
+        const list = document.getElementById('mgrMemberList');
+        const q = filter.toLowerCase();
+        const members = PowerTempleAPI.users.filter((u) => u.role === 'member').filter((m) => !q || m.name.toLowerCase().includes(q) || m.email.toLowerCase().includes(q));
+        list.innerHTML = members.map((m) => {
+          const status = m.membershipStatus || 'active';
+          const statusPill = status === 'active' ? 'success' : (status === 'frozen' ? 'warning' : 'danger');
+          return `
+          <article class="row-card fade-in" style="margin-bottom: 12px;">
+            <div class="row-main">
+              <strong>${m.avatar || '👤'} ${m.name}</strong>
+              <span class="row-meta">@${m.username} · ${m.membershipTier} · joined ${m.joiningDate || '—'}</span>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <span class="pill ${statusPill}">${status}</span>
+              <button class="btn btn-secondary" data-renew="${m.id}" style="padding: 6px 12px; font-size: 0.85rem;">Renew</button>
+              <button class="btn btn-secondary" data-suspend="${m.id}" style="padding: 6px 12px; font-size: 0.85rem;">Suspend</button>
+              <button class="btn btn-ghost" data-activate="${m.id}" style="padding: 6px 12px; font-size: 0.85rem;">Activate</button>
+              <button class="btn btn-ghost" data-edit="${m.id}" style="padding: 6px 12px; font-size: 0.85rem;">Edit</button>
+            </div>
+          </article>`;
+        }).join('') || '<p style="color: var(--text-muted);">No members match.</p>';
+
+        list.querySelectorAll('[data-renew]').forEach((b) => b.addEventListener('click', () => {
+          PowerTempleAPI.renewMembership(b.dataset.renew, 12);
+          showNotification('Membership renewed for 12 months', 'success');
+          renderMembers(document.getElementById('mgrMemberSearch').value);
+        }));
+        list.querySelectorAll('[data-suspend]').forEach((b) => b.addEventListener('click', () => {
+          PowerTempleAPI.setMembershipStatus(b.dataset.suspend, 'suspended');
+          showNotification('Member suspended', 'success');
+          renderStats(); renderMembers(document.getElementById('mgrMemberSearch').value);
+        }));
+        list.querySelectorAll('[data-activate]').forEach((b) => b.addEventListener('click', () => {
+          PowerTempleAPI.setMembershipStatus(b.dataset.activate, 'active');
+          showNotification('Member reactivated', 'success');
+          renderStats(); renderMembers(document.getElementById('mgrMemberSearch').value);
+        }));
+        list.querySelectorAll('[data-edit]').forEach((b) => b.addEventListener('click', () => {
+          const m = PowerTempleAPI.getUserById(Number(b.dataset.edit));
+          if (!m) return;
+          const newName = prompt('New name:', m.name);
+          if (newName) {
+            const newEmail = prompt('New email:', m.email);
+            PowerTempleAPI.updateMemberInfo(m.id, { name: newName, email: newEmail || m.email });
+            showNotification('Member updated', 'success');
+            renderMembers(document.getElementById('mgrMemberSearch').value);
+          }
+        }));
+      }
+
+      document.getElementById('mgrMemberForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const data = {
+          name: fd.get('name'),
+          email: fd.get('email'),
+          username: fd.get('username'),
+          password: fd.get('password'),
+          tier: fd.get('tier').charAt(0).toUpperCase() + fd.get('tier').slice(1),
+          branch: fd.get('branch'),
+        };
+        PowerTempleAPI.registerMemberByStaff(data);
+        showNotification('Member registered successfully', 'success');
+        e.target.reset();
+        renderStats(); renderMembers();
+      });
+
+      document.getElementById('mgrMemberSearch').addEventListener('input', (e) => renderMembers(e.target.value));
+
+      renderStats(); renderMembers();
+    });
+  </script>
+</body>
+</html>
