@@ -1,0 +1,51 @@
+<%- include('../partials/head') %>
+<body data-page="memberships">
+  <div class="app">
+    <%- include('../partials/header-member', { activePage: 'browse-classes' }) %>
+    <main class="container">
+      <section class="hero">
+        <div class="hero-video-bg">
+          <video class="hero-video-element" autoplay muted loop playsinline aria-hidden="true">
+            <source src="/videos/hero-bg.mp4" type="video/mp4">
+          </video>
+          <div class="hero-video-overlay"></div>
+          <div class="hero-video-text" aria-label="Hero message">INHALE PASSION</div>
+        </div>
+      </section>
+      <section class="section fade-in">
+        <div class="section-head"><div><h2>Class Offers</h2></div></div>
+        <div class="class-grid">
+          <article class="class-card fade-in">
+            <div class="toolbar"><span class="pill success">HIIT</span><span class="pill success">Offer</span></div>
+            <img class="class-photo" src="https://www.trxtraining.com/cdn/shop/articles/mma-fighter-workout-training-plan_e5c7f6f7-c3d0-4410-8af7-e2a02397c967.jpg?v=1775795865" alt="MMA Championship Training" loading="lazy" />
+            <h3>MMA Championship Training</h3>
+            <p style="color: var(--text-primary); font-weight: 700; margin-top: 6px;">Price: LE 1200</p>
+            <div class="inline-actions"><button class="btn btn-primary" data-book-class="1" data-class-fee="1200" style="flex: 1;">Book & Pay LE 1200</button></div>
+          </article>
+          <article class="class-card fade-in">
+            <div class="toolbar"><span class="pill success">Strength</span><span class="pill success">Offer</span></div>
+            <img class="class-photo" src="https://trugrit-fitness.com/cdn/shop/articles/Fo7_-Q0g.jpg?crop=center&height=1200&v=1638407838&width=1200" alt="Barbell Mastery" loading="lazy" />
+            <h3>Barbell Mastery</h3>
+            <p style="color: var(--text-primary); font-weight: 700; margin-top: 6px;">Price: LE 1000</p>
+            <div class="inline-actions"><button class="btn btn-primary" data-book-class="2" data-class-fee="1000" style="flex: 1;">Book & Pay LE 1000</button></div>
+          </article>
+          <article class="class-card fade-in">
+            <div class="toolbar"><span class="pill success">Recovery</span><span class="pill success">Offer</span></div>
+            <img class="class-photo" src="/images/mobility-flow.jpg" alt="Mobility Flow" loading="lazy" />
+            <h3>Mobility Flow</h3>
+            <p style="color: var(--text-primary); font-weight: 700; margin-top: 6px;">Price: LE 1000</p>
+            <div class="inline-actions"><button class="btn btn-primary" data-book-class="3" data-class-fee="1000" style="flex: 1;">Book & Pay LE 1000</button></div>
+          </article>
+          <article class="class-card fade-in">
+            <div class="toolbar"><span class="pill success">Combat</span><span class="pill success">Offer</span></div>
+            <img class="class-photo" src="https://americangym.com/wp-content/uploads/boxing7.webp" alt="Boxing Supremacy" loading="lazy" />
+            <h3>Boxing Supremacy</h3>
+            <p style="color: var(--text-primary); font-weight: 700; margin-top: 6px;">Price: LE 1500</p>
+            <div class="inline-actions"><button class="btn btn-primary" data-book-class="4" data-class-fee="1500" style="flex: 1;">Book & Pay LE 1500</button></div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

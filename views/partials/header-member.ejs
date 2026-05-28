@@ -1,0 +1,17 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">PT</span>
+      <span>Power Temple</span>
+    </a>
+    <nav class="nav">
+      <a class="<%= activePage === 'membership' ? 'active' : '' %>" href="/member/membership">My Membership</a>
+      <a class="<%= activePage === 'browse-classes' ? 'active' : '' %>" href="/member/browse-classes">Classes</a>
+      <a class="<%= activePage === 'my-bookings' ? 'active' : '' %>" href="/member/my-bookings">My Bookings</a>
+      <a class="<%= activePage === 'personal-training' ? 'active' : '' %>" href="/member/personal-training">Personal Training</a>
+      <a class="<%= activePage === 'shop' ? 'active' : '' %>" href="/shop">Shop</a>
+      <a class="<%= activePage === 'profile' ? 'active' : '' %>" href="/member/profile">Profile</a>
+      <a href="/auth/logout">Logout</a>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,26 @@
+<div id="quickLoginModal" class="quick-login-modal hidden" aria-hidden="true">
+  <div class="quick-login-backdrop" data-close-login-modal></div>
+  <section class="quick-login-card" role="dialog" aria-modal="true" aria-label="Quick login">
+    <button class="quick-login-close" type="button" aria-label="Close" data-close-login-modal>×</button>
+    <h2 class="quick-login-title">WELCOME BACK</h2>
+    <p class="quick-login-subtitle">Sign in to your Power Temple account</p>
+
+    <div class="quick-login-roles" role="tablist" aria-label="Account role">
+      <button class="quick-role-pill active" type="button" data-role-choice="">ANY</button>
+      <button class="quick-role-pill" type="button" data-role-choice="admin">ADMIN</button>
+      <button class="quick-role-pill" type="button" data-role-choice="manager">MANAGER</button>
+      <button class="quick-role-pill" type="button" data-role-choice="trainer">TRAINER</button>
+      <button class="quick-role-pill" type="button" data-role-choice="member">MEMBER</button>
+    </div>
+
+    <form id="quickLoginFormServer" class="quick-login-form" method="POST" action="/auth/login">
+      <input id="quickLoginRole" name="role" type="hidden" value="" />
+      <label for="quickLoginUsername">Username</label>
+      <input id="quickLoginUsername" name="username" type="text" placeholder="Enter your username" required />
+      <label for="quickLoginPassword">PASSWORD</label>
+      <input id="quickLoginPassword" name="password" type="password" placeholder="••••••••" required />
+      <button class="btn btn-primary" type="submit">Sign In →</button>
+    </form>
+
+  </section>
+</div>

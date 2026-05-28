@@ -1,0 +1,154 @@
+<%- include('partials/head') %>
+<body data-page="memberships">
+  <div class="app">
+    <%- include('partials/header-public', { activePage: 'memberships' }) %>
+
+    <main class="container">
+      <section class="hero">
+        <div class="hero-video-bg">
+          <video class="hero-video-element" autoplay muted loop playsinline aria-hidden="true">
+            <source src="/videos/hero-bg.mp4" type="video/mp4">
+          </video>
+          <div class="hero-video-overlay"></div>
+          <div class="hero-video-text" aria-label="Hero message">INHALE PASSION</div>
+        </div>
+      </section>
+
+      <section class="section memberships-hero fade-in">
+        <div class="section-head">
+          <div>
+            <h2>Memberships</h2>
+            <p>Choose your commitment level. Prices and offers designed for the Egyptian market.</p>
+          </div>
+        </div>
+        <div class="branch-filter-row" aria-label="Branch filter">
+          <span class="branch-chip active">Fifth settlement branch</span>
+        </div>
+        <div class="membership-showcase-grid">
+          <article class="membership-tile" data-branch="katameya" data-product-id="m1">
+            <div class="membership-tile-media membership-bg-one">
+              <span class="offer-timer" data-countdown-end="2026-05-30T23:59:59">Offer Ends In 00d 00h 00m</span>
+              <h3>1 Month Membership</h3>
+            </div>
+            <div class="membership-tile-body">
+              <strong>LE 2,500.00</strong>
+              <button class="btn btn-primary pricing-subscribe-btn" type="button" data-market-add="m1">Add To Cart</button>
+            </div>
+          </article>
+          <article class="membership-tile" data-branch="maadi" data-product-id="m3">
+            <div class="membership-tile-media membership-bg-two">
+              <span class="offer-timer" data-countdown-end="2026-06-22T23:59:59">Offer Ends In 00d 00h 00m</span>
+              <h3>3 Months Membership</h3>
+            </div>
+            <div class="membership-tile-body">
+              <strong>LE 6,000.00</strong>
+              <button class="btn btn-primary pricing-subscribe-btn" type="button" data-market-add="m3">Add To Cart</button>
+            </div>
+          </article>
+          <article class="membership-tile" data-branch="concord" data-product-id="m6">
+            <div class="membership-tile-media membership-bg-three">
+              <span class="offer-timer" data-countdown-end="2026-06-05T23:59:59">Offer Ends In 00d 00h 00m</span>
+              <h3>6 Months Membership</h3>
+            </div>
+            <div class="membership-tile-body">
+              <strong>LE 8,000.00</strong>
+              <button class="btn btn-primary pricing-subscribe-btn" type="button" data-market-add="m6">Add To Cart</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section fade-in" id="offers">
+        <div class="section-head">
+          <div>
+            <h2>Shop By Collection</h2>
+            <p>Explore top branches and active offers. Book your club and lock your membership now.</p>
+          </div>
+        </div>
+        <div class="collection-grid">
+          <article class="collection-card" data-branch="katameya">
+            <div class="collection-media membership-bg-one"></div>
+            <div class="collection-overlay"><span class="pill success">15% OFF Annual</span></div>
+          </article>
+          <article class="collection-card" data-branch="maadi">
+            <div class="collection-media membership-bg-two"></div>
+            <div class="collection-overlay"><span class="pill warning">Free PT Session</span></div>
+          </article>
+          <article class="collection-card" data-branch="concord">
+            <div class="collection-media membership-bg-three"></div>
+            <div class="collection-overlay"><span class="pill success">No Joining Fee</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section fade-in" id="pricing">
+        <div class="section-head">
+          <div>
+            <h2>Choose Your Level</h2>
+            <p>All plans include our app, 24/7 community access, and expert support. Cancel anytime.</p>
+          </div>
+        </div>
+        <div class="list-grid">
+          <article class="plan-card">
+            <div class="toolbar"><h3>Starter</h3><span class="pill success">LE 600/mo</span></div>
+            <p>Begin your transformation. Access to fundamental classes and our growing community.</p>
+            <ul style="margin: 16px 0; padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; list-style: none;">
+              <li style="margin: 10px 0;">✓ 8 classes per month</li>
+              <li style="margin: 10px 0;">✓ Mobile app access</li>
+              <li style="margin: 10px 0;">✓ Community chat & events</li>
+              <li style="margin: 10px 0;">✓ Basic progress tracking</li>
+            </ul>
+            <button class="btn btn-primary pricing-subscribe-btn" type="button" data-subscribe-plan="starter" data-plan-price="600">Subscribe Now</button>
+          </article>
+          <article class="plan-card" style="border-color: rgba(0, 212, 255, 0.4); background: linear-gradient(135deg, rgba(0, 212, 255, 0.12) 0%, rgba(255, 0, 110, 0.08) 100%);">
+            <div class="toolbar"><h3>Elite</h3><span class="pill warning">LE 900/mo</span></div>
+            <p>Most popular. Unlimited classes, priority booking, and monthly 1-on-1 coaching sessions.</p>
+            <ul style="margin: 16px 0; padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; list-style: none;">
+              <li style="margin: 10px 0;">✓ Unlimited classes</li>
+              <li style="margin: 10px 0;">✓ Priority early booking</li>
+              <li style="margin: 10px 0;">✓ 2 trainer sessions/mo</li>
+              <li style="margin: 10px 0;">✓ Advanced analytics</li>
+              <li style="margin: 10px 0;">✓ Nutrition guidance</li>
+            </ul>
+            <button class="btn btn-primary pricing-subscribe-btn" type="button" data-subscribe-plan="elite" data-plan-price="900">Subscribe Now</button>
+          </article>
+          <article class="plan-card">
+            <div class="toolbar"><h3>Pro</h3><span class="pill danger">LE 1200/mo</span></div>
+            <p>For serious athletes. Everything in Elite + custom programs, form analysis, and recovery coaching.</p>
+            <ul style="margin: 16px 0; padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; list-style: none;">
+              <li style="margin: 10px 0;">✓ Unlimited everything</li>
+              <li style="margin: 10px 0;">✓ 4 trainer sessions/mo</li>
+              <li style="margin: 10px 0;">✓ Custom training plans</li>
+              <li style="margin: 10px 0;">✓ Monthly form analysis</li>
+              <li style="margin: 10px 0;">✓ Recovery strategies</li>
+            </ul>
+            <button class="btn btn-primary pricing-subscribe-btn" type="button" data-subscribe-plan="pro" data-plan-price="1200">Subscribe Now</button>
+          </article>
+          <article class="plan-card">
+            <div class="toolbar"><h3>Champion</h3><span class="pill success">LE 1500/mo</span></div>
+            <p>VIP elite experience. 1-on-1 coaching, complete lifestyle transformation, and dedicated support.</p>
+            <ul style="margin: 16px 0; padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; list-style: none;">
+              <li style="margin: 10px 0;">✓ Everything in Pro</li>
+              <li style="margin: 10px 0;">✓ 8 trainer sessions/mo</li>
+              <li style="margin: 10px 0;">✓ VIP recovery sessions</li>
+              <li style="margin: 10px 0;">✓ Dedicated coach support</li>
+              <li style="margin: 10px 0;">✓ Priority access to all</li>
+            </ul>
+            <button class="btn btn-primary pricing-subscribe-btn" type="button" data-subscribe-plan="champion" data-plan-price="1500">Subscribe Now</button>
+          </article>
+        </div>
+        <p style="margin-top: 16px; color: var(--text-muted); font-size: 0.9rem;">Secure payment: Visa, Mastercard, Wallet, or Cash at gym reception.</p>
+      </section>
+
+      <%- include('partials/footer') %>
+    </main>
+  </div>
+
+  <div id="cartToast" class="cart-toast" aria-live="polite">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.25 20.5a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5Zm0-2a.25.25 0 1 0 0 .5.25.25 0 0 0 0-.5Zm9.5 2a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5Zm0-2a.25.25 0 1 0 0 .5.25.25 0 0 0 0-.5Z"></path><path d="M6.31 6h14.44l-1.47 7.35a2.25 2.25 0 0 1-2.21 1.8H9.44a2.25 2.25 0 0 1-2.2-1.79L5.18 3.75H3.25v-1.5h3.14l.58 2.25Zm1.18 1.5 1.2 5.17a.75.75 0 0 0 .73.59h7.64a.75.75 0 0 0 .74-.6l1.08-5.16H7.49Z"></path></svg>
+    <span id="cartToastMsg">Item added to cart!</span>
+  </div>
+  <%- include('partials/cart-drawer') %>
+  <%- include('partials/login-modal') %>
+</body>
+</html>

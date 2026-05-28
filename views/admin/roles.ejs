@@ -1,0 +1,105 @@
+<%- include('../partials/head') %>
+<body data-page="admin">
+  <div class="app">
+    <%- include('../partials/header-admin', { activePage: 'roles' }) %>
+    <main class="container">
+      <%- include('../partials/hero-video') %>
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div><h2>Roles & Permissions</h2><p>Assign roles, promote staff, and demote accounts.</p></div>
+        </div>
+
+        <!-- Role Overview -->
+        <div class="dashboard-grid" style="gap: 24px; margin-bottom: 32px;">
+          <div class="panel">
+            <h3 style="margin-bottom: 16px;">Role Capabilities</h3>
+            <div style="display: grid; gap: 12px; font-size: 0.9rem;">
+              <div style="padding: 12px; background: rgba(255, 0, 110, 0.1); border-left: 3px solid var(--secondary-color); border-radius: 6px;">
+                <strong style="color: var(--secondary-color);">Admin</strong>
+                <p style="color: var(--text-secondary); margin-top: 4px;">Full system control — trainers, classes, memberships, financials, roles.</p>
+              </div>
+              <div style="padding: 12px; background: rgba(0, 212, 255, 0.1); border-left: 3px solid var(--primary-color); border-radius: 6px;">
+                <strong style="color: var(--primary-color);">Manager</strong>
+                <p style="color: var(--text-secondary); margin-top: 4px;">Branch operations — register members, schedule classes, record payments.</p>
+              </div>
+              <div style="padding: 12px; background: rgba(255, 165, 0, 0.1); border-left: 3px solid var(--warning-color); border-radius: 6px;">
+                <strong style="color: var(--warning-color);">Trainer</strong>
+                <p style="color: var(--text-secondary); margin-top: 4px;">View assigned classes & members, log attendance.</p>
+              </div>
+              <div style="padding: 12px; background: rgba(0, 208, 132, 0.1); border-left: 3px solid var(--success-color); border-radius: 6px;">
+                <strong style="color: var(--success-color);">Member</strong>
+                <p style="color: var(--text-secondary); margin-top: 4px;">Book classes, manage profile, view membership.</p>
+              </div>
+            </div>
+          </div>
+
+          <aside class="panel">
+            <h3 style="margin-bottom: 16px;">Team Composition</h3>
+            <div class="stat-grid" style="gap: 12px;">
+              <%
+                var counts = { admin: 0, manager: 0, trainer: 0, member: 0 };
+                users.forEach(function(u) { if (counts[u.role] !== undefined) counts[u.role]++; });
+              %>
+              <div class="stat"><strong><%= counts.admin %></strong><span>Admins</span></div>
+              <div class="stat"><strong><%= counts.manager %></strong><span>Managers</span></div>
+              <div class="stat"><strong><%= counts.trainer %></strong><span>Trainers</span></div>
+              <div class="stat"><strong><%= counts.member %></strong><span>Members</span></div>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 16px;">Total: <%= users.length %> users</p>
+          </aside>
+        </div>
+
+        <!-- User List -->
+        <div class="panel-head" style="margin-bottom: 16px;">
+          <div><h3>All Users</h3><p>Promote/demote roles.</p></div>
+          <input id="userSearch" type="text" placeholder="🔍 Search users..." style="min-width: 280px;"
+            oninput="filterUsers(this.value)" />
+        </div>
+
+        <div id="userList">
+          <% users.forEach(function(u) { %>
+            <article class="row-card fade-in" data-user-name="<%= u.name.toLowerCase() %>" data-user-email="<%= u.email.toLowerCase() %>" data-user-role="<%= u.role %>" style="margin-bottom: 12px;">
+              <div class="row-main">
+                <strong>👤 <%= u.name %></strong>
+                <span class="row-meta"><%= u.email %> · @<%= u.username %></span>
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                <form action="/admin/roles/update/<%= u._id %>" method="POST" style="display: inline-flex; gap: 8px; align-items: center;">
+                  <select name="role" style="padding: 6px 10px; font-size: 0.85rem;">
+                    <option value="admin"   <%= u.role === 'admin'   ? 'selected' : '' %>>Admin</option>
+                    <option value="manager" <%= u.role === 'manager' ? 'selected' : '' %>>Manager</option>
+                    <option value="trainer" <%= u.role === 'trainer' ? 'selected' : '' %>>Trainer</option>
+                    <option value="member"  <%= u.role === 'member'  ? 'selected' : '' %>>Member</option>
+                  </select>
+                  <button class="btn btn-secondary" type="submit" style="padding: 6px 12px; font-size: 0.85rem;">Save</button>
+                </form>
+                <form action="/admin/roles/delete/<%= u._id %>" method="POST" onsubmit="return confirm('Delete this user permanently?')" style="display:inline;">
+                  <button class="btn btn-ghost" type="submit" style="padding: 6px 12px; font-size: 0.85rem; color: var(--danger-color);">Delete</button>
+                </form>
+              </div>
+            </article>
+          <% }) %>
+          <% if (users.length === 0) { %>
+            <p style="color: var(--text-muted);">No users found.</p>
+          <% } %>
+        </div>
+
+        <div id="adminMessage" class="notice hidden" style="margin-top: 20px;"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function filterUsers(q) {
+      q = q.toLowerCase();
+      document.querySelectorAll('#userList .row-card').forEach(function(card) {
+        const match = !q
+          || card.dataset.userName.includes(q)
+          || card.dataset.userEmail.includes(q)
+          || card.dataset.userRole.includes(q);
+        card.style.display = match ? '' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>

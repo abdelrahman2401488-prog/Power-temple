@@ -1,0 +1,28 @@
+<div id="marketCartOverlay" class="market-cart-overlay hidden"></div>
+<aside id="marketCartDrawer" class="market-cart-drawer hidden" aria-label="Shopping cart panel">
+  <button type="button" class="market-cart-close" data-close-market-cart aria-label="Close cart">×</button>
+  <div class="market-cart-layout">
+    <section class="market-reco">
+      <h3>You May Also Like</h3>
+      <div id="marketRecoList" class="market-reco-list"></div>
+    </section>
+    <section class="market-cart-main">
+      <h3>Cart</h3>
+      <div class="market-voucher-panel">
+        <label for="marketVoucherInput">Voucher Code</label>
+        <div class="voucher-input-wrapper">
+          <input id="marketVoucherInput" type="text" placeholder="Enter voucher code" />
+          <button id="marketApplyVoucherBtn" type="button">Apply</button>
+        </div>
+        <p id="marketVoucherMessage" class="market-voucher-message"></p>
+      </div>
+      <div id="marketCartList" class="market-cart-list"></div>
+      <div class="market-cart-note-row">
+        <span>Note</span>
+        <span>Shipping</span>
+      </div>
+      <p class="market-cart-meta">Taxes, discounts and shipping calculated at checkout.</p>
+      <button id="marketCheckoutBtn" class="market-checkout-btn" type="button">CHECK OUT — LE 0.00 EGP</button>
+    </section>
+  </div>
+</aside>

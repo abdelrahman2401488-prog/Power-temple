@@ -1,0 +1,48 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">PT</span>
+      <span>Power Temple</span>
+    </a>
+    <nav class="nav">
+      <a class="<%= activePage === 'home' ? 'active' : '' %>" href="/">Home</a>
+      <a href="/#concept">Concept</a>
+      <a class="<%= activePage === 'services' ? 'active' : '' %>" href="/services">Services</a>
+      <a class="<%= activePage === 'memberships' ? 'active' : '' %>" href="/memberships">Memberships</a>
+      <a href="/member/browse-classes">Classes</a>
+      <a class="<%= activePage === 'shop' ? 'active' : '' %>" href="/shop">Shop</a>
+    </nav>
+    <div class="header-actions" aria-label="Quick actions">
+      <% if (locals.sessionUser) { %>
+        <%
+          var profileHref = '/member/profile';
+          if (sessionUser.role === 'admin') profileHref = '/admin/dashboard';
+          else if (sessionUser.role === 'manager') profileHref = '/manager/dashboard';
+          else if (sessionUser.role === 'trainer') profileHref = '/trainer/my-schedule';
+        %>
+        <a class="header-profile-icon" href="<%= profileHref %>" title="My Profile (<%= sessionUser.name %>)" aria-label="My Profile" style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;border:1px solid var(--border-color);color:var(--text-primary);text-decoration:none;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+            <path d="M12 12.5c-2.62 0-4.75-2.13-4.75-4.75S9.38 3 12 3s4.75 2.13 4.75 4.75-2.13 4.75-4.75 4.75Zm0-8a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5Z"></path>
+            <path d="M19.25 21h-1.5v-1.25c0-2.62-2.13-4.75-4.75-4.75h-2c-2.62 0-4.75 2.13-4.75 4.75V21h-1.5v-1.25c0-3.45 2.8-6.25 6.25-6.25h2c3.45 0 6.25 2.8 6.25 6.25V21Z"></path>
+          </svg>
+        </a>
+      <% } else { %>
+        <a class="header-icon-link" href="#login" title="Login" aria-label="Login" data-open-login-modal>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 12.5c-2.62 0-4.75-2.13-4.75-4.75S9.38 3 12 3s4.75 2.13 4.75 4.75-2.13 4.75-4.75 4.75Zm0-8a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5Z"></path>
+            <path d="M19.25 21h-1.5v-1.25c0-2.62-2.13-4.75-4.75-4.75h-2c-2.62 0-4.75 2.13-4.75 4.75V21h-1.5v-1.25c0-3.45 2.8-6.25 6.25-6.25h2c3.45 0 6.25 2.8 6.25 6.25V21Z"></path>
+          </svg>
+          <span class="sr-only">Login</span>
+        </a>
+      <% } %>
+      <button class="header-icon-link header-cart-icon" type="button" data-open-market-cart title="Cart" aria-label="Cart">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M7.25 20.5a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5Zm0-2a.25.25 0 1 0 0 .5.25.25 0 0 0 0-.5Zm9.5 2a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5Zm0-2a.25.25 0 1 0 0 .5.25.25 0 0 0 0-.5Z"></path>
+          <path d="M6.31 6h14.44l-1.47 7.35a2.25 2.25 0 0 1-2.21 1.8H9.44a2.25 2.25 0 0 1-2.2-1.79L5.18 3.75H3.25v-1.5h3.14l.58 2.25Zm1.18 1.5 1.2 5.17a.75.75 0 0 0 .73.59h7.64a.75.75 0 0 0 .74-.6l1.08-5.16H7.49Z"></path>
+        </svg>
+        <span id="marketCartCount" class="cart-count-badge">0</span>
+        <span class="sr-only">Cart</span>
+      </button>
+    </div>
+  </div>
+</header>

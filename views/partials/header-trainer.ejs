@@ -1,0 +1,14 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">PT</span>
+      <span>Power Temple</span>
+    </a>
+    <nav class="nav">
+      <a class="<%= activePage === 'my-schedule' ? 'active' : '' %>" href="/trainer/my-schedule">My Schedule</a>
+      <a class="<%= activePage === 'attendance' ? 'active' : '' %>" href="/trainer/attendance">Attendance</a>
+      <a class="<%= activePage === 'members' ? 'active' : '' %>" href="/trainer/members">My Members</a>
+      <a href="/auth/logout">Logout</a>
+    </nav>
+  </div>
+</header>

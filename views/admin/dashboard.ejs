@@ -1,0 +1,81 @@
+<%- include('../partials/head') %>
+<body data-page="admin">
+  <div class="app">
+    <%- include('../partials/header-admin', { activePage: 'dashboard' }) %>
+    <main class="container">
+      <section class="hero">
+        <div class="hero-video-bg">
+          <video class="hero-video-element" autoplay muted loop playsinline aria-hidden="true">
+            <source src="/videos/hero-bg.mp4" type="video/mp4">
+          </video>
+          <div class="hero-video-overlay"></div>
+          <div class="hero-video-text" aria-label="Hero message">INHALE PASSION</div>
+        </div>
+      </section>
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div>
+            <h2>Admin Control Center</h2>
+            <p>Manage your entire gym operation. Trainers, classes, members, and performance analytics in one place.</p>
+          </div>
+          <a class="btn btn-primary" href="/admin/classes">Manage Classes</a>
+        </div>
+        <div class="stat-grid" style="margin-bottom: 40px;">
+          <div class="stat fade-in" style="grid-column: span 1;"><strong data-admin-stat="trainers">25</strong><span>Active Trainers</span></div>
+          <div class="stat fade-in" style="grid-column: span 1;"><strong data-admin-stat="classes">50</strong><span>Classes Per Week</span></div>
+          <div class="stat fade-in" style="grid-column: span 1;"><strong data-admin-stat="bookings">847</strong><span>Member Bookings</span></div>
+          <div class="stat fade-in" style="grid-column: span 1;"><strong data-admin-stat="spots">312</strong><span>Open Spots</span></div>
+        </div>
+        <div class="dashboard-grid" style="margin-bottom: 40px;">
+          <div class="stack">
+            <div class="panel-head">
+              <div><h3>Performance Overview</h3><p>Real-time insights into your gym's operations and member engagement.</p></div>
+            </div>
+            <div class="feature-grid stagger">
+              <article class="feature-card"><h3>Member Growth</h3><p>2,500 active members (+18% this month). Steady acquisition across all membership tiers.</p></article>
+              <article class="feature-card"><h3>Revenue</h3><p>LE 147,250 this month (+12% MoM). Strong recurring revenue from Elite and Pro plans.</p></article>
+              <article class="feature-card"><h3>Satisfaction</h3><p>4.8/5.0 average rating across all classes. 94% member retention rate.</p></article>
+            </div>
+          </div>
+          <aside class="panel">
+            <h3 style="margin-bottom: 20px;">Quick Actions</h3>
+            <div class="stack" style="gap: 12px;">
+              <a class="btn btn-primary" href="/admin/trainers" style="text-align: center;">Add New Trainer</a>
+              <a class="btn btn-primary" href="/admin/classes" style="text-align: center;">Create Class</a>
+              <a class="btn btn-primary" href="/admin/shop" style="text-align: center;">Manage Shop</a>
+            </div>
+          </aside>
+        </div>
+        <div class="panel-head" style="margin-bottom: 24px;"><div><h3>Recent Activity</h3><p>Latest updates from your gym operations.</p></div></div>
+        <div class="stack" style="gap: 12px;">
+          <div style="padding: 16px; background: rgba(0, 208, 132, 0.1); border-left: 3px solid var(--success); border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div><strong style="color: var(--success);"> New Member</strong><p style="margin: 4px 0; font-size: 0.9rem; color: var(--text-secondary);">Jordan Lee completed registration and booked 3 classes</p></div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">2 hours ago</span>
+            </div>
+          </div>
+          <div style="padding: 16px; background: rgba(0, 212, 255, 0.1); border-left: 3px solid var(--accent); border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div><strong style="color: var(--accent);"> Class Update</strong><p style="margin: 4px 0; font-size: 0.9rem; color: var(--text-secondary);">Barbell Mastery now has spots available (16/20 members)</p></div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">5 hours ago</span>
+            </div>
+          </div>
+          <div style="padding: 16px; background: rgba(255, 165, 0, 0.1); border-left: 3px solid var(--warning); border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div><strong style="color: var(--warning);"> High Rating</strong><p style="margin: 4px 0; font-size: 0.9rem; color: var(--text-secondary);">MMA Championship Training received 4.9/5.0 rating (15 reviews)</p></div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">1 day ago</span>
+            </div>
+          </div>
+          <div style="padding: 16px; background: rgba(0, 212, 255, 0.1); border-left: 3px solid var(--accent); border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div><strong style="color: var(--accent);">Trainer Added</strong><p style="margin: 4px 0; font-size: 0.9rem; color: var(--text-secondary);">Coach Zeyad joined the team - Specializing in Recovery & Mobility</p></div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">2 days ago</span>
+            </div>
+          </div>
+        </div>
+        <div id="adminMessage" class="notice hidden" style="margin-top: 20px;"></div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

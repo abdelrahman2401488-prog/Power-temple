@@ -1,0 +1,126 @@
+<%- include('../partials/head') %>
+<body data-page="manager">
+  <div class="app">
+    <%- include('../partials/header-manager', { activePage: 'classes' }) %>
+    <main class="container">
+      <%- include('../partials/hero-video') %>
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div><h2>Class & Trainer Scheduling</h2><p>Create classes, assign trainers, set capacity, and update trainer info.</p></div>
+        </div>
+
+        <div class="dashboard-grid" style="gap: 24px; margin-bottom: 32px;">
+
+          <!-- Left: Create Class + Class List -->
+          <div class="stack">
+            <div class="form-card fade-in">
+              <h3 style="margin-bottom: 16px;">+ Create / Schedule Class</h3>
+              <form action="/manager/classes" method="POST">
+                <label>Class Name
+                  <input name="name" type="text" placeholder="e.g., Morning HIIT" required />
+                </label>
+
+                <div class="field-grid">
+                  <label>Trainer
+                    <select name="trainerId" required style="width: 100%;">
+                      <option value="">Select trainer...</option>
+                      <% trainers.forEach(function(t) { %>
+                        <option value="<%= t._id %>"><%= t.name %></option>
+                      <% }) %>
+                      <% if (trainers.length === 0) { %>
+                        <option disabled>No trainers added yet</option>
+                      <% } %>
+                    </select>
+                  </label>
+                  <label>Room
+                    <input name="room" type="text" placeholder="Studio A" required />
+                  </label>
+                </div>
+
+                <div class="field-grid">
+                  <label>Time
+                    <input name="time" type="text" placeholder="06:00 AM" required />
+                  </label>
+                  <label>Capacity
+                    <input name="capacity" type="number" min="1" max="100" required />
+                  </label>
+                </div>
+
+                <div class="field-grid">
+                  <label>Category
+                    <select name="category" style="width: 100%;">
+                      <option>Cardio</option><option>Strength</option><option>Recovery</option><option>Combat</option>
+                    </select>
+                  </label>
+                  <label>Level
+                    <select name="level" style="width: 100%;">
+                      <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
+                    </select>
+                  </label>
+                </div>
+
+                <label>Description
+                  <textarea name="description" placeholder="What members can expect..."></textarea>
+                </label>
+
+                <button class="btn btn-primary" type="submit" style="width: 100%;">Publish Class</button>
+              </form>
+            </div>
+
+            <!-- Classes list -->
+            <div class="panel-head" style="margin-top: 24px;">
+              <div><h3>Scheduled Classes</h3><p><%= classes.length %> class<%= classes.length !== 1 ? 'es' : '' %> in the system</p></div>
+            </div>
+
+            <% if (classes.length > 0) { %>
+              <% classes.forEach(function(cls) { %>
+                <article class="class-card fade-in" style="margin-bottom: 16px;">
+                  <div class="toolbar">
+                    <span class="pill success"><%= cls.category %></span>
+                    <span class="pill success"><%= cls.booked %>/<%= cls.capacity %></span>
+                  </div>
+                  <h3><%= cls.name %></h3>
+                  <p><%= cls.description %></p>
+                  <div class="meta-row">
+                    <span><%= cls.time || 'TBD' %></span>
+                    <span><%= cls.trainer %></span>
+                    <span><%= cls.room || '' %></span>
+                    <span><%= cls.level %></span>
+                  </div>
+                </article>
+              <% }) %>
+            <% } else { %>
+              <div class="empty-state">No classes yet. Create one above.</div>
+            <% } %>
+          </div>
+
+          <!-- Right: Edit Trainer Info -->
+          <aside class="panel" style="height: fit-content;">
+            <h3 style="margin-bottom: 16px;">Edit Trainer Info</h3>
+
+            <% if (trainers.length > 0) { %>
+              <% trainers.forEach(function(t) { %>
+                <details style="margin-bottom: 12px; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px;">
+                  <summary style="cursor: pointer; font-weight: 600; color: var(--text-primary);"><%= t.name %></summary>
+                  <form action="/manager/trainer/update/<%= t._id %>" method="POST" style="margin-top: 12px; display: grid; gap: 10px;">
+                    <label style="font-size: 0.9rem;">Specialty
+                      <input type="text" name="specialty" value="<%= t.specialty || '' %>" style="width: 100%;" />
+                    </label>
+                    <label style="font-size: 0.9rem;">Bio
+                      <textarea name="bio" style="width: 100%; min-height: 60px;"><%= t.bio || '' %></textarea>
+                    </label>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Save Changes</button>
+                  </form>
+                </details>
+              <% }) %>
+            <% } else { %>
+              <p style="color: var(--text-muted); font-size: 0.9rem;">No trainers added yet. Ask admin to add trainers first.</p>
+            <% } %>
+          </aside>
+
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

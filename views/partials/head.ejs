@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/variable.css" />
+  <link rel="stylesheet" href="/css/layout.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/dashboard.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+  <link rel="stylesheet" href="/css/pro-theme.css" />
+  <%- typeof extraCss !== 'undefined' ? extraCss : '' %>
+  <% if (locals.sessionUser) { %>
+  <script>
+    (function() {
+      var u = <%- JSON.stringify(sessionUser) %>;
+      try { localStorage.setItem('powertemple_user', JSON.stringify(u)); } catch(e) {}
+    })();
+  </script>
+  <% } else { %>
+  <script>
+    (function() { try { localStorage.removeItem('powertemple_user'); } catch(e) {} })();
+  </script>
+  <% } %>
+  <script src="/js/api-mock.js" defer></script>
+  <script src="/js/auth.js" defer></script>
+  <script src="/js/main.js" defer></script>
+  <%- typeof extraJs !== 'undefined' ? extraJs : '' %>
+</head>

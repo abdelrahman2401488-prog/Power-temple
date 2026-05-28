@@ -1,0 +1,107 @@
+<%- include('../partials/head') %>
+<body data-page="admin">
+  <div class="app">
+    <%- include('../partials/header-admin', { activePage: 'trainers' }) %>
+    <main class="container">
+      <%- include('../partials/hero-video') %>
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div><h2>Trainer Management</h2><p>Add trainers to the platform. They can then log in with their credentials.</p></div>
+          <a class="btn btn-primary" href="/admin/classes">View Classes</a>
+        </div>
+
+        <% if (locals.flash) { %>
+          <div class="notice <%= flash.includes('Error') ? 'error' : 'success' %>" style="margin-bottom: 20px;"><%= flash %></div>
+        <% } %>
+
+        <div class="dashboard-grid" style="gap: 24px; margin-bottom: 40px;">
+          <div class="stack">
+
+            <!-- Add Trainer Form (server POST) -->
+            <div class="form-card fade-in">
+              <h3 style="margin-bottom: 16px;">+ Add New Trainer</h3>
+              <form action="/admin/trainers" method="POST">
+                <label>Full Name
+                  <input name="name" type="text" placeholder="Coach name" required />
+                </label>
+                <label>Username
+                  <input name="username" type="text" placeholder="username" required />
+                </label>
+                <label>Password
+                  <input name="password" type="password" placeholder="••••••••" required />
+                </label>
+                <label>Specialty
+                  <select name="specialty" required>
+                    <option>Strength & Power</option>
+                    <option>Cardio & Conditioning</option>
+                    <option>Recovery & Mobility</option>
+                    <option>Combat Sports</option>
+                    <option>General Fitness</option>
+                  </select>
+                </label>
+                <button class="btn btn-primary" type="submit" style="width: 100%;">Add Trainer</button>
+              </form>
+            </div>
+
+            <!-- Trainers from MongoDB -->
+            <div class="panel-head" style="margin-top: 24px;">
+              <div>
+                <h3>Your Trainer Team</h3>
+                <p><%= trainers.length %> trainer<%= trainers.length !== 1 ? 's' : '' %> registered</p>
+              </div>
+            </div>
+
+            <% if (trainers.length > 0) { %>
+              <% trainers.forEach(function(t) { %>
+                <article class="row-card fade-in" style="margin-bottom: 12px;">
+                  <div class="row-main">
+                    <strong><%= t.name %></strong>
+                    <span class="row-meta">@<%= t.username %> · <%= t.specialty || 'General Fitness' %> · <%= t.rating || 5.0 %> ★</span>
+                  </div>
+                  <div style="display: flex; gap: 8px; align-items: center;">
+                    <span class="pill success">ACTIVE</span>
+                    <form action="/admin/trainers/delete/<%= t._id %>" method="POST" onsubmit="return confirm('Remove this trainer?')" style="display:inline;">
+                      <button class="btn btn-ghost" type="submit" style="padding: 6px 12px; font-size: 0.85rem; color: var(--danger-color);">Remove</button>
+                    </form>
+                  </div>
+                </article>
+              <% }) %>
+            <% } else { %>
+              <div class="empty-state">No trainers yet. Add one above.</div>
+            <% } %>
+
+          </div>
+
+          <aside class="panel">
+            <h3 style="margin-bottom: 20px;">Trainer Stats</h3>
+            <div class="stat-grid" style="gap: 12px; margin-bottom: 24px;">
+              <div class="stat"><strong><%= trainers.length %></strong><span>Total Trainers</span></div>
+              <div class="stat"><strong><%= trainers.length %></strong><span>Active</span></div>
+            </div>
+            <div style="border-top: 1px solid rgba(0, 212, 255, 0.15); padding-top: 16px;">
+              <h4 style="margin-bottom: 12px;">Specialties</h4>
+              <%
+                var specs = {};
+                trainers.forEach(function(t) {
+                  var s = t.specialty || 'General Fitness';
+                  specs[s] = (specs[s] || 0) + 1;
+                });
+              %>
+              <div style="display: grid; gap: 8px; font-size: 0.9rem; color: var(--text-secondary);">
+                <% Object.keys(specs).forEach(function(s) { %>
+                  <div style="display: flex; justify-content: space-between;">
+                    <span><%= s %></span><strong><%= specs[s] %></strong>
+                  </div>
+                <% }) %>
+                <% if (Object.keys(specs).length === 0) { %>
+                  <p style="color: var(--text-muted);">No specialties yet.</p>
+                <% } %>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

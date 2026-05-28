@@ -1,0 +1,47 @@
+<%- include('../partials/head') %>
+<body data-page="member">
+  <div class="app">
+    <%- include('../partials/header-member', { activePage: 'my-bookings' }) %>
+    <main class="container">
+      <%- include('../partials/hero-video') %>
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div><h2>My Class Bookings</h2><p>Review your upcoming sessions, cancel bookings, and see your training history.</p></div>
+          <a class="btn btn-primary" href="/member/browse-classes">Book More Classes</a>
+        </div>
+        <div class="stat-grid" style="margin-bottom: 32px;">
+          <div class="stat fade-in"><strong id="bkUpcoming">0</strong><span>Upcoming</span></div>
+          <div class="stat fade-in"><strong id="bkCompleted">0</strong><span>Completed</span></div>
+          <div class="stat fade-in"><strong id="bkTotal">0</strong><span>Total</span></div>
+        </div>
+        <div class="panel-head" style="margin-bottom: 16px;"><div><h3>Upcoming Sessions</h3><p>Cancel up to 2 hours before class.</p></div></div>
+        <div id="upcomingList"></div>
+        <div class="panel-head" style="margin: 32px 0 16px;"><div><h3>Past Sessions</h3><p>Your training history.</p></div></div>
+        <div id="pastList"></div>
+        <div id="adminMessage" class="notice hidden" style="margin-top: 20px;"></div>
+      </section>
+    </main>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PowerTempleAPI === 'undefined' || typeof auth === 'undefined') return;
+      const user = auth.getCurrentUser();
+      if (!user) return;
+      function render() {
+        const bookings = PowerTempleAPI.getMemberBookings(user.id);
+        const upcoming = bookings.filter((b) => b.status === 'confirmed');
+        const past = bookings.filter((b) => b.status === 'completed' || b.status === 'cancelled');
+        document.getElementById('bkUpcoming').textContent = upcoming.length;
+        document.getElementById('bkCompleted').textContent = past.filter((b) => b.status === 'completed').length;
+        document.getElementById('bkTotal').textContent = bookings.length;
+        const up = document.getElementById('upcomingList');
+        up.innerHTML = upcoming.map((b) => `<article class="row-card fade-in" style="margin-bottom: 12px;"><div class="row-main"><strong>${b.className}</strong><span class="row-meta">${b.date} · ${b.time} · ${b.trainer} · ${b.room}</span></div><div style="display: flex; gap: 8px; align-items: center;"><span class="pill success">${b.status}</span><button class="btn btn-ghost" data-cancel="${b.id}" style="padding: 6px 12px; font-size: 0.85rem; color: var(--danger-color);">Cancel</button></div></article>`).join('') || '<p style="color: var(--text-muted);">No upcoming bookings. <a href="/member/browse-classes" style="color: var(--primary-color);">Browse classes →</a></p>';
+        up.querySelectorAll('[data-cancel]').forEach((b) => b.addEventListener('click', () => { if (!confirm('Cancel this booking?')) return; PowerTempleAPI.cancelBooking(Number(b.dataset.cancel)); showNotification('Booking cancelled', 'success'); render(); }));
+        const ps = document.getElementById('pastList');
+        ps.innerHTML = past.map((b) => `<article class="row-card fade-in" style="margin-bottom: 12px;"><div class="row-main"><strong>${b.className}</strong><span class="row-meta">${b.date} · ${b.time} · ${b.trainer}</span></div><span class="pill ${b.attendanceStatus === 'attended' ? 'success' : 'warning'}">${b.attendanceStatus || b.status}</span></article>`).join('') || '<p style="color: var(--text-muted);">No past sessions yet.</p>';
+      }
+      render();
+    });
+  </script>
+</body>
+</html>

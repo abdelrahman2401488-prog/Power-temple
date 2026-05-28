@@ -1,0 +1,16 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">PT</span>
+      <span>Power Temple</span>
+    </a>
+    <nav class="nav">
+      <a class="<%= activePage === 'dashboard' ? 'active' : '' %>" href="/manager/dashboard">Dashboard</a>
+      <a class="<%= activePage === 'members' ? 'active' : '' %>" href="/manager/members">Members</a>
+      <a class="<%= activePage === 'classes' ? 'active' : '' %>" href="/manager/classes">Classes</a>
+      <a class="<%= activePage === 'payments' ? 'active' : '' %>" href="/manager/payments">Payments</a>
+      <a class="<%= activePage === 'reports' ? 'active' : '' %>" href="/manager/reports">Reports</a>
+      <a href="/auth/logout">Logout</a>
+    </nav>
+  </div>
+</header>

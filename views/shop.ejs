@@ -1,0 +1,281 @@
+<% extraCss = '<link rel="stylesheet" href="/css/shop.css" />' %>
+<% extraJs = '<script src="/js/shop.js" defer></script>' %>
+<%- include('partials/head') %>
+<body data-page="shop">
+  <div class="app">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="/"><span class="brand-mark">PT</span><span>Power Temple</span></a>
+        <nav class="nav" id="shopNav">
+          <a href="/">Home</a>
+          <a href="/#concept">Concept</a>
+          <a href="/services">Services</a>
+          <a href="/memberships">Memberships</a>
+          <a href="/member/browse-classes">Classes</a>
+          <a href="/shop" class="active">Shop</a>
+        </nav>
+        <div class="header-actions" aria-label="Quick actions">
+          <a class="header-icon-link" href="#login" title="Login" aria-label="Login" data-open-login-modal>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 12.5c-2.62 0-4.75-2.13-4.75-4.75S9.38 3 12 3s4.75 2.13 4.75 4.75-2.13 4.75-4.75 4.75Zm0-8a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5Z"/>
+              <path d="M19.25 21h-1.5v-1.25c0-2.62-2.13-4.75-4.75-4.75h-2c-2.62 0-4.75 2.13-4.75 4.75V21h-1.5v-1.25c0-3.45 2.8-6.25 6.25-6.25h2c3.45 0 6.25 2.8 6.25 6.25V21Z"/>
+            </svg>
+          </a>
+          <button class="header-icon-link header-cart-icon" type="button" data-open-market-cart title="Cart" aria-label="Cart">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M7.25 20.5a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5Zm0-2a.25.25 0 1 0 0 .5.25.25 0 0 0 0-.5Zm9.5 2a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5Zm0-2a.25.25 0 1 0 0 .5.25.25 0 0 0 0-.5Z"/>
+              <path d="M6.31 6h14.44l-1.47 7.35a2.25 2.25 0 0 1-2.21 1.8H9.44a2.25 2.25 0 0 1-2.2-1.79L5.18 3.75H3.25v-1.5h3.14l.58 2.25Zm1.18 1.5 1.2 5.17a.75.75 0 0 0 .73.59h7.64a.75.75 0 0 0 .74-.6l1.08-5.16H7.49Z"/>
+            </svg>
+            <span id="marketCartCount" class="cart-count-badge">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="promo-strip">🔥 FREE SHIPPING ON ORDERS OVER LE 500 &nbsp;•&nbsp; USE CODE PT20 FOR 20% OFF YOUR FIRST ORDER &nbsp;•&nbsp; 🔥 FREE SHIPPING ON ORDERS OVER LE 500 &nbsp;•&nbsp; USE CODE PT20 FOR 20% OFF</div>
+
+    <section class="shop-hero">
+      <div class="container">
+        <span class="shop-hero-label">⚡ Power Temple Nutrition</span>
+        <h1>FUEL YOUR<br><span>GAINS</span></h1>
+        <p>Premium supplements engineered for peak performance. Pre-workout, protein, creatine, and more — gym-tested, elite-approved.</p>
+        <div class="filter-bar">
+          <button class="filter-btn active" data-filter="all">All Products</button>
+          <button class="filter-btn" data-filter="pre-workout">Pre-Workout</button>
+          <button class="filter-btn" data-filter="protein">Protein</button>
+          <button class="filter-btn" data-filter="creatine">Creatine</button>
+          <button class="filter-btn" data-filter="bars">Protein Bars</button>
+          <button class="filter-btn" data-filter="vitamins">Vitamins</button>
+          <button class="filter-btn" data-filter="recovery">Recovery</button>
+        </div>
+      </div>
+    </section>
+
+    <main class="container">
+      <section class="products-section">
+        <h2 class="shop-section-title">TOP <span>SELLERS</span></h2>
+        <div class="products-grid" id="productsGrid">
+          <article class="product-card" data-category="pre-workout">
+            <div class="product-badge">Best Seller</div>
+            <div class="product-img-wrap"><img src="https://tse1.mm.bing.net/th/id/OIP.pAFfcYnkE5t4X_PylLlFWwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Nitro Surge Extreme" loading="lazy"/></div>
+            <div class="product-info">
+              <span class="product-category">Pre-Workout</span>
+              <h3 class="product-name">Nitro Surge Extreme</h3>
+              <p class="product-desc">Max-dosed pre-workout with 350mg caffeine, 6g citrulline malate, and beta-alanine for unstoppable pumps and laser focus.</p>
+              <div class="product-flavors">
+                <div class="flavor-dot" style="background:#e74c3c" title="Watermelon"></div>
+                <div class="flavor-dot" style="background:#3498db" title="Blue Raspberry"></div>
+                <div class="flavor-dot" style="background:#2ecc71" title="Green Apple"></div>
+                <div class="flavor-dot" style="background:#f39c12" title="Mango"></div>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 650 <span>/30 srv</span></div>
+              <button class="add-to-cart-btn" data-product-name="Nitro Surge Extreme" data-product-price="650"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>ADD</button>
+            </div>
+          </article>
+          <article class="product-card" data-category="pre-workout">
+            <div class="product-badge">New</div>
+            <div class="product-img-wrap"><img src="https://i5.walmartimages.com/asr/085a6524-c3e0-4d88-98a8-856bcc58466e.a81bfe065e50c8d70dea9da3f1b7b9b4.jpeg?odnHeight=784&odnWidth=580&odnBg=FFFFFF" alt="Ignite V2 Stim-Free" loading="lazy"/></div>
+            <div class="product-info">
+              <span class="product-category">Pre-Workout</span>
+              <h3 class="product-name">Ignite V2 Stim-Free</h3>
+              <p class="product-desc">Caffeine-free formula with peak O2, alpha-GPC, and electrolytes. Train harder, longer — no crash guaranteed.</p>
+              <div class="product-flavors">
+                <div class="flavor-dot" style="background:#9b59b6" title="Grape"></div>
+                <div class="flavor-dot" style="background:#e74c3c" title="Cherry"></div>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 520 <span>/30 srv</span></div>
+              <button class="add-to-cart-btn" data-product-name="Ignite V2 Stim-Free" data-product-price="520"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>ADD</button>
+            </div>
+          </article>
+          <article class="product-card" data-category="protein">
+            <div class="product-badge">Top Rated</div>
+            <div class="product-img-wrap"><img src="https://i.pinimg.com/736x/52/c3/0a/52c30aeeb8ea2e358fcc91656fe147bf.jpg" alt="PT Whey Gold" loading="lazy"/></div>
+            <div class="product-info">
+              <span class="product-category">Protein</span>
+              <h3 class="product-name">PT Whey Gold</h3>
+              <p class="product-desc">25g ultra-pure whey isolate per scoop. Cold-processed for maximum bioavailability. 5g BCAAs, less than 1g sugar.</p>
+              <div class="product-flavors">
+                <div class="flavor-dot" style="background:#5d4037" title="Chocolate Fudge"></div>
+                <div class="flavor-dot" style="background:#f5f5f5;border-color:rgba(255,255,255,0.3)" title="Vanilla Cream"></div>
+                <div class="flavor-dot" style="background:#e91e63" title="Strawberry"></div>
+                <div class="flavor-dot" style="background:#3e2723" title="Double Chocolate"></div>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 1,200 <span>/2kg</span></div>
+              <button class="add-to-cart-btn" data-product-name="PT Whey Gold" data-product-price="1200"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>ADD</button>
+            </div>
+          </article>
+          <article class="product-card" data-category="protein">
+            <div class="product-img-wrap"><img src="https://www.proteini.si/en/image/original/1244/usn-casein-night-time-protein-908g" alt="Night Fuel Casein" loading="lazy"/></div>
+            <div class="product-info">
+              <span class="product-category">Protein</span>
+              <h3 class="product-name">Night Fuel Casein</h3>
+              <p class="product-desc">Slow-digesting micellar casein for overnight muscle recovery. 24g protein, rich pudding-like texture. Perfect before bed.</p>
+              <div class="product-flavors">
+                <div class="flavor-dot" style="background:#5d4037" title="Chocolate Brownie"></div>
+                <div class="flavor-dot" style="background:#ffe082" title="Banana Cream"></div>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 980 <span>/1.8kg</span></div>
+              <button class="add-to-cart-btn" data-product-name="Night Fuel Casein" data-product-price="980"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>ADD</button>
+            </div>
+          </article>
+          <article class="product-card" data-category="creatine">
+            <div class="product-badge">Essential</div>
+            <div class="product-img-wrap"><img src="https://i.pinimg.com/1200x/4e/dc/2d/4edc2d9014915f13029978d1610bf030.jpg" alt="Pure Creatine Mono" loading="lazy"/></div>
+            <div class="product-info">
+              <span class="product-category">Creatine</span>
+              <h3 class="product-name">Pure Creatine Mono</h3>
+              <p class="product-desc">5g pharmaceutical-grade creatine monohydrate per serving. Micronized for instant dissolve. Unflavored — stack with anything.</p>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 320 <span>/500g</span></div>
+              <button class="add-to-cart-btn" data-product-name="Pure Creatine Mono" data-product-price="320"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>ADD</button>
+            </div>
+          </article>
+          <article class="product-card" data-category="creatine">
+            <div class="product-img-wrap"><img src="https://supplementsource.ca/cdn/shop/products/SSca-Creatine-HCL-421698_1200x1200.jpg?v=1625854115" alt="Creatine HCL Advanced" loading="lazy"/></div>
+            <div class="product-info">
+              <span class="product-category">Creatine</span>
+              <h3 class="product-name">Creatine HCL Advanced</h3>
+              <p class="product-desc">More soluble than monohydrate, less bloating. 3g per serving for maximum strength output and rapid ATP regeneration.</p>
+              <div class="product-flavors">
+                <div class="flavor-dot" style="background:#e74c3c" title="Fruit Punch"></div>
+                <div class="flavor-dot" style="background:#1abc9c" title="Lemon-Lime"></div>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 480 <span>/90 srv</span></div>
+              <button class="add-to-cart-btn" data-product-name="Creatine HCL Advanced" data-product-price="480"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>ADD</button>
+            </div>
+          </article>
+          <article class="product-card" data-category="bars">
+            <div class="product-badge">Fan Fav</div>
+            <div class="product-img-wrap"><img src="https://i.pinimg.com/736x/5d/d3/e9/5dd3e9cd50689af61e9d06cf7da1f93d.jpg" alt="Power Bar Crunch" loading="lazy"/></div>
+            <div class="product-info">
+              <span class="product-category">Protein Bars</span>
+              <h3 class="product-name">Power Bar Crunch</h3>
+              <p class="product-desc">20g protein, crunchy peanut coating, real chocolate. Only 220 calories. No sugar alcohols — actually tastes amazing.</p>
+              <div class="product-flavors">
+                <div class="flavor-dot" style="background:#5d4037" title="Chocolate Peanut"></div>
+                <div class="flavor-dot" style="background:#f57f17" title="Caramel Almond"></div>
+                <div class="flavor-dot" style="background:#c0392b" title="Red Velvet"></div>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 75 <span>/bar</span></div>
+              <button class="add-to-cart-btn" data-product-name="Power Bar Crunch" data-product-price="75"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>ADD</button>
+            </div>
+          </article>
+          <article class="product-card" data-category="vitamins">
+            <div class="product-img-wrap"><img src="https://i.pinimg.com/736x/3c/7c/fe/3c7cfe1aed9035f1e3d10fcf1405784b.jpg" alt="Elite Multi Daily" loading="lazy"/></div>
+            <div class="product-info">
+              <span class="product-category">Vitamins</span>
+              <h3 class="product-name">Elite Multi Daily</h3>
+              <p class="product-desc">30+ essential vitamins and minerals optimized for athletes. Vitamin D3, K2, zinc, magnesium, B-complex in one daily pack.</p>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 390 <span>/60 caps</span></div>
+              <button class="add-to-cart-btn" data-product-name="Elite Multi Daily" data-product-price="390"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>ADD</button>
+            </div>
+          </article>
+          <article class="product-card" data-category="vitamins">
+            <div class="product-img-wrap"><img src="https://flex.darrelwilson.com/nutranest/storage/sites/140/2024/06/High-Strength-Omega-3.png" alt="Omega-3 Ultra Strength" loading="lazy"/></div>
+            <div class="product-info">
+              <span class="product-category">Vitamins</span>
+              <h3 class="product-name">Omega-3 Ultra Strength</h3>
+              <p class="product-desc">3000mg EPA/DHA per serving. Molecularly distilled, mercury-free. Supports joint health, brain function, and recovery speed.</p>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 450 <span>/90 caps</span></div>
+              <button class="add-to-cart-btn" data-product-name="Omega-3 Ultra Strength" data-product-price="450"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>ADD</button>
+            </div>
+          </article>
+          <article class="product-card" data-category="recovery">
+            <div class="product-badge">Popular</div>
+            <div class="product-img-wrap"><img src="https://i.pinimg.com/1200x/e4/50/78/e450785f058c7841976529d4c537b9c6.jpg" alt="BCAA 2:1:1 Intra" loading="lazy"/></div>
+            <div class="product-info">
+              <span class="product-category">Recovery</span>
+              <h3 class="product-name">BCAA 2:1:1 Intra</h3>
+              <p class="product-desc">10g BCAAs in the clinical 2:1:1 ratio. Added electrolytes and glutamine for hydration and muscle preservation during training.</p>
+              <div class="product-flavors">
+                <div class="flavor-dot" style="background:#e74c3c" title="Watermelon Splash"></div>
+                <div class="flavor-dot" style="background:#3498db" title="Blue Raspberry"></div>
+                <div class="flavor-dot" style="background:#1abc9c" title="Tropical"></div>
+              </div>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 540 <span>/30 srv</span></div>
+              <button class="add-to-cart-btn" data-product-name="BCAA 2:1:1 Intra" data-product-price="540"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>ADD</button>
+            </div>
+          </article>
+          <article class="product-card" data-category="recovery">
+            <div class="product-img-wrap"><img src="https://i.pinimg.com/1200x/9a/79/70/9a7970c56cfb78347c28f8b3bd6d08c9.jpg" alt="L-Glutamine Pure" loading="lazy"/></div>
+            <div class="product-info">
+              <span class="product-category">Recovery</span>
+              <h3 class="product-name">L-Glutamine Pure</h3>
+              <p class="product-desc">5g pure pharmaceutical glutamine per serving. Supports gut health, immune system, and reduces post-workout soreness significantly.</p>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">LE 280 <span>/300g</span></div>
+              <button class="add-to-cart-btn" data-product-name="L-Glutamine Pure" data-product-price="280"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></svg>ADD</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="footer-grid">
+          <div class="footer-col footer-about">
+            <div class="footer-brand-row"><a class="brand footer-brand" href="/"><span class="brand-mark">PT</span></a></div>
+            <p class="footer-copy">Power Temple helps you build strength and confidence with expert trainers, performance-driven plans, and a community built for real results.</p>
+          </div>
+          <div class="footer-col">
+            <h3 class="footer-head">Shop</h3>
+            <ul class="footer-list">
+              <li><a href="#">Pre-Workout</a></li><li><a href="#">Proteins</a></li><li><a href="#">Creatine</a></li><li><a href="#">Protein Bars</a></li><li><a href="#">Vitamins</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h3 class="footer-head">Quick Links</h3>
+            <ul class="footer-list">
+              <li><a href="/">Home</a></li><li><a href="/member/browse-classes">Classes</a></li><li><a href="/memberships">Memberships</a></li><li><a href="/services">Services</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h3 class="footer-head">Contact</h3>
+            <div class="footer-contact">
+              <p><strong>Phone:</strong> <a href="tel:0101234567">0101234567</a></p>
+              <p><strong>Email:</strong> <a href="mailto:powertemple@gmail.com">powertemple@gmail.com</a></p>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      <section class="shop-newsletter">
+        <div class="newsletter-card">
+          <div class="newsletter-copy">
+            <span class="eyebrow">LATEST NEWS</span>
+            <h2>Subscribe for exclusive offers and updates</h2>
+            <p>Get the newest product launches, workout tips, and discount codes sent directly to your inbox.</p>
+          </div>
+          <div class="newsletter-form">
+            <input id="shopNewsletterEmail" type="email" placeholder="Enter your email address" />
+            <button id="shopNewsletterBtn" type="button">Subscribe</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="cartToast" class="cart-toast"><span>✅</span><span id="cartToastMsg">Item added to cart!</span></div>
+  <%- include('partials/cart-drawer') %>
+  <%- include('partials/login-modal') %>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<%- include('../partials/head') %>
+<body data-page="trainer">
+  <div class="app">
+    <%- include('../partials/header-trainer', { activePage: 'attendance' }) %>
+    <main class="container">
+      <%- include('../partials/hero-video') %>
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div><h2>Attendance & Member Performance</h2><p>Track member attendance, engagement, and performance metrics across your sessions.</p></div>
+          <a class="btn btn-primary" href="/trainer/my-schedule">View Schedule</a>
+        </div>
+        <div class="section-head" style="margin-bottom: 32px;"><div><h3>This Week's Sessions</h3><p>Member attendance and performance tracking for your assigned classes.</p></div></div>
+        <div style="display: grid; gap: 24px;">
+          <article class="panel fade-in">
+            <div class="toolbar" style="margin-bottom: 20px;"><h3>MMA Championship Training</h3><span class="pill success">Today 06:00 AM</span></div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px;">
+              <div class="stat"><strong>18</strong><span>Total Spots</span></div>
+              <div class="stat"><strong>15</strong><span>Attended</span></div>
+              <div class="stat"><strong>2</strong><span>No-Show</span></div>
+              <div class="stat"><strong>1</strong><span>Cancelled</span></div>
+            </div>
+            <div style="border-top: 1px solid rgba(0, 212, 255, 0.15); padding-top: 16px;">
+              <h4 style="margin-bottom: 12px;">Member List</h4>
+              <div style="display: grid; gap: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(0, 208, 132, 0.1); border-radius: 8px; border-left: 3px solid var(--success);"><span>Jordan Lee</span><span class="pill success">✓ Attended</span></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(0, 208, 132, 0.1); border-radius: 8px; border-left: 3px solid var(--success);"><span>Avery Smith</span><span class="pill success">✓ Attended</span></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255, 165, 0, 0.1); border-radius: 8px; border-left: 3px solid var(--warning);"><span>Taylor Martinez</span><span class="pill warning">⏳ Late (5 min)</span></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255, 0, 110, 0.1); border-radius: 8px; border-left: 3px solid var(--danger);"><span>Casey Kim</span><span class="pill danger">✗ No-Show</span></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(255, 0, 110, 0.1); border-radius: 8px; border-left: 3px solid var(--danger);"><span>Morgan Davis</span><span class="pill danger">✗ Cancelled</span></div>
+              </div>
+            </div>
+          </article>
+          <article class="panel fade-in">
+            <div class="toolbar" style="margin-bottom: 20px;"><h3>Mobility Flow</h3><span class="pill warning">Thursday 09:00 AM</span></div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px;">
+              <div class="stat"><strong>20</strong><span>Total Spots</span></div>
+              <div class="stat"><strong>17</strong><span>Registered</span></div>
+              <div class="stat"><strong>0</strong><span>Cancelled</span></div>
+              <div class="stat"><strong>3</strong><span>Spots Open</span></div>
+            </div>
+            <div style="border-top: 1px solid rgba(0, 212, 255, 0.15); padding-top: 16px;">
+              <h4 style="margin-bottom: 12px;">Registered Members</h4>
+              <div style="display: grid; gap: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(0, 208, 132, 0.1); border-radius: 8px;"><span>Alex Johnson</span><span class="pill success">✓ Registered</span></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(0, 208, 132, 0.1); border-radius: 8px;"><span>Riley Anderson</span><span class="pill success">✓ Registered</span></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(0, 208, 132, 0.1); border-radius: 8px;"><span>Jordan Taylor</span><span class="pill success">✓ Registered</span></div>
+                <div style="margin-top: 8px; padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; text-align: center; color: var(--text-muted);">+ 14 more registered members</div>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="section-head" style="margin-top: 40px; margin-bottom: 28px;"><div><h3>Trainer Insights</h3><p>Your performance metrics and member engagement data.</p></div></div>
+        <div class="feature-grid">
+          <article class="feature-card"><div class="icon">📊</div><h3>Attendance Rate</h3><p>Your average member attendance across all sessions: <strong style="color: var(--success);">89%</strong>. Industry average is 76%.</p></article>
+          <article class="feature-card"><div class="icon">⭐</div><h3>Member Rating</h3><p>Average member rating for your classes: <strong style="color: var(--success);">4.9/5.0</strong> based on 187 reviews.</p></article>
+          <article class="feature-card"><div class="icon">🏆</div><h3>Retention Score</h3><p>Your members return rate: <strong style="color: var(--success);">94%</strong>. Top 5% of all trainers!</p></article>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

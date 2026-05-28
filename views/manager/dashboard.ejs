@@ -1,0 +1,62 @@
+<%- include('../partials/head') %>
+<body data-page="manager">
+  <div class="app">
+    <%- include('../partials/header-manager', { activePage: 'dashboard' }) %>
+    <main class="container">
+      <%- include('../partials/hero-video') %>
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div><h2>Branch Manager Control Center</h2><p>Run the day-to-day operations. Register members, schedule classes, log payments, and review reports.</p></div>
+          <a class="btn btn-primary" href="/manager/members">Register Member</a>
+        </div>
+        <div class="stat-grid" style="margin-bottom: 32px;">
+          <div class="stat fade-in"><strong id="mgrStatMembers">0</strong><span>Active Members</span></div>
+          <div class="stat fade-in"><strong id="mgrStatClasses">0</strong><span>Classes This Week</span></div>
+          <div class="stat fade-in"><strong id="mgrStatRevenue">LE 0</strong><span>Revenue Today</span></div>
+          <div class="stat fade-in"><strong id="mgrStatRenewals">0</strong><span>Renewals This Month</span></div>
+        </div>
+        <div class="dashboard-grid" style="gap: 24px; margin-bottom: 32px;">
+          <div class="stack">
+            <div class="panel-head"><div><h3>Quick Operations</h3><p>Get to the most common manager tasks fast.</p></div></div>
+            <div class="feature-grid stagger">
+              <a class="feature-card" href="/manager/members"><h3>Register Member</h3><p>Onboard new walk-ins with full membership setup.</p></a>
+              <a class="feature-card" href="/manager/classes"><h3>Create / Schedule Class</h3><p>Assign trainers, set capacity, publish sessions.</p></a>
+              <a class="feature-card" href="/manager/payments"><h3>Record Cash Payment</h3><p>Log walk-in renewals and cash transactions.</p></a>
+              <a class="feature-card" href="/manager/reports"><h3>View Reports</h3><p>Attendance, revenue, and trainer schedules.</p></a>
+            </div>
+          </div>
+          <aside class="panel">
+            <h3 style="margin-bottom: 16px;">Today's Snapshot</h3>
+            <div style="display: grid; gap: 10px; font-size: 0.9rem;">
+              <div style="display: flex; justify-content: space-between;"><span>Check-ins:</span><strong id="snapAttended">0</strong></div>
+              <div style="display: flex; justify-content: space-between;"><span>No-shows:</span><strong id="snapNoshow">0</strong></div>
+              <div style="display: flex; justify-content: space-between;"><span>Cancellations:</span><strong id="snapCancel">0</strong></div>
+              <div style="display: flex; justify-content: space-between;"><span>Cash Today:</span><strong id="snapCash">LE 0</strong></div>
+            </div>
+          </aside>
+        </div>
+        <div class="panel-head" style="margin-bottom: 16px;"><div><h3>Latest Payments</h3><p>Most recent transactions across the branch.</p></div></div>
+        <div id="mgrLatestPayments"></div>
+      </section>
+    </main>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PowerTempleAPI === 'undefined') return;
+      const fmt = (n) => 'LE ' + Number(n || 0).toLocaleString();
+      document.getElementById('mgrStatMembers').textContent = PowerTempleAPI.users.filter((u) => u.role === 'member' && (u.membershipStatus !== 'suspended' && u.membershipStatus !== 'cancelled')).length;
+      document.getElementById('mgrStatClasses').textContent = PowerTempleAPI.classes.length;
+      const todayRev = PowerTempleAPI.payments.filter((p) => p.status === 'paid').reduce((s, p) => s + Number(p.amount), 0);
+      document.getElementById('mgrStatRevenue').textContent = fmt(todayRev);
+      document.getElementById('mgrStatRenewals').textContent = PowerTempleAPI.getRenewalsThisMonth().length;
+      const att = PowerTempleAPI.attendance.reduce((acc, a) => ({ attended: acc.attended + a.attended, noShow: acc.noShow + a.noShow, cancelled: acc.cancelled + a.cancelled }), { attended: 0, noShow: 0, cancelled: 0 });
+      document.getElementById('snapAttended').textContent = att.attended;
+      document.getElementById('snapNoshow').textContent = att.noShow;
+      document.getElementById('snapCancel').textContent = att.cancelled;
+      document.getElementById('snapCash').textContent = fmt(PowerTempleAPI.payments.filter((p) => p.method === 'cash' && p.status === 'paid').reduce((s, p) => s + Number(p.amount), 0));
+      const list = document.getElementById('mgrLatestPayments');
+      list.innerHTML = PowerTempleAPI.payments.slice().reverse().slice(0, 5).map((p) => `<article class="row-card fade-in" style="margin-bottom: 12px;"><div class="row-main"><strong>${p.memberName || 'Member'} — ${fmt(p.amount)}</strong><span class="row-meta">${new Date(p.paidAt).toLocaleDateString()} · ${p.method.toUpperCase()} · ${p.description}</span></div><span class="pill ${p.status === 'paid' ? 'success' : 'warning'}">${p.status}</span></article>`).join('') || '<p style="color: var(--text-muted);">No payments yet.</p>';
+    });
+  </script>
+</body>
+</html>

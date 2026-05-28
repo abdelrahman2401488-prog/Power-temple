@@ -1,0 +1,124 @@
+<%- include('../partials/head') %>
+<body data-page="admin">
+  <div class="app">
+    <%- include('../partials/header-admin', { activePage: 'classes' }) %>
+    <main class="container">
+      <%- include('../partials/hero-video') %>
+      <section class="dashboard-layout">
+        <div class="dashboard-banner fade-in">
+          <div><h2>Class Management</h2><p>Create, schedule, and manage all group classes. Monitor capacity and member demand.</p></div>
+          <a class="btn btn-primary" href="/admin/trainers">Manage Trainers</a>
+        </div>
+
+        <div class="dashboard-grid" style="gap: 24px; margin-bottom: 40px;">
+          <div class="stack">
+
+            <!-- Create Class Form (server-side POST with image upload) -->
+            <div class="form-card fade-in">
+              <h3 style="margin-bottom: 16px;">+ Create New Class</h3>
+              <form action="/admin/classes" method="POST" enctype="multipart/form-data">
+
+                <label>Class Name
+                  <input name="name" type="text" placeholder="e.g., MMA Championship Training" required />
+                </label>
+
+                <label>Trainer
+                  <select name="trainer" required>
+                    <option value="">Select a trainer...</option>
+                    <% if (typeof trainers !== 'undefined') { %>
+                      <% trainers.forEach(function(t) { %>
+                        <option value="<%= t.name %>"><%= t.name %></option>
+                      <% }) %>
+                    <% } %>
+                  </select>
+                </label>
+
+                <div class="field-grid">
+                  <label>Category
+                    <select name="category" required>
+                      <option>Cardio</option>
+                      <option>Strength</option>
+                      <option>Recovery</option>
+                      <option>Combat</option>
+                    </select>
+                  </label>
+                  <label>Level
+                    <select name="level" required>
+                      <option>Beginner</option>
+                      <option>Intermediate</option>
+                      <option>Advanced</option>
+                    </select>
+                  </label>
+                </div>
+
+                <label>Capacity
+                  <input name="capacity" type="number" min="1" placeholder="Max members" required />
+                </label>
+
+                <label>Description
+                  <textarea name="description" placeholder="Class details and benefits..."></textarea>
+                </label>
+
+                <label>Class Photo</label>
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                  <input id="classImageInput" name="image" type="file" accept="image/*" style="display: none;" onchange="document.getElementById('classImageLabel').textContent = this.files[0] ? this.files[0].name : 'No file chosen'" />
+                  <button type="button" class="btn btn-secondary" onclick="document.getElementById('classImageInput').click()">
+                    Choose Photo
+                  </button>
+                  <span id="classImageLabel" style="font-size: 0.9rem; color: var(--text-muted);">No file chosen</span>
+                </div>
+
+                <button class="btn btn-primary" type="submit" style="width: 100%; margin-top: 8px;">Publish Class</button>
+              </form>
+            </div>
+
+            <!-- Classes list from MongoDB -->
+            <div class="panel-head" style="margin-top: 24px;">
+              <div>
+                <h3>All Classes</h3>
+                <p><%= typeof classes !== 'undefined' ? classes.length : 0 %> classes in the system</p>
+              </div>
+            </div>
+
+            <% if (typeof classes !== 'undefined' && classes.length > 0) { %>
+              <% classes.forEach(function(cls) { %>
+                <article class="class-card fade-in" style="margin-bottom: 16px;">
+                  <% if (cls.image) { %>
+                    <img src="<%= cls.image %>" alt="<%= cls.name %>" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 12px;" />
+                  <% } %>
+                  <div class="toolbar">
+                    <span class="pill success"><%= cls.category %></span>
+                    <span class="pill success"><%= cls.booked %>/<%= cls.capacity %></span>
+                  </div>
+                  <h3><%= cls.name %></h3>
+                  <p><%= cls.description %></p>
+                  <div class="meta-row">
+                    <span><%= cls.time || 'TBD' %></span>
+                    <span><%= cls.trainer %></span>
+                    <span><%= cls.level %></span>
+                  </div>
+                  <form action="/admin/classes/delete/<%= cls._id %>" method="POST" style="margin-top: 10px;">
+                    <button type="submit" class="btn btn-ghost" style="font-size: 0.85rem; color: var(--danger-color);" onclick="return confirm('Delete this class?')">Delete</button>
+                  </form>
+                </article>
+              <% }) %>
+            <% } else { %>
+              <div class="empty-state">No classes yet. Create one above.</div>
+            <% } %>
+
+          </div>
+
+          <aside class="panel">
+            <h3 style="margin-bottom: 20px;">Class Stats</h3>
+            <div class="stat-grid" style="gap: 12px; margin-bottom: 24px;">
+              <div class="stat"><strong><%= typeof classes !== 'undefined' ? classes.length : 0 %></strong><span>Total Classes</span></div>
+              <div class="stat"><strong>4.8</strong><span>Avg Rating</span></div>
+            </div>
+            <div id="adminMessage" class="notice hidden" style="margin-top: 20px;"></div>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
