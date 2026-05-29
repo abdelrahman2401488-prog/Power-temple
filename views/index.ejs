@@ -60,80 +60,48 @@
         </div>
         <div class="classes-carousel-wrap">
           <div class="classes-carousel-track" id="classesCarousel">
+            <% (classes || []).forEach(function(cls) { %>
             <div class="classes-slide-card">
               <div class="slide-img-wrap">
-                <img src="https://www.trxtraining.com/cdn/shop/articles/mma-fighter-workout-training-plan_e5c7f6f7-c3d0-4410-8af7-e2a02397c967.jpg?v=1775795865" alt="MMA Championship Training"/>
+                <img src="<%= cls.image || '/images/mobility-flow.jpg' %>" alt="<%= cls.name %>" />
                 <div class="slide-overlay"></div>
-                <div class="slide-badges"><span class="pill success">HIIT</span><span class="pill success">OFFER</span></div>
+                <div class="slide-badges">
+                  <% (cls.badges || [cls.category]).forEach(function(b) { %>
+                    <span class="pill success"><%= b %></span>
+                  <% }) %>
+                </div>
               </div>
               <div class="slide-info">
-                <h3>MMA Championship Training</h3>
-                <p>Full-contact fighting conditioning blended with explosive HIIT circuits. Build knockout power, footwork, and elite cardio endurance. Led by ex-national champion Coach Yasmine.</p>
-                <div class="slide-meta"><span>⏱ 60 min</span><span>🔥 High Intensity</span><span>👥 Max 15 members</span></div>
+                <h3><%= cls.name %></h3>
+                <p><%= cls.description %></p>
+                <div class="slide-meta">
+                  <span>⏱ <%= cls.duration %> min</span>
+                  <span>👥 Max <%= cls.capacity %> members</span>
+                </div>
                 <a href="/member/browse-classes" class="btn btn-primary">Book Class →</a>
               </div>
             </div>
+            <% }) %>
+            <% if (!classes || classes.length === 0) { %>
             <div class="classes-slide-card">
-              <div class="slide-img-wrap">
-                <img src="https://trugrit-fitness.com/cdn/shop/articles/Fo7_-Q0g.jpg?crop=center&height=1200&v=1638407838&width=1200" alt="Barbell Mastery"/>
-                <div class="slide-overlay"></div>
-                <div class="slide-badges"><span class="pill success">STRENGTH</span><span class="pill success">OFFER</span></div>
-              </div>
-              <div class="slide-info">
-                <h3>Barbell Mastery</h3>
-                <p>A deep dive into the king of lifts — squat, bench, and deadlift. Perfect form, progressive overload programming, and real strength gains every session.</p>
-                <div class="slide-meta"><span>⏱ 75 min</span><span>💪 All Levels</span><span>👥 Max 12 members</span></div>
-                <a href="/member/browse-classes" class="btn btn-primary">Book Class →</a>
+              <div class="slide-info" style="padding: 40px; text-align: center;">
+                <h3>Classes coming soon</h3>
+                <p>Check back soon for our elite training programs.</p>
               </div>
             </div>
-            <div class="classes-slide-card">
-              <div class="slide-img-wrap">
-                <img src="/images/mobility-flow.jpg" alt="Mobility Flow"/>
-                <div class="slide-overlay"></div>
-                <div class="slide-badges"><span class="pill success">RECOVERY</span><span class="pill success">OFFER</span></div>
-              </div>
-              <div class="slide-info">
-                <h3>Mobility Flow</h3>
-                <p>Restore your range of motion, fix imbalances, and bulletproof your joints. A mix of yoga, dynamic stretching, and fascia work for long-term athletic longevity.</p>
-                <div class="slide-meta"><span>⏱ 50 min</span><span>🧘 Beginner Friendly</span><span>👥 Max 20 members</span></div>
-                <a href="/member/browse-classes" class="btn btn-primary">Book Class →</a>
-              </div>
-            </div>
-            <div class="classes-slide-card">
-              <div class="slide-img-wrap">
-                <img src="https://americangym.com/wp-content/uploads/boxing7.webp" alt="Boxing Supremacy"/>
-                <div class="slide-overlay"></div>
-                <div class="slide-badges"><span class="pill success">COMBAT</span><span class="pill success">OFFER</span></div>
-              </div>
-              <div class="slide-info">
-                <h3>Boxing Supremacy</h3>
-                <p>Learn to punch with power and precision. Heavy bags, mitts, and sparring drills designed to sharpen reflexes, melt fat, and build the heart of a fighter.</p>
-                <div class="slide-meta"><span>⏱ 60 min</span><span>🥊 Intermediate</span><span>👥 Max 10 members</span></div>
-                <a href="/member/browse-classes" class="btn btn-primary">Book Class →</a>
-              </div>
-            </div>
-            <div class="classes-slide-card">
-              <div class="slide-img-wrap">
-                <img src="https://www.trxtraining.com/cdn/shop/articles/mma-fighter-workout-training-plan_e5c7f6f7-c3d0-4410-8af7-e2a02397c967.jpg?v=1775795865" alt="MMA Championship Training"/>
-                <div class="slide-overlay"></div>
-                <div class="slide-badges"><span class="pill success">HIIT</span></div>
-              </div>
-              <div class="slide-info">
-                <h3>MMA Championship Training</h3>
-                <p>Full-contact fighting conditioning blended with explosive HIIT circuits. Build knockout power, footwork, and elite cardio endurance.</p>
-                <div class="slide-meta"><span>⏱ 60 min</span><span>🔥 High Intensity</span><span>👥 Max 15 members</span></div>
-                <a href="/member/browse-classes" class="btn btn-primary">Book Class →</a>
-              </div>
+            <% } %>
             </div>
           </div>
           <button class="carousel-btn carousel-btn-prev" id="carouselPrev" aria-label="Previous">&#8592;</button>
           <button class="carousel-btn carousel-btn-next" id="carouselNext" aria-label="Next">&#8594;</button>
         </div>
         <div class="carousel-dots" id="carouselDots">
-          <button class="carousel-dot active" data-idx="0"></button>
-          <button class="carousel-dot" data-idx="1"></button>
-          <button class="carousel-dot" data-idx="2"></button>
-          <button class="carousel-dot" data-idx="3"></button>
+          <% (classes || []).forEach(function(cls, i) { %>
+            <button class="carousel-dot <%= i === 0 ? 'active' : '' %>" data-idx="<%= i %>"></button>
+          <% }) %>
+          <% if (!classes || classes.length === 0) { %>
+            <button class="carousel-dot active" data-idx="0"></button>
+          <% } %>
         </div>
       </section>
 

@@ -13,6 +13,7 @@ const gymClassSchema = new mongoose.Schema({
   room: { type: String, default: 'Studio A' },
   description: { type: String },
   image: { type: String },
+  badges: [String],
 }, { timestamps: true });
 
 module.exports = mongoose.model('GymClass', gymClassSchema);

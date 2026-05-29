@@ -207,7 +207,7 @@ class PowerTempleAuth {
   // Protect route - redirect if not authenticated or wrong role
   protectRoute(requiredRoles = []) {
     if (!this.isAuthenticated()) {
-      window.location.href = this.getAppPath('index.html#login');
+      window.location.href = '/auth/login';
       return false;
     }
 
@@ -224,22 +224,12 @@ class PowerTempleAuth {
   // Redirect to appropriate dashboard based on role
   redirectToDashboard() {
     const role = this.getUserRole();
-
     switch (role) {
-      case 'admin':
-        window.location.href = this.getAppPath('admin/dashboard.html');
-        break;
-      case 'manager':
-        window.location.href = this.getAppPath('manager/dashboard.html');
-        break;
-      case 'trainer':
-        window.location.href = this.getAppPath('trainer/my-schedule.html');
-        break;
-      case 'member':
-        window.location.href = this.getAppPath('member/membership.html');
-        break;
-      default:
-        window.location.href = this.getAppPath('index.html');
+      case 'admin':   window.location.href = '/admin/dashboard'; break;
+      case 'manager': window.location.href = '/manager/dashboard'; break;
+      case 'trainer': window.location.href = '/trainer/my-schedule'; break;
+      case 'member':  window.location.href = '/member/membership'; break;
+      default:        window.location.href = '/';
     }
   }
 
@@ -276,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
   } else if (/\/trainer\//.test(path)) {
     auth.protectRoute(['trainer']);
   } else if (/\/member\//.test(path)) {
-    const isPublicClassesPage = /\/member\/browse-classes\.html$/.test(path);
+    const isPublicClassesPage = /\/member\/browse-classes(\.html)?$/.test(path);
     if (!isPublicClassesPage) {
       auth.protectRoute(['member']);
     }

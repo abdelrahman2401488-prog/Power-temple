@@ -1,10 +1,12 @@
 require('dotenv').config();
 const app = require('./app');
 const connectDB = require('./config/db');
+const seedClasses = require('./config/seeder');
 
 const PORT = process.env.PORT || 3000;
 
-connectDB().then(() => {
+connectDB().then(async () => {
+  await seedClasses();
   app.listen(PORT, () => {
     console.log(`Power Temple running at http://localhost:${PORT}`);
   });

@@ -2,7 +2,7 @@
   const track = document.getElementById('classesCarousel');
   const cards = track.querySelectorAll('.classes-slide-card');
   const dots = document.querySelectorAll('.carousel-dot');
-  const TOTAL = 4; // real cards
+  const TOTAL = Math.max(cards.length, 1);
   let current = 0;
   let autoTimer;
   let isDragging = false;

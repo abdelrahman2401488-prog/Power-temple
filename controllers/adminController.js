@@ -32,9 +32,14 @@ exports.getClasses = async (req, res) => {
 };
 
 exports.postClass = async (req, res) => {
-  const { name, trainer, category, level, capacity, description } = req.body;
+  const { name, trainer, category, level, capacity, description, time, duration } = req.body;
   const image = req.file ? '/images/classes/' + req.file.filename : '';
-  await GymClass.create({ name, trainer, category, level, capacity: Number(capacity), description, image });
+  try {
+    await GymClass.create({ name, trainer, category, level, capacity: Number(capacity), description, image, time, duration: Number(duration) || 60 });
+    req.session.flash = 'Class published successfully!';
+  } catch (err) {
+    req.session.flash = 'Error creating class: ' + err.message;
+  }
   res.redirect('/admin/classes');
 };
 

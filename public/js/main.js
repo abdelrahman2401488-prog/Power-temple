@@ -47,13 +47,8 @@ function initializeAuthHeaderState() {
     auth.logout();
     showNotification('Logged out successfully', 'success', 900);
 
-    const path = window.location.pathname.replace(/\\/g, '/').toLowerCase();
-    const homePath = /(\/admin\/|\/member\/|\/trainer\/|\/auth\/)/.test(path)
-      ? '../index.html'
-      : 'index.html';
-
     setTimeout(() => {
-      window.location.href = homePath;
+      window.location.href = '/auth/logout';
     }, 200);
   };
 
