@@ -43,6 +43,19 @@ exports.postClass = async (req, res) => {
   res.redirect('/admin/classes');
 };
 
+exports.editClass = async (req, res) => {
+  const { name, trainer, category, level, capacity, description, time, duration } = req.body;
+  const update = { name, trainer, category, level, capacity: Number(capacity), description, time, duration: Number(duration) || 60 };
+  if (req.file) update.image = '/images/classes/' + req.file.filename;
+  try {
+    await GymClass.findByIdAndUpdate(req.params.id, update);
+    req.session.flash = 'Class updated successfully!';
+  } catch (err) {
+    req.session.flash = 'Error updating class: ' + err.message;
+  }
+  res.redirect('/admin/classes');
+};
+
 exports.deleteClass = async (req, res) => {
   await GymClass.findByIdAndDelete(req.params.id);
   res.redirect('/admin/classes');

@@ -6,54 +6,83 @@
       <%- include('../partials/hero-video') %>
       <section class="dashboard-layout">
         <div class="dashboard-banner fade-in">
-          <div><h2 id="memberWelcome">Welcome Back</h2><p>Track your membership, renew, or upgrade to a higher tier with more perks.</p></div>
+          <div><h2>Welcome, <%= currentUser.name %></h2><p>Track your membership, renew, or upgrade to a higher tier with more perks.</p></div>
           <a class="btn btn-primary" href="/member/browse-classes">Book a Class</a>
         </div>
-        <div class="dashboard-grid" style="gap: 24px; margin-bottom: 32px;">
-          <div class="panel" id="currentPlanPanel">
-            <h3 style="margin-bottom: 12px;">Current Plan</h3>
-            <div id="currentPlanInfo"></div>
-            <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
-              <button class="btn btn-primary" id="renewBtn">Renew (12 months)</button>
-            </div>
+
+        <% if (locals.flash) { %>
+          <div style="margin-bottom: 20px; padding: 12px 16px; background: rgba(0,212,255,0.1); border-left: 3px solid var(--primary-color); border-radius: 6px; color: var(--primary-color);">
+            <%= flash %>
           </div>
-          <aside class="panel">
+        <% } %>
+
+        <!-- Current Plan + Stats -->
+        <div class="dashboard-grid" style="gap: 24px; margin-bottom: 32px;">
+          <div class="panel fade-in">
+            <h3 style="margin-bottom: 12px;">Current Plan</h3>
+            <% if (currentUser.membershipTier) { %>
+              <%
+                var statusPill = 'success';
+                if (currentUser.membershipStatus === 'suspended' || currentUser.membershipStatus === 'cancelled') statusPill = 'danger';
+                else if (currentUser.membershipStatus === 'frozen') statusPill = 'warning';
+              %>
+              <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 12px;">
+                <h2 style="margin: 0;"><%= currentUser.membershipTier %></h2>
+                <span class="pill <%= statusPill %>"><%= currentUser.membershipStatus %></span>
+              </div>
+              <p style="color: var(--text-secondary); margin-bottom: 8px;">
+                Member since <%= currentUser.joiningDate ? new Date(currentUser.joiningDate).toLocaleDateString() : '—' %>
+              </p>
+            <% } else { %>
+              <p style="color: var(--text-secondary);">No active membership. Subscribe to a plan below.</p>
+            <% } %>
+          </div>
+
+          <aside class="panel fade-in">
             <h3 style="margin-bottom: 12px;">Membership Stats</h3>
             <div class="stat-grid" style="gap: 12px;">
-              <div class="stat"><strong id="statBookings">0</strong><span>Bookings</span></div>
-              <div class="stat"><strong id="statSince">—</strong><span>Member Since</span></div>
+              <div class="stat"><strong><%= currentUser.totalBookings || 0 %></strong><span>Bookings</span></div>
+            </div>
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+              <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Member Since</span>
+              <p style="margin: 4px 0 0; font-size: 1rem; color: var(--text-primary); font-weight: 600;">
+                <%= currentUser.joiningDate ? new Date(currentUser.joiningDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '—' %>
+              </p>
             </div>
           </aside>
         </div>
-        <div class="panel-head" style="margin-bottom: 16px;"><div><h3>Upgrade Your Plan</h3><p>Unlock more classes, premium trainers, and exclusive perks.</p></div></div>
-        <div id="upgradeOptions" class="dashboard-grid" style="gap: 16px;"></div>
-        <div id="adminMessage" class="notice hidden" style="margin-top: 20px;"></div>
+
+        <!-- Plans -->
+        <div class="panel-head" style="margin-bottom: 16px;">
+          <div>
+            <h3><%= currentUser.membershipTier ? 'Change Your Plan' : 'Choose a Plan' %></h3>
+            <p>Unlock more classes, premium trainers, and exclusive perks.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-grid" style="gap: 16px; margin-bottom: 40px;">
+          <% plans.forEach(function(plan) { %>
+            <%
+              var isCurrent = currentUser.membershipTier === plan.name;
+            %>
+            <article class="form-card fade-in" style="<%= isCurrent ? 'border: 2px solid var(--primary-color);' : '' %>">
+              <% if (isCurrent) { %>
+                <span class="pill success" style="margin-bottom: 10px; display: inline-block;">Current Plan</span>
+              <% } %>
+              <h3 style="margin-bottom: 8px;"><%= plan.name %></h3>
+              <p style="color: var(--primary-color); font-size: 1.4rem; font-weight: 700; margin-bottom: 16px;">LE <%= plan.monthlyPrice %>/mo</p>
+              <form action="/member/membership/subscribe" method="POST">
+                <input type="hidden" name="planId" value="<%= plan._id %>" />
+                <button class="btn <%= isCurrent ? 'btn-secondary' : 'btn-primary' %>" type="submit" style="width: 100%;">
+                  <%= isCurrent ? 'Renew Plan' : 'Subscribe to ' + plan.name %>
+                </button>
+              </form>
+            </article>
+          <% }) %>
+        </div>
+
       </section>
     </main>
   </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      if (typeof PowerTempleAPI === 'undefined' || typeof auth === 'undefined') return;
-      const user = auth.getCurrentUser();
-      if (!user) return;
-      document.getElementById('memberWelcome').textContent = `Welcome, ${user.name}`;
-      function renderCurrent() {
-        const record = PowerTempleAPI.memberMemberships.find((m) => m.memberId === user.id);
-        const info = document.getElementById('currentPlanInfo');
-        if (!record) { info.innerHTML = '<p style="color: var(--text-secondary);">No active membership found. Subscribe to a plan below.</p>'; return; }
-        const statusPill = record.status === 'active' ? 'success' : (record.status === 'frozen' ? 'warning' : 'danger');
-        info.innerHTML = `<div style="display: flex; gap: 12px; align-items: center; margin-bottom: 12px;"><h2 style="margin: 0;">${record.planName}</h2><span class="pill ${statusPill}">${record.status}</span></div><p style="color: var(--text-secondary); margin-bottom: 8px;">LE ${record.monthlyPrice}/month · ${record.branch} branch</p><p style="color: var(--text-muted); font-size: 0.9rem;">Started: ${record.startDate} · Expires: ${record.endDate}</p>`;
-      }
-      document.getElementById('statBookings').textContent = user.totalBookings || 0;
-      document.getElementById('statSince').textContent = user.joiningDate || '—';
-      function renderUpgrades() {
-        const container = document.getElementById('upgradeOptions');
-        container.innerHTML = PowerTempleAPI.membershipPlans.map((p) => `<article class="form-card fade-in"><h3 style="margin-bottom: 8px;">${p.name}</h3><p style="color: var(--primary-color); font-size: 1.4rem; font-weight: 700; margin-bottom: 12px;">LE ${p.monthlyPrice}/mo</p><button class="btn btn-primary" data-upgrade="${p.id}" style="width: 100%;">Upgrade to ${p.name}</button></article>`).join('');
-        container.querySelectorAll('[data-upgrade]').forEach((b) => b.addEventListener('click', () => { const r = PowerTempleAPI.upgradeMembership(user.id, b.dataset.upgrade); if (r.success) { showNotification(`Upgraded to ${r.record.planName}`, 'success'); renderCurrent(); } else showNotification(r.message || 'Could not upgrade', 'error'); }));
-      }
-      document.getElementById('renewBtn').addEventListener('click', () => { const r = PowerTempleAPI.renewMembership(user.id, 12); if (r.success) { showNotification('Membership renewed for 12 months', 'success'); renderCurrent(); } else showNotification(r.message || 'Renewal failed', 'error'); });
-      renderCurrent(); renderUpgrades();
-    });
-  </script>
 </body>
 </html>

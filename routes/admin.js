@@ -13,6 +13,7 @@ router.post('/trainers', c.postTrainer);
 router.post('/trainers/delete/:id', c.deleteTrainer);
 router.get('/classes', c.getClasses);
 router.post('/classes', upload.single('image'), c.postClass);
+router.post('/classes/edit/:id', upload.single('image'), c.editClass);
 router.post('/classes/delete/:id', c.deleteClass);
 router.get('/memberships', c.getMemberships);
 router.post('/memberships/plan/create', c.postPlan);

@@ -5,57 +5,109 @@
     <main class="container">
       <%- include('../partials/hero-video') %>
       <section class="dashboard-layout">
-        <div class="dashboard-banner fade-in"><div><h2>Personal Training</h2><p>Request a 1-on-1 session with one of our elite trainers. Pick a date, time, and goal.</p></div></div>
+        <div class="dashboard-banner fade-in">
+          <div><h2>Personal Training</h2><p>Request a 1-on-1 session with one of our elite trainers. Pick a date, time, and goal.</p></div>
+        </div>
+
+        <% if (locals.flash) { %>
+          <div style="margin-bottom: 20px; padding: 12px 16px; background: rgba(0,212,255,0.1); border-left: 3px solid var(--primary-color); border-radius: 6px; color: var(--primary-color);">
+            <%= flash %>
+          </div>
+        <% } %>
+
         <div class="dashboard-grid" style="gap: 24px;">
+
+          <!-- Request Form -->
           <div class="form-card fade-in">
             <h3 style="margin-bottom: 16px;">Request a Session</h3>
-            <form id="ptForm">
-              <label>Trainer<select id="ptTrainer" required></select></label>
-              <div class="field-grid">
-                <label>Date<input id="ptDate" type="date" required /></label>
-                <label>Time<input id="ptTime" type="time" required /></label>
-              </div>
-              <label>Session Type<select id="ptType" required><option>Strength</option><option>Cardio</option><option>Mobility</option><option>Combat</option><option>Weight Loss</option><option>Muscle Gain</option></select></label>
-              <label>Notes (Goals, injuries, preferences)<textarea id="ptNotes" placeholder="Tell your trainer what you want to focus on..."></textarea></label>
-              <button class="btn btn-primary" type="submit" style="width: 100%;">Request Session</button>
-            </form>
+            <%
+              var staticTrainers = [
+                { name: 'Coach Omar',   specialty: 'Strength & Power' },
+                { name: 'Coach Yasmine', specialty: 'Cardio & Combat' },
+                { name: 'Coach Zeyad',  specialty: 'Mobility & Recovery' },
+              ];
+              var dbTrainerNames = trainers.map(function(t){ return t.name.toLowerCase(); });
+              var allTrainers = staticTrainers.concat(
+                trainers.map(function(t){ return { name: t.name, specialty: t.specialty || 'General Fitness' }; })
+              ).filter(function(t, i, arr){
+                return arr.findIndex(function(x){ return x.name === t.name; }) === i;
+              });
+            %>
+            <% if (allTrainers.length === 0) { %>
+              <p style="color: var(--text-muted);">No trainers available at the moment.</p>
+            <% } else { %>
+              <form action="/member/personal-training/request" method="POST">
+                <label>Trainer
+                  <select name="trainerName" required>
+                    <% allTrainers.forEach(function(t) { %>
+                      <option value="<%= t.name %>"><%= t.name %><%= t.specialty ? ' — ' + t.specialty : '' %></option>
+                    <% }) %>
+                  </select>
+                </label>
+                <div class="field-grid">
+                  <label>Date<input name="date" type="date" required /></label>
+                  <label>Time<input name="time" type="time" required /></label>
+                </div>
+                <label>Session Type
+                  <select name="sessionType" required>
+                    <option>Strength</option>
+                    <option>Cardio</option>
+                    <option>Mobility</option>
+                    <option>Combat</option>
+                    <option>Weight Loss</option>
+                    <option>Muscle Gain</option>
+                  </select>
+                </label>
+                <label>Notes (Goals, injuries, preferences)
+                  <textarea name="notes" placeholder="Tell your trainer what you want to focus on..."></textarea>
+                </label>
+                <button class="btn btn-primary" type="submit" style="width: 100%;">Request Session</button>
+              </form>
+            <% } %>
           </div>
-          <aside class="panel">
-            <h3 style="margin-bottom: 16px;">Featured Trainers</h3>
-            <div id="trainerCards" style="display: grid; gap: 12px;"></div>
+
+          <!-- Featured Trainers Sidebar -->
+          <aside class="panel fade-in">
+            <h3 style="margin-bottom: 16px;">Our Trainers</h3>
+            <div style="display: grid; gap: 12px;">
+              <% allTrainers.forEach(function(t) { %>
+                <article style="padding: 12px; background: var(--glass); border-radius: 8px;">
+                  <strong>👤 <%= t.name %></strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">
+                    <%= t.specialty || 'General Fitness' %>
+                  </p>
+                </article>
+              <% }) %>
+            </div>
           </aside>
         </div>
-        <div class="panel-head" style="margin: 32px 0 16px;"><div><h3>My Scheduled Sessions</h3><p>Track the status of your personal training requests.</p></div></div>
-        <div id="ptList"></div>
-        <div id="adminMessage" class="notice hidden" style="margin-top: 20px;"></div>
+
+        <!-- My Sessions -->
+        <div class="panel-head" style="margin: 32px 0 16px;">
+          <div><h3>My Scheduled Sessions</h3><p>Track the status of your personal training requests.</p></div>
+        </div>
+
+        <% if (sessions.length > 0) { %>
+          <% sessions.forEach(function(s) { %>
+            <%
+              var pill = 'warning';
+              if (s.status === 'confirmed') pill = 'success';
+              else if (s.status === 'cancelled') pill = 'danger';
+            %>
+            <article class="row-card fade-in" style="margin-bottom: 12px;">
+              <div class="row-main">
+                <strong><%= s.sessionType %> with <%= s.trainerName %></strong>
+                <span class="row-meta"><%= s.date %> at <%= s.time %><%= s.notes ? ' · ' + s.notes : '' %></span>
+              </div>
+              <span class="pill <%= pill %>"><%= s.status %></span>
+            </article>
+          <% }) %>
+        <% } else { %>
+          <p style="color: var(--text-muted);">No personal training sessions yet. Request one above!</p>
+        <% } %>
+
       </section>
     </main>
   </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      if (typeof PowerTempleAPI === 'undefined' || typeof auth === 'undefined') return;
-      const user = auth.getCurrentUser();
-      if (!user) return;
-      const trainerSel = document.getElementById('ptTrainer');
-      trainerSel.innerHTML = PowerTempleAPI.trainers.map((t) => `<option value="${t.id}">${t.name} — ${t.specialty}</option>`).join('');
-      const cards = document.getElementById('trainerCards');
-      cards.innerHTML = PowerTempleAPI.trainers.slice(0, 3).map((t) => `<article style="padding: 12px; background: var(--glass); border-radius: 8px;"><strong>${t.name}</strong><p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">${t.specialty} · ⭐ ${t.rating}</p></article>`).join('');
-      function renderRequests() {
-        const list = document.getElementById('ptList');
-        const requests = PowerTempleAPI.getMemberPersonalRequests(user.id);
-        list.innerHTML = requests.map((r) => `<article class="row-card fade-in" style="margin-bottom: 12px;"><div class="row-main"><strong>${r.sessionType} with ${r.trainerName}</strong><span class="row-meta">${r.date} at ${r.time}${r.notes ? ' · ' + r.notes : ''}</span></div><span class="pill ${r.status === 'confirmed' ? 'success' : (r.status === 'pending' ? 'warning' : 'danger')}">${r.status}</span></article>`).join('') || '<p style="color: var(--text-muted);">No personal training sessions yet. Request one above!</p>';
-      }
-      document.getElementById('ptForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const date = document.getElementById('ptDate').value;
-        const time = document.getElementById('ptTime').value;
-        if (!date || !time) { showNotification('Date and time are required', 'error'); return; }
-        PowerTempleAPI.createPersonalTrainingRequest({ memberId: user.id, trainerId: trainerSel.value, sessionType: document.getElementById('ptType').value, date, time, notes: document.getElementById('ptNotes').value });
-        showNotification('Personal training session requested! Trainer will confirm shortly.', 'success');
-        e.target.reset(); renderRequests();
-      });
-      renderRequests();
-    });
-  </script>
 </body>
 </html>

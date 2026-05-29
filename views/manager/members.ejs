@@ -5,12 +5,23 @@
     <main class="container">
       <%- include('../partials/hero-video') %>
       <section class="dashboard-layout">
-        <div class="dashboard-banner fade-in"><div><h2>Member Management</h2><p>Register new members, update info, renew memberships, and suspend accounts.</p></div></div>
+        <div class="dashboard-banner fade-in">
+          <div><h2>Member Management</h2><p>Register new members, update info, renew memberships, and suspend accounts.</p></div>
+        </div>
+
+        <% if (locals.flash) { %>
+          <div class="notice" style="margin-bottom: 16px; padding: 12px 16px; background: rgba(0,212,255,0.1); border-left: 3px solid var(--primary-color); border-radius: 6px; color: var(--primary-color);">
+            <%= flash %>
+          </div>
+        <% } %>
+
         <div class="dashboard-grid" style="gap: 24px; margin-bottom: 32px;">
           <div class="stack">
+
+            <!-- Register New Member -->
             <div class="form-card fade-in">
               <h3 style="margin-bottom: 16px;">+ Register New Member</h3>
-              <form id="mgrMemberForm">
+              <form action="/manager/members/register" method="POST">
                 <div class="field-grid">
                   <label>Full Name<input name="name" type="text" required /></label>
                   <label>Email<input name="email" type="email" required /></label>
@@ -20,64 +31,102 @@
                   <label>Initial Password<input name="password" type="text" value="TempPass1" required /></label>
                 </div>
                 <div class="field-grid">
-                  <label>Plan<select name="tier" required><option value="starter">Starter</option><option value="elite">Elite</option><option value="pro">Pro</option><option value="champion">Champion</option></select></label>
-                  <label>Branch<select name="branch" required><option>Maadi</option><option>Zamalek</option><option>New Cairo</option></select></label>
+                  <label>Plan
+                    <select name="tier" required>
+                      <option value="Starter">Starter</option>
+                      <option value="Elite">Elite</option>
+                      <option value="Pro">Pro</option>
+                      <option value="Champion">Champion</option>
+                    </select>
+                  </label>
+                  <label>Branch
+                    <select name="branch" required>
+                      <option>Maadi</option>
+                      <option>Zamalek</option>
+                      <option>New Cairo</option>
+                    </select>
+                  </label>
                 </div>
                 <button class="btn btn-primary" type="submit" style="width: 100%;">Register Member</button>
               </form>
             </div>
-            <div style="margin-top: 24px;"><input id="mgrMemberSearch" type="text" placeholder="🔍 Search members..." style="width: 100%; margin-bottom: 20px;" /></div>
-            <div class="panel-head"><div><h3>Members</h3><p>Update info, renew, or suspend membership.</p></div></div>
-            <div id="mgrMemberList"></div>
+
+            <!-- Search -->
+            <form method="GET" action="/manager/members" style="margin-top: 24px;">
+              <input name="q" type="text" value="<%= locals.q || '' %>" placeholder="🔍 Search members..." style="width: 100%; margin-bottom: 20px;" oninput="this.form.submit()" />
+            </form>
+
+            <% var memberList = locals.members || []; %>
+            <% var searchQ = locals.q || ''; %>
+
+            <!-- Members List -->
+            <div class="panel-head">
+              <div>
+                <h3>Members</h3>
+                <p><%= memberList.length %> member<%= memberList.length !== 1 ? 's' : '' %> found</p>
+              </div>
+            </div>
+
+            <% if (memberList.length > 0) { %>
+              <% memberList.forEach(function(m) { %>
+                <%
+                  var statusPill = 'success';
+                  if (m.membershipStatus === 'suspended' || m.membershipStatus === 'cancelled') statusPill = 'danger';
+                  else if (m.membershipStatus === 'frozen') statusPill = 'warning';
+                %>
+                <article class="row-card fade-in" style="margin-bottom: 12px;">
+                  <div class="row-main">
+                    <strong>👤 <%= m.name %></strong>
+                    <span class="row-meta">@<%= m.username %> · <%= m.membershipTier || 'No plan' %> · joined <%= m.joiningDate ? m.joiningDate.toISOString().split('T')[0] : '—' %></span>
+                    <span class="row-meta"><%= m.email %></span>
+                  </div>
+                  <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 10px;">
+                    <span class="pill <%= statusPill %>"><%= m.membershipStatus || 'active' %></span>
+
+                    <form action="/manager/members/renew/<%= m._id %>" method="POST" style="margin: 0;">
+                      <button class="btn btn-secondary" type="submit" style="padding: 6px 12px; font-size: 0.85rem;">Renew</button>
+                    </form>
+
+                    <% if (m.membershipStatus !== 'suspended') { %>
+                      <form action="/manager/members/suspend/<%= m._id %>" method="POST" style="margin: 0;">
+                        <button class="btn btn-secondary" type="submit" style="padding: 6px 12px; font-size: 0.85rem;" onclick="return confirm('Suspend <%= m.name %>?')">Suspend</button>
+                      </form>
+                    <% } %>
+
+                    <% if (m.membershipStatus !== 'active') { %>
+                      <form action="/manager/members/activate/<%= m._id %>" method="POST" style="margin: 0;">
+                        <button class="btn btn-ghost" type="submit" style="padding: 6px 12px; font-size: 0.85rem;">Activate</button>
+                      </form>
+                    <% } %>
+                  </div>
+                </article>
+              <% }) %>
+            <% } else { %>
+              <div class="empty-state">No members found<%= searchQ ? ' matching "' + searchQ + '"' : '' %>.</div>
+            <% } %>
+
           </div>
+
+          <!-- Stats Sidebar -->
           <aside class="panel">
             <h3 style="margin-bottom: 16px;">Member Stats</h3>
             <div class="stat-grid" style="gap: 12px;">
-              <div class="stat"><strong id="memCntTotal">0</strong><span>Total</span></div>
-              <div class="stat"><strong id="memCntActive">0</strong><span>Active</span></div>
-              <div class="stat"><strong id="memCntSuspended">0</strong><span>Suspended</span></div>
-              <div class="stat"><strong id="memCntNew">0</strong><span>New (30d)</span></div>
+              <div class="stat"><strong><%= memberList.length %></strong><span>Total</span></div>
+              <div class="stat"><strong><%= memberList.filter(function(m){ return m.membershipStatus === 'active'; }).length %></strong><span>Active</span></div>
+              <div class="stat"><strong><%= memberList.filter(function(m){ return m.membershipStatus === 'suspended'; }).length %></strong><span>Suspended</span></div>
+              <div class="stat">
+                <strong><%=
+                  memberList.filter(function(m){
+                    return m.joiningDate && (Date.now() - new Date(m.joiningDate).getTime()) < 30 * 24 * 60 * 60 * 1000;
+                  }).length
+                %></strong>
+                <span>New (30d)</span>
+              </div>
             </div>
           </aside>
         </div>
-        <div id="adminMessage" class="notice hidden"></div>
       </section>
     </main>
   </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      if (typeof PowerTempleAPI === 'undefined') return;
-      function renderStats() {
-        const members = PowerTempleAPI.users.filter((u) => u.role === 'member');
-        document.getElementById('memCntTotal').textContent = members.length;
-        document.getElementById('memCntActive').textContent = members.filter((m) => m.membershipStatus !== 'suspended' && m.membershipStatus !== 'cancelled').length;
-        document.getElementById('memCntSuspended').textContent = members.filter((m) => m.membershipStatus === 'suspended').length;
-        const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
-        document.getElementById('memCntNew').textContent = members.filter((m) => m.joiningDate && new Date(m.joiningDate).getTime() > cutoff).length;
-      }
-      function renderMembers(filter = '') {
-        const list = document.getElementById('mgrMemberList');
-        const q = filter.toLowerCase();
-        const members = PowerTempleAPI.users.filter((u) => u.role === 'member').filter((m) => !q || m.name.toLowerCase().includes(q) || m.email.toLowerCase().includes(q));
-        list.innerHTML = members.map((m) => {
-          const status = m.membershipStatus || 'active';
-          const statusPill = status === 'active' ? 'success' : (status === 'frozen' ? 'warning' : 'danger');
-          return `<article class="row-card fade-in" style="margin-bottom: 12px;"><div class="row-main"><strong>${m.avatar || '👤'} ${m.name}</strong><span class="row-meta">@${m.username} · ${m.membershipTier} · joined ${m.joiningDate || '—'}</span></div><div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;"><span class="pill ${statusPill}">${status}</span><button class="btn btn-secondary" data-renew="${m.id}" style="padding: 6px 12px; font-size: 0.85rem;">Renew</button><button class="btn btn-secondary" data-suspend="${m.id}" style="padding: 6px 12px; font-size: 0.85rem;">Suspend</button><button class="btn btn-ghost" data-activate="${m.id}" style="padding: 6px 12px; font-size: 0.85rem;">Activate</button></div></article>`;
-        }).join('') || '<p style="color: var(--text-muted);">No members match.</p>';
-        list.querySelectorAll('[data-renew]').forEach((b) => b.addEventListener('click', () => { PowerTempleAPI.renewMembership(b.dataset.renew, 12); showNotification('Membership renewed for 12 months', 'success'); renderMembers(document.getElementById('mgrMemberSearch').value); }));
-        list.querySelectorAll('[data-suspend]').forEach((b) => b.addEventListener('click', () => { PowerTempleAPI.setMembershipStatus(b.dataset.suspend, 'suspended'); showNotification('Member suspended', 'success'); renderStats(); renderMembers(document.getElementById('mgrMemberSearch').value); }));
-        list.querySelectorAll('[data-activate]').forEach((b) => b.addEventListener('click', () => { PowerTempleAPI.setMembershipStatus(b.dataset.activate, 'active'); showNotification('Member reactivated', 'success'); renderStats(); renderMembers(document.getElementById('mgrMemberSearch').value); }));
-      }
-      document.getElementById('mgrMemberForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const fd = new FormData(e.target);
-        PowerTempleAPI.registerMemberByStaff({ name: fd.get('name'), email: fd.get('email'), username: fd.get('username'), password: fd.get('password'), tier: fd.get('tier').charAt(0).toUpperCase() + fd.get('tier').slice(1), branch: fd.get('branch') });
-        showNotification('Member registered successfully', 'success');
-        e.target.reset(); renderStats(); renderMembers();
-      });
-      document.getElementById('mgrMemberSearch').addEventListener('input', (e) => renderMembers(e.target.value));
-      renderStats(); renderMembers();
-    });
-  </script>
 </body>
 </html>

@@ -78,7 +78,7 @@
                   <span>⏱ <%= cls.duration %> min</span>
                   <span>👥 Max <%= cls.capacity %> members</span>
                 </div>
-                <a href="/member/browse-classes" class="btn btn-primary">Book Class →</a>
+                <a href="/member/browse-classes" class="btn btn-primary" data-require-auth>Book Class →</a>
               </div>
             </div>
             <% }) %>
@@ -105,12 +105,12 @@
         </div>
       </section>
 
-      <section class="section fade-in">
+      <section class="section fade-in" style="flex-direction: column; align-items: center; text-align: center; padding: 60px 20px;">
         <div>
           <h2>Ready to Transform?</h2>
           <p>Join 2,500+ athletes who've already started their journey with Power Temple. Your best self is waiting.</p>
         </div>
-        <a class="btn btn-primary" href="/auth/register">Get Started Free</a>
+        <a class="btn btn-primary" style="margin-top: 24px;" href="/auth/register">Get Started Free</a>
       </section>
 
       <%- include('partials/footer') %>
@@ -119,5 +119,23 @@
 
   <%- include('partials/cart-drawer') %>
   <%- include('partials/login-modal') %>
+  <script>
+    document.querySelectorAll('[data-require-auth]').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        <% if (!locals.sessionUser) { %>
+        e.preventDefault();
+        // Show notification
+        var n = document.createElement('div');
+        n.textContent = 'You need to sign in to book a class.';
+        n.style.cssText = 'position:fixed;top:24px;right:24px;z-index:9999;background:#1a1a2e;color:#fff;padding:14px 20px;border-radius:10px;border-left:4px solid #00d4ff;font-size:0.95rem;box-shadow:0 4px 20px rgba(0,0,0,0.4);';
+        document.body.appendChild(n);
+        setTimeout(function() {
+          window.location.href = '/auth/register#register';
+        }, 1800);
+        setTimeout(function() { n.remove(); }, 4000);
+        <% } %>
+      });
+    });
+  </script>
 </body>
 </html>

@@ -106,9 +106,73 @@
                     <span><%= cls.trainer %></span>
                     <span><%= cls.level %></span>
                   </div>
-                  <form action="/admin/classes/delete/<%= cls._id %>" method="POST" style="margin-top: 10px;">
-                    <button type="submit" class="btn btn-ghost" style="font-size: 0.85rem; color: var(--danger-color);" onclick="return confirm('Delete this class?')">Delete</button>
-                  </form>
+                  <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button type="button" class="btn btn-secondary" style="font-size: 0.85rem;" onclick="toggleEditForm('<%= cls._id %>')">Edit</button>
+                    <form action="/admin/classes/delete/<%= cls._id %>" method="POST" style="margin: 0;">
+                      <button type="submit" class="btn btn-ghost" style="font-size: 0.85rem; color: var(--danger-color);" onclick="return confirm('Delete this class?')">Delete</button>
+                    </form>
+                  </div>
+
+                  <!-- Inline Edit Form -->
+                  <div id="editForm-<%= cls._id %>" style="display: none; margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                    <h4 style="margin-bottom: 12px;">Edit Class</h4>
+                    <form action="/admin/classes/edit/<%= cls._id %>" method="POST" enctype="multipart/form-data">
+                      <label>Class Name
+                        <input name="name" type="text" value="<%= cls.name %>" required />
+                      </label>
+                      <label>Trainer
+                        <select name="trainer" required>
+                          <% if (typeof trainers !== 'undefined' && trainers.length > 0) { %>
+                            <% trainers.forEach(function(t) { %>
+                              <option value="<%= t.name %>" <%= cls.trainer === t.name ? 'selected' : '' %>><%= t.name %></option>
+                            <% }) %>
+                          <% } else { %>
+                            <option value="<%= cls.trainer %>" selected><%= cls.trainer %></option>
+                          <% } %>
+                        </select>
+                      </label>
+                      <div class="field-grid">
+                        <label>Category
+                          <select name="category" required>
+                            <% ['Cardio','Strength','Recovery','Combat'].forEach(function(cat) { %>
+                              <option <%= cls.category === cat ? 'selected' : '' %>><%= cat %></option>
+                            <% }) %>
+                          </select>
+                        </label>
+                        <label>Level
+                          <select name="level" required>
+                            <% ['Beginner','Intermediate','Advanced'].forEach(function(lvl) { %>
+                              <option <%= cls.level === lvl ? 'selected' : '' %>><%= lvl %></option>
+                            <% }) %>
+                          </select>
+                        </label>
+                      </div>
+                      <div class="field-grid">
+                        <label>Schedule Time
+                          <input name="time" type="text" value="<%= cls.time || '' %>" required />
+                        </label>
+                        <label>Duration (min)
+                          <input name="duration" type="number" min="1" value="<%= cls.duration || 60 %>" />
+                        </label>
+                      </div>
+                      <label>Capacity
+                        <input name="capacity" type="number" min="1" value="<%= cls.capacity %>" required />
+                      </label>
+                      <label>Description
+                        <textarea name="description"><%= cls.description %></textarea>
+                      </label>
+                      <label>Replace Photo (optional)</label>
+                      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <input id="editImage-<%= cls._id %>" name="image" type="file" accept="image/*" style="display: none;" onchange="document.getElementById('editImageLabel-<%= cls._id %>').textContent = this.files[0] ? this.files[0].name : 'No file chosen'" />
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('editImage-<%= cls._id %>').click()">Choose Photo</button>
+                        <span id="editImageLabel-<%= cls._id %>" style="font-size: 0.9rem; color: var(--text-muted);">No file chosen</span>
+                      </div>
+                      <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-primary" type="submit" style="flex: 1;">Save Changes</button>
+                        <button type="button" class="btn btn-ghost" onclick="toggleEditForm('<%= cls._id %>')" style="flex: 1;">Cancel</button>
+                      </div>
+                    </form>
+                  </div>
                 </article>
               <% }) %>
             <% } else { %>
@@ -129,5 +193,11 @@
       </section>
     </main>
   </div>
+  <script>
+    function toggleEditForm(id) {
+      const form = document.getElementById('editForm-' + id);
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+  </script>
 </body>
 </html>

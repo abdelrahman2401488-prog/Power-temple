@@ -10,9 +10,11 @@ router.post('/book/:classId', c.bookClass);
 router.use(requireRole('member'));
 
 router.get('/membership', c.getMembership);
+router.post('/membership/subscribe', c.subscribePlan);
 router.get('/my-bookings', c.getMyBookings);
 router.post('/cancel/:bookingId', c.cancelBooking);
 router.get('/personal-training', c.getPersonalTraining);
+router.post('/personal-training/request', c.requestPersonalTraining);
 router.get('/profile', c.getProfile);
 
 module.exports = router;

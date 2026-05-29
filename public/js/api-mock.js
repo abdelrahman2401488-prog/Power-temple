@@ -168,10 +168,10 @@ const PowerTempleAPI = {
 
   // === MONTHLY MEMBERSHIP PLANS ===
   membershipPlans: [
-    { id: 'starter', name: 'Starter', monthlyPrice: 19 },
-    { id: 'elite', name: 'Elite', monthlyPrice: 59 },
-    { id: 'pro', name: 'Pro', monthlyPrice: 89 },
-    { id: 'champion', name: 'Champion', monthlyPrice: 149 },
+    { id: 'starter', name: 'Starter', monthlyPrice: 600 },
+    { id: 'elite', name: 'Elite', monthlyPrice: 900 },
+    { id: 'pro', name: 'Pro', monthlyPrice: 1200 },
+    { id: 'champion', name: 'Champion', monthlyPrice: 1500 },
   ],
 
   // === SHOP PRODUCTS ===

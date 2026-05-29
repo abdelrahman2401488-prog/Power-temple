@@ -9,5 +9,7 @@ router.get('/', (req, res) => res.redirect('/trainer/my-schedule'));
 router.get('/my-schedule', c.getSchedule);
 router.get('/attendance', c.getAttendance);
 router.get('/members', c.getMembers);
+router.post('/pt-request/confirm/:id', c.confirmPTRequest);
+router.post('/pt-request/cancel/:id', c.cancelPTRequest);
 
 module.exports = router;
