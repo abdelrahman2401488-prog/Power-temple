@@ -393,6 +393,11 @@ textarea::placeholder {
   color: var(--text-muted);
 }
 
+select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
 input:focus,
 select:focus,
 textarea:focus {
