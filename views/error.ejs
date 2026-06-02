@@ -1,0 +1,50 @@
+<%- include('partials/head') %>
+<%- include('partials/header-public') %>
+
+<div class="container mt-5 py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 text-center">
+      <div class="alert alert-danger border-0 rounded" role="alert">
+        <h1 class="display-1 text-danger mb-3"><%= errorCode %></h1>
+        <h2 class="h4 mb-3"><%= title %></h2>
+        <p class="lead text-muted mb-4"><%= details %></p>
+        
+        <% if (message && message !== details) { %>
+          <p class="text-muted mb-4">Details: <%= message %></p>
+        <% } %>
+
+        <div class="mt-5">
+          <a href="/" class="btn btn-danger btn-lg me-2">
+            <i class="fas fa-home"></i> Home
+          </a>
+          <button onclick="history.back()" class="btn btn-outline-danger btn-lg">
+            <i class="fas fa-arrow-left"></i> Back
+          </button>
+        </div>
+      </div>
+
+      <% if (errorCode === 404) { %>
+        <div class="mt-5 p-4 bg-light rounded">
+          <p class="mb-2">Looking for something?</p>
+          <ul class="list-unstyled">
+            <li><a href="/" class="text-decoration-none">Home</a></li>
+            <li><a href="/memberships" class="text-decoration-none">Memberships</a></li>
+            <li><a href="/services" class="text-decoration-none">Services</a></li>
+            <li><a href="/shop" class="text-decoration-none">Shop</a></li>
+          </ul>
+        </div>
+      <% } %>
+
+      <% if (errorCode >= 500) { %>
+        <div class="mt-5 p-4 bg-light rounded">
+          <p class="text-muted">
+            <i class="fas fa-info-circle"></i>
+            If this problem persists, please contact support at support@powertemple.com
+          </p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

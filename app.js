@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const errorHandler = require('./middleware/errorHandler');
+const AppError = require('./utils/AppError');
 require('dotenv').config();
 
 const app = express();
@@ -45,9 +47,12 @@ app.use('/manager', require('./routes/manager'));
 app.use('/member', require('./routes/member'));
 app.use('/trainer', require('./routes/trainer'));
 
-// 404
-app.use((req, res) => {
-  res.status(404).send('Page not found');
+// 404 handler
+app.use((req, res, next) => {
+  next(new AppError('Page not found', 404));
 });
+
+// Global error handler (must be last)
+app.use(errorHandler);
 
 module.exports = app;

@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const c = require('../controllers/authController');
+const { validateAuth } = require('../middleware/validateInput');
 
 router.get('/login', c.getLogin);
-router.post('/login', c.postLogin);
-router.post('/register', c.postRegister);
+router.post('/login', validateAuth, c.postLogin);
+router.post('/register', validateAuth, c.postRegister);
 router.get('/logout', c.logout);
 
 // /auth/register opens login page with register tab active
