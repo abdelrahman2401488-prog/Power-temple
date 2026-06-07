@@ -357,24 +357,34 @@ function wireMarketCartActions() {
 
     if (!paymentData) return;
 
-    const user = typeof auth !== 'undefined' ? auth.getCurrentUser() : null;
-    const memberId = user?.id || 5;
-    const paymentResult = PowerTempleAPI.processPayment({
-      ...paymentData,
-      memberId,
-      amount: total,
-    });
+    try {
+      const res = await fetch('/member/shop/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        body: JSON.stringify({
+          items: egyptianMarketCart.map((item) => ({ name: item.name, price: item.price, qty: item.qty })),
+          total,
+          method: paymentData.method,
+          email: paymentData.email,
+          phone: paymentData.phone,
+          address: paymentData.address,
+        }),
+      });
+      const result = await res.json();
 
-    if (!paymentResult.success) {
-      showNotification(paymentResult.message, 'error');
-      return;
+      if (result.status !== 'success') {
+        showNotification(result.message || 'Checkout failed. Please try again.', 'error');
+        return;
+      }
+
+      egyptianMarketCart = [];
+      persistMarketCart();
+      renderMarketCart();
+      renderMarketRecommendations();
+      showNotification('Order placed successfully! Welcome to Power Temple!', 'success');
+    } catch (e) {
+      showNotification('Network error. Please try again.', 'error');
     }
-
-    egyptianMarketCart = [];
-    persistMarketCart();
-    renderMarketCart();
-    renderMarketRecommendations();
-    showNotification('Payment completed successfully. Welcome to Power Temple!', 'success');
   });
 }
 

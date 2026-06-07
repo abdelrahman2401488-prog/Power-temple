@@ -47,27 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
       </button>`;
   }
 
-  function renderProductsFromAPI() {
-    if (!grid || typeof PowerTempleAPI === 'undefined' || typeof PowerTempleAPI.getAllProducts !== 'function') return;
-    const products = PowerTempleAPI.getAllProducts();
-    if (!products || !products.length) return;
-
-    grid.innerHTML = products.map((p) => `
-      <article class="product-card" data-category="${escapeHtml(p.category)}" data-product-name="${escapeHtml(p.name)}" data-product-price="${p.price}" data-product-unit="${escapeHtml(p.unit || '')}">
-        ${p.badge ? `<div class="product-badge">${escapeHtml(p.badge)}</div>` : ''}
-        <div class="product-img-wrap">
-          <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy" />
-        </div>
-        <div class="product-info">
-          <span class="product-category">${escapeHtml(CAT_LABELS[p.category] || p.category)}</span>
-          <h3 class="product-name">${escapeHtml(p.name)}</h3>
-          <p class="product-desc">${escapeHtml(p.description)}</p>
-        </div>
-        <div class="product-footer">${buildFooterMarkup(p)}</div>
-      </article>
-    `).join('');
-  }
-
   function refreshAllCardFooters() {
     document.querySelectorAll('.product-card[data-product-name]').forEach((card) => {
       const product = {
@@ -144,8 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Sync card footers whenever the market cart changes (from card, drawer, or checkout reset).
   window.addEventListener('market-cart-changed', refreshAllCardFooters);
 
-  // Initial render → filters → action wiring
-  renderProductsFromAPI();
+  // Initial render (server-rendered from DB) → filters → action wiring
+  refreshAllCardFooters();
   wireFilters();
-  wireFooterActions();
 });

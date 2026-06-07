@@ -3,6 +3,7 @@ const Booking = require('../models/Booking');
 const MembershipPlan = require('../models/MembershipPlan');
 const User = require('../models/User');
 const PTRequest = require('../models/PersonalTrainingRequest');
+const Order = require('../models/Order');
 const AppError = require('../utils/AppError');
 
 exports.getMembership = async (req, res, next) => {
@@ -224,6 +225,39 @@ exports.requestPersonalTraining = async (req, res, next) => {
     req.session.flash = err.message || 'Failed to request session';
     res.redirect('/member/personal-training');
   }
+};
+
+exports.checkout = async (req, res, next) => {
+  try {
+    const { items, total, method, email, phone, address } = req.body;
+
+    if (!Array.isArray(items) || items.length === 0) {
+      throw new AppError('Your cart is empty', 400);
+    }
+    if (!total || Number(total) <= 0) {
+      throw new AppError('Invalid order total', 400);
+    }
+
+    const order = await Order.create({
+      memberId: req.session.user.id,
+      memberName: req.session.user.name,
+      items: items.map((it) => ({ name: it.name, price: Number(it.price), qty: Number(it.qty) })),
+      total: Number(total),
+      method: method || 'cash',
+      email,
+      phone,
+      address,
+    });
+
+    res.json({ status: 'success', message: 'Order placed successfully!', order });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getMyOrders = async (req, res) => {
+  const orders = await Order.find({ memberId: req.session.user.id }).sort({ createdAt: -1 });
+  res.render('member/my-orders', { title: 'My Orders | Power Temple', orders });
 };
 
 exports.getProfile = (req, res) => {
