@@ -54,6 +54,26 @@ function watchBookings() {
   });
 }
 
+function watchOrders() {
+  watchCollection('orders', (change) => {
+    const id = change.documentKey._id.toString();
+    const doc = change.fullDocument;
+
+    io.emit('order:changed', {
+      action: mapOperation(change.operationType),
+      id,
+      memberId: doc && doc.memberId && doc.memberId.toString(),
+    });
+  });
+}
+
+function watchProducts() {
+  watchCollection('products', (change) => {
+    const id = change.documentKey._id.toString();
+    io.emit('product:changed', { action: mapOperation(change.operationType), id });
+  });
+}
+
 function init(server) {
   io = require('socket.io')(server);
   return io;
@@ -64,6 +84,8 @@ function start() {
   watchClasses();
   watchUsers();
   watchBookings();
+  watchProducts();
+  watchOrders();
 }
 
 module.exports = { init, start };

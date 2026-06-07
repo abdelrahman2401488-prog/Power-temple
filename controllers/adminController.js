@@ -1,5 +1,6 @@
 const GymClass = require('../models/GymClass');
 const User = require('../models/User');
+const Product = require('../models/Product');
 
 exports.getDashboard = (req, res) => res.render('admin/dashboard', { title: 'Admin Dashboard | Power Temple' });
 exports.getTrainers = async (req, res) => {
@@ -105,6 +106,38 @@ exports.deletePlan = async (req, res) => {
   res.redirect('/admin/memberships');
 };
 exports.getShop = (req, res) => res.render('admin/shop', { title: 'Shop Management | Power Temple' });
+
+exports.getProducts = async (req, res) => {
+  const products = await Product.find().sort({ createdAt: -1 });
+  res.json({ status: 'success', products });
+};
+
+exports.createProduct = async (req, res) => {
+  const { name, category, price, unit, badge, image, description, stock } = req.body;
+  const product = await Product.create({
+    name, category, price: Number(price), unit, badge, image, description, stock: Number(stock || 0),
+  });
+  res.json({ status: 'success', product });
+};
+
+exports.updateProduct = async (req, res) => {
+  const updates = {};
+  ['name', 'category', 'unit', 'badge', 'image', 'description'].forEach((k) => {
+    if (req.body[k] !== undefined) updates[k] = req.body[k];
+  });
+  if (req.body.price !== undefined) updates.price = Number(req.body.price);
+  if (req.body.stock !== undefined) updates.stock = Number(req.body.stock);
+
+  const product = await Product.findByIdAndUpdate(req.params.id, updates, { new: true });
+  if (!product) return res.status(404).json({ status: 'error', message: 'Product not found' });
+  res.json({ status: 'success', product });
+};
+
+exports.deleteProduct = async (req, res) => {
+  const product = await Product.findByIdAndDelete(req.params.id);
+  if (!product) return res.status(404).json({ status: 'error', message: 'Product not found' });
+  res.json({ status: 'success' });
+};
 exports.getFinancials = (req, res) => res.render('admin/financials', { title: 'Financial Management | Power Temple' });
 exports.getRoles = async (req, res) => {
   const users = await User.find({}, 'name email username role specialty createdAt').sort({ createdAt: -1 });

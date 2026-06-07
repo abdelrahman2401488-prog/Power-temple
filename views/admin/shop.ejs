@@ -62,11 +62,17 @@
   </div>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      if (typeof PowerTempleAPI === 'undefined') return;
       const fmt = (n) => 'LE ' + Number(n || 0).toLocaleString();
       const CATS = [{id:'pre-workout',label:'Pre-Workout'},{id:'protein',label:'Protein'},{id:'creatine',label:'Creatine'},{id:'bars',label:'Protein Bars'},{id:'vitamins',label:'Vitamins'},{id:'recovery',label:'Recovery'}];
+      let products = [];
+
+      async function fetchProducts() {
+        const res = await fetch('/admin/products', { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+        const data = await res.json();
+        products = data.products || [];
+      }
+
       function renderStats() {
-        const products = PowerTempleAPI.getAllProducts();
         document.getElementById('prodTotal').textContent = products.length;
         const cats = new Set(products.map((p) => p.category));
         document.getElementById('prodCategories').textContent = cats.size;
@@ -76,17 +82,63 @@
         const breakdown = document.getElementById('categoryBreakdown');
         breakdown.innerHTML = CATS.map((c) => { const count = products.filter((p) => p.category === c.id).length; return `<div style="display: flex; justify-content: space-between;"><span>${c.label}</span><strong>${count}</strong></div>`; }).join('');
       }
+
       function renderProducts(filter = '') {
         const list = document.getElementById('productList');
         const q = filter.toLowerCase();
-        const items = PowerTempleAPI.getAllProducts().filter((p) => !q || p.name.toLowerCase().includes(q) || p.category.includes(q));
-        list.innerHTML = items.map((p) => `<article class="product-edit-card fade-in" data-product-id="${p.id}"><img src="${p.image || ''}" alt="${p.name}" onerror="this.style.opacity=0.3" /><div class="product-edit-body"><div class="product-edit-row"><input data-field="name" type="text" value="${p.name.replace(/"/g, '&quot;')}" style="flex: 2; min-width: 180px;" /><select data-field="category" style="flex: 1; min-width: 130px;">${CATS.map((c) => `<option value="${c.id}" ${p.category === c.id ? 'selected' : ''}>${c.label}</option>`).join('')}</select><input data-field="badge" type="text" value="${(p.badge || '').replace(/"/g, '&quot;')}" placeholder="Badge" style="width: 110px;" /></div><div class="product-edit-row"><input data-field="price" type="number" min="0" value="${p.price}" style="width: 100px;" /><input data-field="unit" type="text" value="${(p.unit || '').replace(/"/g, '&quot;')}" placeholder="/30 srv" style="width: 100px;" /><input data-field="stock" type="number" min="0" value="${p.stock || 0}" style="width: 90px;" /><input data-field="image" type="url" value="${(p.image || '').replace(/"/g, '&quot;')}" placeholder="Image URL" style="flex: 1; min-width: 200px;" /></div><textarea data-field="description" style="width: 100%; min-height: 50px;">${p.description || ''}</textarea><div class="product-edit-actions"><button class="btn btn-primary" data-save="${p.id}" style="padding: 6px 14px; font-size: 0.85rem;">Save</button><button class="btn btn-ghost" data-remove="${p.id}" style="padding: 6px 14px; font-size: 0.85rem; color: var(--danger-color);">Remove</button><span style="margin-left: auto; color: var(--text-muted); font-size: 0.8rem;">ID #${p.id}</span></div></div></article>`).join('') || '<p style="color: var(--text-muted);">No products match.</p>';
-        list.querySelectorAll('[data-save]').forEach((b) => b.addEventListener('click', () => { const id = b.dataset.save; const card = b.closest('[data-product-id]'); const updates = {}; card.querySelectorAll('[data-field]').forEach((el) => { updates[el.dataset.field] = el.value; }); const r = PowerTempleAPI.updateProduct(id, updates); if (r.success) { showNotification('Product updated', 'success'); renderStats(); } else showNotification(r.message, 'error'); }));
-        list.querySelectorAll('[data-remove]').forEach((b) => b.addEventListener('click', () => { if (!confirm('Remove this product from the shop?')) return; const r = PowerTempleAPI.removeProduct(b.dataset.remove); if (r.success) { showNotification('Product removed', 'success'); renderStats(); renderProducts(document.getElementById('productSearch').value); } }));
+        const items = products.filter((p) => !q || p.name.toLowerCase().includes(q) || p.category.includes(q));
+        list.innerHTML = items.map((p) => `<article class="product-edit-card fade-in" data-product-id="${p._id}"><img src="${p.image || ''}" alt="${p.name}" onerror="this.style.opacity=0.3" /><div class="product-edit-body"><div class="product-edit-row"><input data-field="name" type="text" value="${p.name.replace(/"/g, '&quot;')}" style="flex: 2; min-width: 180px;" /><select data-field="category" style="flex: 1; min-width: 130px;">${CATS.map((c) => `<option value="${c.id}" ${p.category === c.id ? 'selected' : ''}>${c.label}</option>`).join('')}</select><input data-field="badge" type="text" value="${(p.badge || '').replace(/"/g, '&quot;')}" placeholder="Badge" style="width: 110px;" /></div><div class="product-edit-row"><input data-field="price" type="number" min="0" value="${p.price}" style="width: 100px;" /><input data-field="unit" type="text" value="${(p.unit || '').replace(/"/g, '&quot;')}" placeholder="/30 srv" style="width: 100px;" /><input data-field="stock" type="number" min="0" value="${p.stock || 0}" style="width: 90px;" /><input data-field="image" type="url" value="${(p.image || '').replace(/"/g, '&quot;')}" placeholder="Image URL" style="flex: 1; min-width: 200px;" /></div><textarea data-field="description" style="width: 100%; min-height: 50px;">${p.description || ''}</textarea><div class="product-edit-actions"><button class="btn btn-primary" data-save="${p._id}" style="padding: 6px 14px; font-size: 0.85rem;">Save</button><button class="btn btn-ghost" data-remove="${p._id}" style="padding: 6px 14px; font-size: 0.85rem; color: var(--danger-color);">Remove</button></div></div></article>`).join('') || '<p style="color: var(--text-muted);">No products match.</p>';
+
+        list.querySelectorAll('[data-save]').forEach((b) => b.addEventListener('click', async () => {
+          const id = b.dataset.save;
+          const card = b.closest('[data-product-id]');
+          const updates = {};
+          card.querySelectorAll('[data-field]').forEach((el) => { updates[el.dataset.field] = el.value; });
+          const res = await fetch('/admin/products/' + id, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+            body: JSON.stringify(updates),
+          });
+          const data = await res.json();
+          if (data.status === 'success') { showNotification('Product updated', 'success'); await fetchProducts(); renderStats(); }
+          else showNotification(data.message || 'Failed to update product', 'error');
+        }));
+
+        list.querySelectorAll('[data-remove]').forEach((b) => b.addEventListener('click', async () => {
+          if (!confirm('Remove this product from the shop?')) return;
+          const res = await fetch('/admin/products/' + b.dataset.remove + '/delete', {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          });
+          const data = await res.json();
+          if (data.status === 'success') { showNotification('Product removed', 'success'); await fetchProducts(); renderStats(); renderProducts(document.getElementById('productSearch').value); }
+          else showNotification(data.message || 'Failed to remove product', 'error');
+        }));
       }
-      document.getElementById('productForm').addEventListener('submit', (e) => { e.preventDefault(); const fd = new FormData(e.target); const data = { name: fd.get('name'), category: fd.get('category'), price: fd.get('price'), unit: fd.get('unit'), badge: fd.get('badge'), image: fd.get('image'), description: fd.get('description'), stock: fd.get('stock') }; PowerTempleAPI.addProduct(data); showNotification(`${data.name} added to the shop`, 'success'); e.target.reset(); renderStats(); renderProducts(); });
+
+      document.getElementById('productForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const data = { name: fd.get('name'), category: fd.get('category'), price: fd.get('price'), unit: fd.get('unit'), badge: fd.get('badge'), image: fd.get('image'), description: fd.get('description'), stock: fd.get('stock') };
+        const res = await fetch('/admin/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+          body: JSON.stringify(data),
+        });
+        const result = await res.json();
+        if (result.status === 'success') {
+          showNotification(`${data.name} added to the shop`, 'success');
+          e.target.reset();
+          await fetchProducts();
+          renderStats(); renderProducts();
+        } else {
+          showNotification(result.message || 'Failed to add product', 'error');
+        }
+      });
+
       document.getElementById('productSearch').addEventListener('input', (e) => renderProducts(e.target.value));
-      renderStats(); renderProducts();
+
+      fetchProducts().then(() => { renderStats(); renderProducts(); });
     });
   </script>
 </body>
