@@ -1,0 +1,410 @@
+/* =================================
+   POWER TEMPLE - RESPONSIVE STYLES
+   ================================= */
+
+/* === TABLET (768px and below) === */
+@media (max-width: 768px) {
+  :root {
+    --spacing-xl: 24px;
+    --spacing-2xl: 32px;
+    --spacing-3xl: 40px;
+  }
+
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  main {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  /* Header */
+  .header-inner {
+    gap: var(--spacing-md);
+  }
+
+  .nav {
+    gap: var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+
+  .nav a.active::after {
+    bottom: -6px;
+  }
+
+  /* Hero */
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-video-bg {
+    height: 560px;
+  }
+
+  .hero-copy h1 {
+    font-size: var(--font-size-2xl);
+    line-height: 1.3;
+  }
+
+  .hero-copy p {
+    font-size: var(--font-size-md);
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  /* Grids */
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .class-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .list-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Dashboard */
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .section-head h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Forms */
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .member-filters {
+    grid-template-columns: 1fr;
+  }
+
+  /* Plan Cards */
+  .plan-card ul li {
+    padding-left: var(--spacing-md);
+  }
+}
+
+/* === MOBILE (480px and below) === */
+@media (max-width: 480px) {
+  :root {
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+    --spacing-2xl: 24px;
+    --spacing-3xl: 32px;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.75rem;
+    --font-size-3xl: 2rem;
+  }
+
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  main {
+    padding: var(--spacing-xl) 0;
+  }
+
+  /* Header */
+  .site-header {
+    padding: var(--spacing-sm) 0;
+  }
+
+  .header-inner {
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+
+  .brand {
+    order: 2;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nav {
+    order: 3;
+    width: 100%;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .nav a {
+    font-size: var(--font-size-xs);
+  }
+
+  /* Hero */
+  .hero-copy h1 {
+    font-size: var(--font-size-xl);
+  }
+
+  .hero-video-bg {
+    height: 460px;
+  }
+
+  .hero-copy p {
+    font-size: var(--font-size-sm);
+  }
+
+  .hero-story {
+    margin-top: 96px;
+    padding: 0 16px 34px;
+    font-size: 0.97rem;
+    line-height: 1.56;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .concept-media {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .chip-row {
+    flex-direction: column;
+  }
+
+  .pill {
+    font-size: var(--font-size-xs);
+  }
+
+  /* Cards */
+  .card,
+  .panel,
+  .form-card {
+    padding: var(--spacing-lg);
+  }
+
+  .feature-card,
+  .class-card,
+  .plan-card {
+    padding: var(--spacing-lg);
+  }
+
+  .class-card h3 {
+    font-size: var(--font-size-md);
+  }
+
+  .meta-row {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  /* Grids */
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .member-list {
+    grid-template-columns: 1fr;
+  }
+
+  .food-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .attendance-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+
+  .booking-actions .btn {
+    width: 100%;
+  }
+
+  /* Buttons */
+  .btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-sm);
+  }
+
+  /* Tables / Rows */
+  .row-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+
+  .row-main {
+    width: 100%;
+  }
+
+  /* Forms */
+  input,
+  select,
+  textarea,
+  label {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  /* Meal Plans */
+  .macros-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .meal-plans-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .supplement-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Activity Feed */
+  .activity-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .activity-time {
+    align-self: flex-start;
+  }
+
+  /* Panel Head */
+  .panel-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .panel-head h3 {
+    font-size: var(--font-size-md);
+  }
+
+  /* Section Head */
+  .section-head h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  .section-head p {
+    font-size: var(--font-size-sm);
+  }
+
+  /* Metric Cards */
+  .metric-card strong {
+    font-size: var(--font-size-2xl);
+  }
+
+  /* Navigation on smaller screens */
+  .nav {
+    display: none;
+  }
+
+  .nav.mobile-active {
+    display: flex;
+  }
+}
+
+/* === LANDSCAPE MODE === */
+@media (max-height: 500px) and (orientation: landscape) {
+  main {
+    padding: var(--spacing-md) 0;
+  }
+
+  .hero-grid {
+    gap: var(--spacing-lg);
+  }
+
+  .section {
+    margin-bottom: var(--spacing-lg);
+  }
+}
+
+/* === PRINT STYLES === */
+@media print {
+  .site-header,
+  .footer,
+  .btn,
+  .nav {
+    display: none;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  .card,
+  .panel,
+  .feature-card,
+  .class-card {
+    page-break-inside: avoid;
+    border: 1px solid #ccc;
+  }
+}
+
+/* === ACCESSIBILITY === */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --border-color: rgba(0, 212, 255, 0.4);
+  }
+
+  .btn {
+    font-weight: var(--font-weight-bold);
+  }
+
+  input,
+  select,
+  textarea {
+    border-width: 2px;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-primary: #f8f9fa;
+    --bg-secondary: #f0f2f5;
+    --bg-tertiary: #e4e6eb;
+    --text-primary: #000;
+    --text-secondary: #65676b;
+    --text-muted: #a5a5a5;
+  }
+
+  .site-header {
+    background: rgba(248, 249, 250, 0.7);
+  }
+
+  input,
+  select,
+  textarea {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-primary);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+}

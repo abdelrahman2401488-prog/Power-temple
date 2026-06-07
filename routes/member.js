@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const c = require('../controllers/memberController');
 const { requireRole, requireLogin } = require('../middleware/auth');
-const { validateMemberInput } = require('../middleware/validateInput');
+const { validateMemberInput, validateClassInput } = require('../middleware/validateInput');
 
 // Browse classes is public — no login required
 router.get('/browse-classes', c.getBrowseClasses);
@@ -15,10 +15,8 @@ router.get('/membership', c.getMembership);
 router.post('/membership/subscribe', validateMemberInput, c.subscribePlan);
 router.get('/my-bookings', c.getMyBookings);
 router.post('/cancel/:bookingId', c.cancelBooking);
-router.get('/my-orders', c.getMyOrders);
-router.post('/shop/checkout', c.checkout);
 router.get('/personal-training', c.getPersonalTraining);
-router.post('/personal-training/request', c.requestPersonalTraining);
+router.post('/personal-training/request', validateClassInput, c.requestPersonalTraining);
 router.get('/profile', c.getProfile);
 
 module.exports = router;

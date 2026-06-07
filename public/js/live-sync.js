@@ -85,22 +85,6 @@
     morphSection('#bookingsSection');
   });
 
-  // ---- Orders placed / updated (own orders only) ----
-  socket.on('order:changed', function (data) {
-    var user = getStoredUser();
-    if (!user || !data.memberId || String(user.id) !== String(data.memberId)) return;
-    morphSection('#ordersSection');
-  });
-
-  // ---- Shop products created / updated / deleted ----
-  socket.on('product:changed', function (data) {
-    if (data.action === 'deleted' && data.id) {
-      fadeRemove(document.getElementById('product-' + data.id));
-      return;
-    }
-    morphSection('#productsGrid');
-  });
-
   // ---- Trainers / members / roles created / updated / deleted ----
   socket.on('user:changed', function (data) {
     if (data.action === 'deleted' && data.id) {

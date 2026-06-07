@@ -44,7 +44,7 @@ const errorHandler = (err, req, res, next) => {
   });
 
   // Distinguish between API and view requests
-  if (req.xhr || req.path.startsWith('/api/')) {
+  if (req.accepts('json') || req.path.startsWith('/api/')) {
     return res.status(err.statusCode).json({
       status: 'error',
       statusCode: err.statusCode,

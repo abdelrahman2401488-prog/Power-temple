@@ -2,7 +2,7 @@ require('dotenv').config();
 const http = require('http');
 const app = require('./app');
 const connectDB = require('./config/db');
-const { seedClasses, seedProducts } = require('./config/seeder');
+const seedClasses = require('./config/seeder');
 const liveSync = require('./utils/liveSync');
 
 const PORT = process.env.PORT || 3000;
@@ -12,7 +12,6 @@ liveSync.init(server);
 
 connectDB().then(async () => {
   await seedClasses();
-  await seedProducts();
   liveSync.start();
   server.listen(PORT, () => {
     console.log(`Power Temple running at http://localhost:${PORT}`);

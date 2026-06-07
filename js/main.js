@@ -47,8 +47,13 @@ function initializeAuthHeaderState() {
     auth.logout();
     showNotification('Logged out successfully', 'success', 900);
 
+    const path = window.location.pathname.replace(/\\/g, '/').toLowerCase();
+    const homePath = /(\/admin\/|\/member\/|\/trainer\/|\/auth\/)/.test(path)
+      ? '../indexxx.html'
+      : 'indexxx.html';
+
     setTimeout(() => {
-      window.location.href = '/auth/logout';
+      window.location.href = homePath;
     }, 200);
   };
 
@@ -136,47 +141,6 @@ function initializePricingSubscribeFallback() {
   });
 }
 
-function openQuickLoginModal() {
-  const modal = document.getElementById('quickLoginModal');
-  if (!modal) return false;
-
-  modal.classList.remove('hidden');
-  modal.setAttribute('aria-hidden', 'false');
-  document.body.classList.add('modal-open');
-  return true;
-}
-
-async function resumePendingSubscriptionCheckout() {
-  const rawPending = localStorage.getItem('powertemple_pending_subscription');
-  if (!rawPending) return false;
-
-  const authService = typeof auth !== 'undefined' ? auth : null;
-  const user = authService && typeof authService.getCurrentUser === 'function'
-    ? authService.getCurrentUser()
-    : null;
-
-  if (!user || user.role !== 'member') return false;
-
-  let pendingData;
-  try {
-    pendingData = JSON.parse(rawPending);
-  } catch (error) {
-    localStorage.removeItem('powertemple_pending_subscription');
-    return false;
-  }
-
-  const planId = pendingData?.planId;
-  const planPrice = Number(pendingData?.planPrice || 0);
-  if (!planId || planPrice <= 0) {
-    localStorage.removeItem('powertemple_pending_subscription');
-    return false;
-  }
-
-  localStorage.removeItem('powertemple_pending_subscription');
-  await handlePlanSubscription(planId, planPrice);
-  return true;
-}
-
 function initializeApp() {
   // Initialize animations
   initializeAnimations();
@@ -237,10 +201,6 @@ const voucherDefinitions = {
   POWER15: { amount: 0.15, minTotal: 1000, label: '15% off orders LE 1000+' },
   WELCOME20: { amount: 0.2, minTotal: 2000, label: '20% off orders LE 2000+' },
 };
-
-function isMembershipItem(productId) {
-  return egyptianMarketProducts.some((product) => product.id === productId);
-}
 
 function initializeEgyptianMarketPage() {
   const page = document.body.getAttribute('data-page');
@@ -378,16 +338,6 @@ function wireMarketCartActions() {
   });
 }
 
-function showMarketToast(msg) {
-  const toast = document.getElementById('cartToast');
-  const toastMsg = document.getElementById('cartToastMsg');
-  if (!toast || !toastMsg) return;
-  toastMsg.textContent = msg;
-  toast.classList.add('show');
-  clearTimeout(showMarketToast._t);
-  showMarketToast._t = setTimeout(() => toast.classList.remove('show'), 2500);
-}
-
 function addProductToMarketCart(productId, button = null) {
   let item = egyptianMarketProducts.find((product) => product.id === productId);
   if (!item && button) {
@@ -403,14 +353,9 @@ function addProductToMarketCart(productId, button = null) {
 
   const existing = egyptianMarketCart.find((cartItem) => cartItem.id === productId);
   if (existing) {
-    if (isMembershipItem(productId)) {
-      showMarketToast('Membership already in cart.');
-      return;
-    }
     existing.qty += 1;
   } else {
     egyptianMarketCart.push({ ...item, qty: 1 });
-    if (isMembershipItem(productId)) showMarketToast('Membership added to cart!');
   }
 
   persistMarketCart();
@@ -428,7 +373,6 @@ function removeProductFromMarketCart(productId) {
 function changeMarketCartQty(productId, delta) {
   const item = egyptianMarketCart.find((cartItem) => cartItem.id === productId);
   if (!item) return;
-  if (isMembershipItem(productId)) return;
 
   item.qty += delta;
   if (item.qty <= 0) {
@@ -487,13 +431,11 @@ function renderMarketCart() {
         <div>
           <h4>${item.name}</h4>
           <p class="market-cart-price">${formatEGP(item.price)}</p>
-          ${isMembershipItem(item.id)
-            ? '<div class="market-qty"><span>Qty: 1</span></div>'
-            : `<div class="market-qty">
+          <div class="market-qty">
             <button type="button" data-qty-minus="${item.id}">−</button>
             <span>${item.qty}</span>
             <button type="button" data-qty-plus="${item.id}">+</button>
-          </div>`}
+          </div>
         </div>
         <button class="market-remove" type="button" data-market-remove="${item.id}" aria-label="Remove">🗑</button>
       </article>
@@ -535,13 +477,6 @@ function renderMarketCart() {
   list.querySelectorAll('[data-market-remove]').forEach((btn) => {
     btn.addEventListener('click', () => removeProductFromMarketCart(btn.getAttribute('data-market-remove')));
   });
-
-  // Notify other modules (e.g. shop.js) that the cart has changed so they can sync UI.
-  try {
-    window.dispatchEvent(new CustomEvent('market-cart-changed', {
-      detail: { cart: egyptianMarketCart.slice() },
-    }));
-  } catch (err) { /* ignore */ }
 }
 
 function getMarketCartTotal() {
@@ -641,13 +576,7 @@ async function handlePlanSubscription(planId, planPrice) {
       'powertemple_pending_subscription',
       JSON.stringify({ planId, planPrice })
     );
-
-    const loginModalOpened = openQuickLoginModal();
-    if (!loginModalOpened) {
-      window.location.href = '#login';
-    }
-
-    showNotification('Please login as a member to continue checkout.', 'error');
+    window.location.href = '#login';
     return;
   }
 
@@ -687,31 +616,13 @@ function ensurePaymentModal() {
       </div>
       <p id="paymentSummary" class="pt-modal-summary"></p>
       <form id="paymentForm" class="pt-payment-form">
-        <fieldset style="border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
-          <legend style="padding: 0 8px; font-size: 0.85rem; color: var(--text-secondary);">Contact &amp; Shipping</legend>
-          <div class="field-grid">
-            <label>
-              Email Address
-              <input id="checkoutEmail" type="email" placeholder="you@example.com" required />
-            </label>
-            <label>
-              Phone Number
-              <input id="checkoutPhone" type="tel" placeholder="01XXXXXXXXX" required />
-            </label>
-          </div>
-          <label>
-            Shipping Address
-            <textarea id="checkoutAddress" placeholder="Street, building, apartment, city" required style="min-height: 60px;"></textarea>
-          </label>
-        </fieldset>
-
         <label>
           Payment Method
           <select id="paymentMethod" required>
             <option value="visa">Visa</option>
             <option value="mastercard">Mastercard</option>
             <option value="wallet">Digital Wallet</option>
-            <option value="cash">Cash on Delivery</option>
+            <option value="cash">Cash at Gym</option>
           </select>
         </label>
 
@@ -784,18 +695,6 @@ function openPaymentModal({ title, itemName, amount }) {
   form.reset();
   const methodSelect = document.getElementById('paymentMethod');
   if (methodSelect) methodSelect.value = 'visa';
-
-  // Pre-fill email / phone / address if available on the logged-in user.
-  const currentUser = typeof auth !== 'undefined' ? auth.getCurrentUser() : null;
-  if (currentUser) {
-    const emailEl = document.getElementById('checkoutEmail');
-    const phoneEl = document.getElementById('checkoutPhone');
-    const addrEl = document.getElementById('checkoutAddress');
-    if (emailEl && currentUser.email) emailEl.value = currentUser.email;
-    if (phoneEl && currentUser.phone) phoneEl.value = currentUser.phone;
-    if (addrEl && currentUser.address) addrEl.value = currentUser.address;
-  }
-
   toggleCardFields();
 
   modal.classList.remove('hidden');
@@ -804,30 +703,13 @@ function openPaymentModal({ title, itemName, amount }) {
   return new Promise((resolve) => {
     const onSubmit = (e) => {
       e.preventDefault();
-      const email = document.getElementById('checkoutEmail')?.value.trim();
-      const phone = document.getElementById('checkoutPhone')?.value.trim();
-      const address = document.getElementById('checkoutAddress')?.value.trim();
       const method = document.getElementById('paymentMethod')?.value;
       const cardHolder = document.getElementById('cardHolder')?.value.trim();
       const cardNumber = document.getElementById('cardNumber')?.value.trim();
       const cardExpiry = document.getElementById('cardExpiry')?.value.trim();
       const cardCVV = document.getElementById('cardCVV')?.value.trim();
 
-      // Contact / shipping validation (always required)
-      if (!auth.validateEmailFormat(email)) {
-        showNotification('Please enter a valid email address', 'error');
-        return;
-      }
-      if (!/^[+0-9\s\-()]{7,20}$/.test(phone)) {
-        showNotification('Please enter a valid phone number', 'error');
-        return;
-      }
-      if (!address || address.length < 10) {
-        showNotification('Please enter a complete shipping address (min. 10 characters)', 'error');
-        return;
-      }
-
-      // Card validation only for non-cash methods
+      // Validation
       if (method !== 'cash') {
         if (!auth.validateCardHolderName(cardHolder)) {
           showNotification('Please enter a valid card holder name (first and last name required)', 'error');
@@ -849,9 +731,6 @@ function openPaymentModal({ title, itemName, amount }) {
 
       const paymentData = {
         method,
-        email,
-        phone,
-        address,
         cardHolder,
         cardNumber,
         cardExpiry,
@@ -1193,7 +1072,9 @@ function addClass(e) {
   const trainer = formData.get('trainer');
   const category = formData.get('category');
   const level = formData.get('level');
+  const time = formData.get('time');
   const capacity = formData.get('capacity');
+  const room = formData.get('room');
   const description = formData.get('description');
 
   // Validation
@@ -1213,8 +1094,16 @@ function addClass(e) {
     showNotification('Level is required', 'error');
     return;
   }
+  if (!auth.validateDateTime(time)) {
+    showNotification('Please select a valid future date and time', 'error');
+    return;
+  }
   if (!auth.validateCapacity(capacity)) {
     showNotification('Capacity must be a number between 1 and 100', 'error');
+    return;
+  }
+  if (!auth.validateRequired(room)) {
+    showNotification('Room/studio is required', 'error');
     return;
   }
 
@@ -1224,10 +1113,10 @@ function addClass(e) {
     level,
     trainerId: parseInt(trainer),
     trainer: 'Coach ' + trainer,
-    time: 'TBD',
+    time: time || '18:00 PM',
     duration: 60,
     capacity: parseInt(capacity),
-    room: 'Main Studio',
+    room,
     description,
     image: '💪',
   };
@@ -1307,7 +1196,7 @@ function initializeRegisterForm() {
     if (result.success) {
       showNotification(result.message, 'success');
       setTimeout(() => {
-        window.location.href = auth.getAppPath('index.html');
+        window.location.href = auth.getAppPath('indexxx.html');
       }, 1500);
     } else {
       showNotification(result.message, 'error');
@@ -1440,8 +1329,7 @@ function initializeQuickLoginModal() {
 
   const demoCredentials = {
     admin: { username: 'admin', password: 'admin123' },
-    manager: { username: 'manager', password: 'Manager123' },
-    trainer: { username: 'coach_omar', password: 'omar123' },
+    trainer: { username: 'coach_maya', password: 'maya123' },
     member: { username: 'john_doe', password: 'john123' },
   };
 
@@ -1488,11 +1376,8 @@ function initializeQuickLoginModal() {
       showNotification(result.message, 'success', 1200);
       initializeAuthHeaderState();
       closeModal();
-      setTimeout(async () => {
-        const resumed = await resumePendingSubscriptionCheckout();
-        if (!resumed) {
-          auth.redirectToDashboard();
-        }
+      setTimeout(() => {
+        auth.redirectToDashboard();
       }, 400);
     } else {
       showNotification(result.message, 'error');
@@ -1502,8 +1387,6 @@ function initializeQuickLoginModal() {
 
 // Validate forms
 function validateForm(e) {
-  if (e.defaultPrevented) return;
-
   const requiredFields = this.querySelectorAll('[required]');
   let isValid = true;
 
