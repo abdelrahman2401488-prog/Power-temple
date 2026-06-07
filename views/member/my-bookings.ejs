@@ -20,22 +20,21 @@
           <div class="stat fade-in"><strong><%= (bookings || []).length %></strong><span>Total</span></div>
         </div>
 
+        <div id="bookingsSection">
         <div class="panel-head" style="margin-bottom: 16px;">
           <div><h3>Upcoming Sessions</h3></div>
         </div>
 
         <% if (upcoming.length > 0) { %>
           <% upcoming.forEach(function(b) { %>
-            <article class="row-card fade-in" style="margin-bottom: 12px;">
+            <article class="row-card fade-in" id="booking-<%= b._id %>" style="margin-bottom: 12px;">
               <div class="row-main">
                 <strong><%= b.className %></strong>
                 <span class="row-meta"><%= b.time || '' %> · <%= b.trainer || '' %> · <%= b.room || '' %></span>
               </div>
               <div style="display: flex; gap: 8px; align-items: center;">
                 <span class="pill success">Confirmed</span>
-                <form action="/member/cancel/<%= b._id %>" method="POST" onsubmit="return confirm('Cancel this booking?')" style="display:inline;">
-                  <button class="btn btn-ghost" type="submit" style="padding: 6px 12px; font-size: 0.85rem; color: var(--danger-color);">Cancel</button>
-                </form>
+                <button class="btn btn-ghost cancel-booking-btn" type="button" data-booking-id="<%= b._id %>" style="padding: 6px 12px; font-size: 0.85rem; color: var(--danger-color);">Cancel</button>
               </div>
             </article>
           <% }) %>
@@ -49,7 +48,7 @@
 
         <% if (past.length > 0) { %>
           <% past.forEach(function(b) { %>
-            <article class="row-card fade-in" style="margin-bottom: 12px;">
+            <article class="row-card fade-in" id="booking-<%= b._id %>" style="margin-bottom: 12px;">
               <div class="row-main">
                 <strong><%= b.className %></strong>
                 <span class="row-meta"><%= b.trainer || '' %></span>
@@ -60,10 +59,45 @@
         <% } else { %>
           <p style="color: var(--text-muted);">No past sessions yet.</p>
         <% } %>
+        </div>
 
         <div id="adminMessage" class="notice hidden" style="margin-top: 20px;"></div>
       </section>
     </main>
   </div>
+  <script>
+    document.querySelectorAll('.cancel-booking-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (!confirm('Cancel this booking?')) return;
+
+        var bookingId = btn.dataset.bookingId;
+        var card = btn.closest('.row-card');
+        btn.disabled = true;
+        btn.textContent = 'Cancelling...';
+
+        fetch('/member/cancel/' + bookingId, {
+          method: 'POST',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        })
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            if (data.status === 'success') {
+              card.style.transition = 'opacity 0.25s ease';
+              card.style.opacity = '0';
+              setTimeout(function () { card.remove(); }, 250);
+            } else {
+              alert(data.message || 'Failed to cancel booking');
+              btn.disabled = false;
+              btn.textContent = 'Cancel';
+            }
+          })
+          .catch(function () {
+            alert('Network error. Please try again.');
+            btn.disabled = false;
+            btn.textContent = 'Cancel';
+          });
+      });
+    });
+  </script>
 </body>
 </html>

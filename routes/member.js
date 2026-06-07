@@ -6,7 +6,7 @@ const { validateMemberInput, validateClassInput } = require('../middleware/valid
 
 // Browse classes is public — no login required
 router.get('/browse-classes', c.getBrowseClasses);
-router.post('/book/:classId', validateClassInput, c.bookClass);
+router.post('/book/:classId', c.bookClass);
 
 // All routes below require member login
 router.use(requireRole('member'));

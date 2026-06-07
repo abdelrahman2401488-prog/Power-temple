@@ -15,17 +15,16 @@
           <div><h2>Class Offers</h2><p>Book your spot in one of our elite training sessions.</p></div>
         </div>
 
+        <div id="classSection">
         <% if (typeof classes !== 'undefined' && classes.length > 0) { %>
-          <div class="class-grid">
+          <div class="class-grid" id="classGrid">
             <% classes.forEach(function(cls) { %>
-              <article class="class-card fade-in">
+              <article class="class-card fade-in" id="class-<%= cls._id %>" data-capacity="<%= cls.capacity %>">
                 <div class="toolbar">
                   <span class="pill success"><%= cls.category %></span>
-                  <% if (cls.booked < cls.capacity) { %>
-                    <span class="pill success"><%= cls.capacity - cls.booked %> spots left</span>
-                  <% } else { %>
-                    <span class="pill danger">Full</span>
-                  <% } %>
+                  <span class="pill <%= cls.booked < cls.capacity ? 'success' : 'danger' %>" id="capacityPill-<%= cls._id %>">
+                    <%= cls.booked < cls.capacity ? (cls.capacity - cls.booked) + ' spots left' : 'Full' %>
+                  </span>
                 </div>
 
                 <% if (cls.image) { %>
@@ -38,7 +37,7 @@
                 <% if (cls.time) { %><p style="color: var(--text-secondary); font-size: 0.9rem;">Time: <%= cls.time %></p><% } %>
                 <p style="color: var(--primary-color); font-weight: 700; margin-top: 6px;">Level: <%= cls.level %></p>
 
-                <div class="inline-actions" style="margin-top: 12px;">
+                <div class="inline-actions" style="margin-top: 12px;" id="bookAction-<%= cls._id %>">
                   <% if (!locals.sessionUser) { %>
                     <a href="/auth/login" class="btn btn-primary" style="flex: 1;">Login to Book</a>
                   <% } else if (sessionUser.role !== 'member') { %>
@@ -60,6 +59,7 @@
             <p>Check back soon — new classes are added regularly.</p>
           </div>
         <% } %>
+        </div>
       </section>
     </main>
   </div>

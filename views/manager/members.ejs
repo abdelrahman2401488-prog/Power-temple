@@ -60,6 +60,7 @@
             <% var searchQ = locals.q || ''; %>
 
             <!-- Members List -->
+            <div id="memberSection">
             <div class="panel-head">
               <div>
                 <h3>Members</h3>
@@ -68,20 +69,21 @@
             </div>
 
             <% if (memberList.length > 0) { %>
+              <div id="memberList">
               <% memberList.forEach(function(m) { %>
                 <%
                   var statusPill = 'success';
                   if (m.membershipStatus === 'suspended' || m.membershipStatus === 'cancelled') statusPill = 'danger';
                   else if (m.membershipStatus === 'frozen') statusPill = 'warning';
                 %>
-                <article class="row-card fade-in" style="margin-bottom: 12px;">
+                <article class="row-card fade-in" id="user-<%= m._id %>" style="margin-bottom: 12px;">
                   <div class="row-main">
                     <strong>👤 <%= m.name %></strong>
                     <span class="row-meta">@<%= m.username %> · <%= m.membershipTier || 'No plan' %> · joined <%= m.joiningDate ? m.joiningDate.toISOString().split('T')[0] : '—' %></span>
                     <span class="row-meta"><%= m.email %></span>
                   </div>
                   <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 10px;">
-                    <span class="pill <%= statusPill %>"><%= m.membershipStatus || 'active' %></span>
+                    <span class="pill <%= statusPill %>" id="statusPill-<%= m._id %>"><%= m.membershipStatus || 'active' %></span>
 
                     <form action="/manager/members/renew/<%= m._id %>" method="POST" style="margin: 0;">
                       <button class="btn btn-secondary" type="submit" style="padding: 6px 12px; font-size: 0.85rem;">Renew</button>
@@ -101,9 +103,11 @@
                   </div>
                 </article>
               <% }) %>
+              </div>
             <% } else { %>
               <div class="empty-state">No members found<%= searchQ ? ' matching "' + searchQ + '"' : '' %>.</div>
             <% } %>
+            </div>
 
           </div>
 

@@ -44,6 +44,7 @@
             </div>
 
             <!-- Trainers from MongoDB -->
+            <div id="trainerSection">
             <div class="panel-head" style="margin-top: 24px;">
               <div>
                 <h3>Your Trainer Team</h3>
@@ -52,8 +53,9 @@
             </div>
 
             <% if (trainers.length > 0) { %>
+              <div id="trainerList">
               <% trainers.forEach(function(t) { %>
-                <article class="row-card fade-in" style="margin-bottom: 12px;">
+                <article class="row-card fade-in" id="user-<%= t._id %>" style="margin-bottom: 12px;">
                   <div class="row-main">
                     <strong><%= t.name %></strong>
                     <span class="row-meta">@<%= t.username %> · <%= t.specialty || 'General Fitness' %> · <%= t.rating || 5.0 %> ★</span>
@@ -66,9 +68,11 @@
                   </div>
                 </article>
               <% }) %>
+              </div>
             <% } else { %>
               <div class="empty-state">No trainers yet. Add one above.</div>
             <% } %>
+            </div>
 
           </div>
 

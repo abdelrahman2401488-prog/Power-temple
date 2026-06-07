@@ -57,8 +57,18 @@ exports.editClass = async (req, res) => {
 };
 
 exports.deleteClass = async (req, res) => {
-  await GymClass.findByIdAndDelete(req.params.id);
-  res.redirect('/admin/classes');
+  try {
+    await GymClass.findByIdAndDelete(req.params.id);
+    if (req.xhr) {
+      return res.json({ status: 'success', message: 'Class deleted successfully!' });
+    }
+    res.redirect('/admin/classes');
+  } catch (err) {
+    if (req.xhr) {
+      return res.status(500).json({ status: 'error', message: 'Failed to delete class' });
+    }
+    res.redirect('/admin/classes');
+  }
 };
 
 const MembershipPlan = require('../models/MembershipPlan');

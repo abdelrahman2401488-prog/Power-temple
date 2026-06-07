@@ -157,9 +157,16 @@ exports.cancelBooking = async (req, res, next) => {
     await Booking.findByIdAndUpdate(booking._id, { status: 'cancelled' });
     await GymClass.findByIdAndUpdate(booking.classId, { $inc: { booked: -1 } });
 
+    if (req.xhr) {
+      return res.json({ status: 'success', message: 'Booking cancelled successfully!' });
+    }
+
     req.session.flash = 'Booking cancelled successfully!';
     res.redirect('/member/my-bookings');
   } catch (err) {
+    if (req.xhr) {
+      return res.status(err.statusCode || 500).json({ status: 'error', message: err.message || 'Failed to cancel booking' });
+    }
     req.session.flash = err.message || 'Failed to cancel booking';
     res.redirect('/member/my-bookings');
   }

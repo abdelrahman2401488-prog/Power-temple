@@ -58,7 +58,7 @@
 
         <div id="userList">
           <% users.forEach(function(u) { %>
-            <article class="row-card fade-in" data-user-name="<%= u.name.toLowerCase() %>" data-user-email="<%= u.email.toLowerCase() %>" data-user-role="<%= u.role %>" style="margin-bottom: 12px;">
+            <article class="row-card fade-in" id="user-<%= u._id %>" data-user-name="<%= u.name.toLowerCase() %>" data-user-email="<%= u.email.toLowerCase() %>" data-user-role="<%= u.role %>" style="margin-bottom: 12px;">
               <div class="row-main">
                 <strong>👤 <%= u.name %></strong>
                 <span class="row-meta"><%= u.email %> · @<%= u.username %></span>

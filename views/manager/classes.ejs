@@ -68,16 +68,18 @@
             </div>
 
             <!-- Classes list -->
+            <div id="classSection">
             <div class="panel-head" style="margin-top: 24px;">
               <div><h3>Scheduled Classes</h3><p><%= classes.length %> class<%= classes.length !== 1 ? 'es' : '' %> in the system</p></div>
             </div>
 
             <% if (classes.length > 0) { %>
+              <div id="managerClassList">
               <% classes.forEach(function(cls) { %>
-                <article class="class-card fade-in" style="margin-bottom: 16px;">
+                <article class="class-card fade-in" id="class-<%= cls._id %>" style="margin-bottom: 16px;">
                   <div class="toolbar">
                     <span class="pill success"><%= cls.category %></span>
-                    <span class="pill success"><%= cls.booked %>/<%= cls.capacity %></span>
+                    <span class="pill success" id="capacityPill-<%= cls._id %>"><%= cls.booked %>/<%= cls.capacity %></span>
                   </div>
                   <h3><%= cls.name %></h3>
                   <p><%= cls.description %></p>
@@ -89,9 +91,11 @@
                   </div>
                 </article>
               <% }) %>
+              </div>
             <% } else { %>
               <div class="empty-state">No classes yet. Create one above.</div>
             <% } %>
+            </div>
           </div>
 
           <!-- Right: Edit Trainer Info -->
