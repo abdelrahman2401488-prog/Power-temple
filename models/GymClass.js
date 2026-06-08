@@ -13,6 +13,10 @@ const gymClassSchema = new mongoose.Schema({
   room: { type: String, default: 'Studio A' },
   description: { type: String },
   image: { type: String },
+  // Uploaded photo bytes live in MongoDB (Atlas) so every device/deployment
+  // sees the same picture — local disk storage doesn't travel with the DB.
+  imageData: { type: Buffer },
+  imageType: { type: String },
   badges: [String],
 }, { timestamps: true });
 

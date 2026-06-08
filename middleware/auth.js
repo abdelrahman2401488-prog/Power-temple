@@ -1,7 +1,5 @@
 const AppError = require('../utils/AppError');
 
-// Treat XHR and REST API (/api/*) requests as JSON clients rather than
-// browser navigations, so they receive JSON errors instead of redirects.
 const wantsJson = (req) => req.xhr || req.originalUrl.startsWith('/api');
 
 function requireLogin(req, res, next) {

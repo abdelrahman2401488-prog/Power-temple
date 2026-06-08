@@ -6,6 +6,7 @@ router.get('/', c.getIndex);
 router.get('/services', c.getServices);
 router.get('/memberships', c.getMemberships);
 router.get('/shop', c.getShop);
+router.get('/uploads/class/:id', c.getClassImage);
 
 // Catch old .html paths from mock JS redirects
 router.get('/index.html', (req, res) => res.redirect('/'));

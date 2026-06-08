@@ -37,9 +37,14 @@ exports.getClasses = async (req, res) => {
 
 exports.postClass = async (req, res) => {
   const { name, trainer, category, level, capacity, description, time, duration } = req.body;
-  const image = req.file ? '/images/classes/' + req.file.filename : '';
   try {
-    await GymClass.create({ name, trainer, category, level, capacity: Number(capacity), description, image, time, duration: Number(duration) || 60 });
+    const gymClass = await GymClass.create({ name, trainer, category, level, capacity: Number(capacity), description, time, duration: Number(duration) || 60 });
+    if (req.file) {
+      gymClass.imageData = req.file.buffer;
+      gymClass.imageType = req.file.mimetype;
+      gymClass.image = '/uploads/class/' + gymClass._id;
+      await gymClass.save();
+    }
     req.session.flash = 'Class published successfully!';
   } catch (err) {
     req.session.flash = 'Error creating class: ' + err.message;
@@ -50,7 +55,11 @@ exports.postClass = async (req, res) => {
 exports.editClass = async (req, res) => {
   const { name, trainer, category, level, capacity, description, time, duration } = req.body;
   const update = { name, trainer, category, level, capacity: Number(capacity), description, time, duration: Number(duration) || 60 };
-  if (req.file) update.image = '/images/classes/' + req.file.filename;
+  if (req.file) {
+    update.imageData = req.file.buffer;
+    update.imageType = req.file.mimetype;
+    update.image = '/uploads/class/' + req.params.id;
+  }
   try {
     await GymClass.findByIdAndUpdate(req.params.id, update);
     req.session.flash = 'Class updated successfully!';
