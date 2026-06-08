@@ -5,6 +5,8 @@ const User = require('../models/User');
 const PTRequest = require('../models/PersonalTrainingRequest');
 const Order = require('../models/Order');
 const AppError = require('../utils/AppError');
+const QRCode = require('qrcode');
+const crypto = require('crypto');
 
 exports.getMembership = async (req, res, next) => {
   try {
@@ -260,9 +262,37 @@ exports.getMyOrders = async (req, res) => {
   res.render('member/my-orders', { title: 'My Orders | Power Temple', orders });
 };
 
-exports.getProfile = (req, res) => {
+// Generate a unique member code (used as the payload of the member's QR code).
+async function ensureMemberCode(user) {
+  if (user.memberCode) return user.memberCode;
+  // Retry on the rare chance of a collision with the unique index.
+  for (let i = 0; i < 5; i++) {
+    user.memberCode = 'PT-' + crypto.randomBytes(5).toString('hex').toUpperCase();
+    try {
+      await user.save();
+      return user.memberCode;
+    } catch (err) {
+      if (err.code === 11000) continue; // duplicate, try another
+      throw err;
+    }
+  }
+  throw new Error('Could not generate a unique member code');
+}
+
+exports.getProfile = async (req, res) => {
   try {
-    res.render('member/profile', { title: 'My Profile | Power Temple' });
+    const user = await User.findById(req.session.user.id);
+    if (!user) return res.redirect('/auth/login');
+
+    const memberCode = await ensureMemberCode(user);
+    // Encode the unique code as a QR image (data URL) rendered on the page.
+    const qrCode = await QRCode.toDataURL(memberCode, { width: 240, margin: 1 });
+
+    res.render('member/profile', {
+      title: 'My Profile | Power Temple',
+      memberCode,
+      qrCode,
+    });
   } catch (err) {
     res.status(500).render('error', {
       title: 'Error 500',

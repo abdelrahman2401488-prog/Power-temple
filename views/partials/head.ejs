@@ -4,6 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title><%= title %></title>
+  <!-- Apply saved light/dark theme before paint to avoid a flash -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('powertemple_theme');
+        if (t === 'light' || t === 'dark') {
+          document.documentElement.setAttribute('data-theme', t);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/variable.css" />
@@ -12,6 +23,7 @@
   <link rel="stylesheet" href="/css/dashboard.css" />
   <link rel="stylesheet" href="/css/responsive.css" />
   <link rel="stylesheet" href="/css/pro-theme.css" />
+  <link rel="stylesheet" href="/css/light-theme.css" />
   <%- typeof extraCss !== 'undefined' ? extraCss : '' %>
   <% if (locals.sessionUser) { %>
   <script>
@@ -30,5 +42,6 @@
   <script src="/js/api-mock.js" defer></script>
   <script src="/js/auth.js" defer></script>
   <script src="/js/main.js" defer></script>
+  <script src="/js/theme.js" defer></script>
   <%- typeof extraJs !== 'undefined' ? extraJs : '' %>
 </head>

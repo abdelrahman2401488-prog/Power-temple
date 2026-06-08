@@ -4,6 +4,7 @@
 const mongoose = require('mongoose');
 
 let io = null;
+let warnedNoReplicaSet = false;
 
 function mapOperation(operationType) {
   if (operationType === 'insert') return 'created';
@@ -14,7 +15,20 @@ function mapOperation(operationType) {
 function watchCollection(name, onChange) {
   const stream = mongoose.connection.collection(name).watch([], { fullDocument: 'updateLookup' });
   stream.on('change', onChange);
-  stream.on('error', (err) => console.error(`Live sync watcher error on "${name}":`, err.message));
+  stream.on('error', (err) => {
+    // Change streams require a replica set. A standalone MongoDB (e.g. the
+    // local fallback) can't support them — degrade quietly instead of spamming
+    // one error per collection. The app keeps working without real-time sync.
+    if (/replica set|changeStream/i.test(err.message)) {
+      if (!warnedNoReplicaSet) {
+        warnedNoReplicaSet = true;
+        console.warn('Live sync disabled: connected MongoDB is not a replica set, so real-time updates are off (the app works normally otherwise).');
+      }
+      stream.close().catch(() => {});
+      return;
+    }
+    console.error(`Live sync watcher error on "${name}":`, err.message);
+  });
   return stream;
 }
 

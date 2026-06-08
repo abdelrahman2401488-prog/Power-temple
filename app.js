@@ -19,13 +19,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Session
+// Session — stored in whichever database the app actually connects to
+// (Atlas, or the local MongoDB fallback). See config/db.js.
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI,
+    clientPromise: require('./config/db').clientPromise,
     touchAfter: 24 * 3600,
   }).on('error', () => {}),
   cookie: { maxAge: 1000 * 60 * 60 * 24 },
@@ -46,6 +47,9 @@ app.use('/admin', require('./routes/admin'));
 app.use('/manager', require('./routes/manager'));
 app.use('/member', require('./routes/member'));
 app.use('/trainer', require('./routes/trainer'));
+
+// REST API (JSON CRUD)
+app.use('/api', require('./routes/api'));
 
 // 404 handler
 app.use((req, res, next) => {

@@ -89,3 +89,42 @@
     --bg-tertiary: #16213e;
   }
 }
+
+/* =================================
+   LIGHT THEME
+   Activated by data-theme="light" on <html> (toggled in /js/theme.js).
+   Uses a higher-specificity selector so it overrides the defaults above.
+   ================================= */
+:root[data-theme="light"] {
+  /* === BACKGROUNDS === */
+  --bg-primary: #f4f6fb;           /* App background - soft light gray */
+  --bg-secondary: #ffffff;         /* Panels */
+  --bg-tertiary: #eef1f7;          /* Subtle sections */
+  --bg-light: #ffffff;             /* Cards */
+
+  /* === TEXT COLORS === */
+  --text-primary: #11121a;         /* Main text - near black */
+  --text-secondary: #3a3c4a;       /* Secondary text */
+  --text-muted: #6b6d7c;           /* Muted text */
+  --text-accent: #0077a3;          /* Accent text - darker cyan for contrast */
+
+  /* === GLASS MORPHISM (dark-tinted on light bg) === */
+  --glass: rgba(17, 18, 26, 0.04);
+  --glass-strong: rgba(17, 18, 26, 0.07);
+  --shadow-sm: 0 4px 15px rgba(17, 18, 26, 0.08);
+  --shadow-md: 0 8px 32px rgba(17, 18, 26, 0.12);
+  --shadow-lg: 0 20px 60px rgba(17, 18, 26, 0.15);
+  --shadow-neon: 0 8px 32px rgba(0, 119, 163, 0.2);
+
+  /* === BORDERS === */
+  --border-color: rgba(17, 18, 26, 0.12);
+}
+
+/* Some pages hardcode a near-black background (for the video hero) which would
+   ignore the theme. In light mode, make them follow the themed background. */
+:root[data-theme="light"] html,
+:root[data-theme="light"] body,
+:root[data-theme="light"] body[data-page="landing"],
+:root[data-theme="light"] body[data-page="services"] {
+  background: var(--bg-primary);
+}

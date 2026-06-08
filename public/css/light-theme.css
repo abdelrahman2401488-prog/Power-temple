@@ -1,0 +1,106 @@
+/* =================================================================
+   LIGHT THEME OVERRIDES
+   Loaded LAST and only active when <html data-theme="light">.
+   The base styles are dark-first with many hardcoded colors (white
+   text, dark glass panels, dark headers). These rules make content
+   surfaces light and every piece of text readable in light mode,
+   without touching the dark theme.
+   ================================================================= */
+
+/* ---------- Header ----------
+   The video-hero pages (landing, concept, services, memberships, admin) keep
+   their TRANSPARENT header so the video shows through, with white nav text
+   over the dark video — that already reads well in light mode. We only lighten
+   the header on the regular "content" pages (shop, member, manager, trainer,
+   login), where it is a solid bar. The :not() chain excludes the video pages. */
+:root[data-theme="light"] body:not([data-page="landing"]):not([data-page="concept"]):not([data-page="services"]):not([data-page="memberships"]):not([data-page="admin"]) .site-header {
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid rgba(17, 18, 26, 0.1);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+/* Active nav link was hardcoded near-white -> readable on the light bar */
+:root[data-theme="light"] body:not([data-page="landing"]):not([data-page="concept"]):not([data-page="services"]):not([data-page="memberships"]):not([data-page="admin"]) .nav a.active {
+  color: var(--text-primary);
+}
+
+/* Header round icon buttons (content pages only) */
+:root[data-theme="light"] body:not([data-page="landing"]):not([data-page="concept"]):not([data-page="services"]):not([data-page="memberships"]):not([data-page="admin"]) .header-icon-link {
+  border-color: rgba(17, 18, 26, 0.15);
+  background: rgba(17, 18, 26, 0.04);
+  color: var(--text-primary);
+}
+
+/* ---------- Content surfaces: dark/glass cards -> light ---------- */
+:root[data-theme="light"] .product-card,
+:root[data-theme="light"] .classes-slide-card,
+:root[data-theme="light"] .supplement-item,
+:root[data-theme="light"] .membership-tile,
+:root[data-theme="light"] .filter-btn,
+:root[data-theme="light"] .newsletter-card,
+:root[data-theme="light"] .quick-role-pill {
+  background: #ffffff;
+  border: 1px solid rgba(17, 18, 26, 0.1);
+}
+
+:root[data-theme="light"] .dashboard-banner {
+  background: linear-gradient(150deg, #eef3fb 0%, #e7edf7 100%);
+  border: 1px solid rgba(17, 18, 26, 0.1);
+}
+
+/* Concept "story" band was near-black */
+:root[data-theme="light"] .hero-story {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+/* ---------- Hardcoded light text on light surfaces -> dark ---------- */
+:root[data-theme="light"] .services-title,
+:root[data-theme="light"] .services-row,
+:root[data-theme="light"] .services-row-body p,
+:root[data-theme="light"] .product-name,
+:root[data-theme="light"] .product-price,
+:root[data-theme="light"] .product-price span,
+:root[data-theme="light"] .shop-section-title,
+:root[data-theme="light"] .classes-carousel-title,
+:root[data-theme="light"] .newsletter-copy h2,
+:root[data-theme="light"] .membership-tile-body strong,
+:root[data-theme="light"] .cart-toast {
+  color: var(--text-primary);
+}
+
+/* Services table had near-white borders */
+:root[data-theme="light"] .services-table,
+:root[data-theme="light"] .services-row,
+:root[data-theme="light"] .services-row-body {
+  border-color: rgba(17, 18, 26, 0.14);
+}
+
+/* ---------- Inputs / textareas / selects -> light ---------- */
+:root[data-theme="light"] input,
+:root[data-theme="light"] textarea,
+:root[data-theme="light"] select,
+:root[data-theme="light"] .newsletter-form input,
+:root[data-theme="light"] .quick-login-form input {
+  background: #ffffff;
+  color: var(--text-primary);
+  border-color: rgba(17, 18, 26, 0.18);
+}
+
+/* ---------- Toast panel ---------- */
+:root[data-theme="light"] .cart-toast {
+  border: 1px solid rgba(17, 18, 26, 0.1);
+}
+
+/* ---------- Buttons: grey "secondary" buttons had light text ---------- */
+:root[data-theme="light"] .btn-secondary {
+  background: #ffffff;
+  color: var(--text-primary);
+  border-color: rgba(17, 18, 26, 0.18);
+}
+
+:root[data-theme="light"] .btn-secondary:hover:not(:disabled) {
+  background: #f0f3f9;
+  border-color: rgba(17, 18, 26, 0.28);
+}

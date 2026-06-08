@@ -1,0 +1,6 @@
+# Local self-signed HTTPS certificates (generated at startup)
+certs/
+
+# Local MongoDB data + logs (managed replica set)
+.db-data/
+mongod-test*.log
