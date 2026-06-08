@@ -15,6 +15,8 @@ router.get('/classes', c.getClasses);
 router.post('/classes', upload.single('image'), c.postClass);
 router.post('/classes/edit/:id', upload.single('image'), c.editClass);
 router.post('/classes/delete/:id', c.deleteClass);
+router.post('/class-requests/approve/:id', c.approveClassDeletion);
+router.post('/class-requests/reject/:id', c.rejectClassDeletion);
 router.get('/memberships', c.getMemberships);
 router.post('/memberships/plan/create', c.postPlan);
 router.post('/memberships/plan/update/:id', c.updatePlan);

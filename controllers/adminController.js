@@ -1,6 +1,7 @@
 const GymClass = require('../models/GymClass');
 const User = require('../models/User');
 const Product = require('../models/Product');
+const ClassDeletionRequest = require('../models/ClassDeletionRequest');
 
 exports.getDashboard = (req, res) => res.render('admin/dashboard', { title: 'Admin Dashboard | Power Temple' });
 exports.getTrainers = async (req, res) => {
@@ -29,7 +30,9 @@ exports.deleteTrainer = async (req, res) => {
 exports.getClasses = async (req, res) => {
   const classes = await GymClass.find().sort({ createdAt: -1 });
   const trainers = await User.find({ role: 'trainer' }, 'name username');
-  res.render('admin/classes', { title: 'Manage Classes | Power Temple', classes, trainers });
+  // Pending class-deletion requests raised by managers, awaiting admin action.
+  const deletionRequests = await ClassDeletionRequest.find({ status: 'pending' }).sort({ createdAt: -1 });
+  res.render('admin/classes', { title: 'Manage Classes | Power Temple', classes, trainers, deletionRequests });
 };
 
 exports.postClass = async (req, res) => {
@@ -70,6 +73,23 @@ exports.deleteClass = async (req, res) => {
     }
     res.redirect('/admin/classes');
   }
+};
+
+// Approve a manager's class-deletion request: delete the class and mark the request approved.
+exports.approveClassDeletion = async (req, res) => {
+  const request = await ClassDeletionRequest.findById(req.params.id);
+  if (request && request.status === 'pending') {
+    await GymClass.findByIdAndDelete(request.classId);
+    request.status = 'approved';
+    await request.save();
+  }
+  res.redirect('/admin/classes');
+};
+
+// Reject a manager's class-deletion request: keep the class, mark request rejected.
+exports.rejectClassDeletion = async (req, res) => {
+  await ClassDeletionRequest.findByIdAndUpdate(req.params.id, { status: 'rejected' });
+  res.redirect('/admin/classes');
 };
 
 const MembershipPlan = require('../models/MembershipPlan');

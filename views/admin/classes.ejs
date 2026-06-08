@@ -182,6 +182,33 @@
           </div>
 
           <aside class="panel">
+            <h3 style="margin-bottom: 16px;">Deletion Requests
+              <% if (typeof deletionRequests !== 'undefined' && deletionRequests.length > 0) { %>
+                <span class="pill warning" style="margin-left: 6px;"><%= deletionRequests.length %></span>
+              <% } %>
+            </h3>
+            <% if (typeof deletionRequests !== 'undefined' && deletionRequests.length > 0) { %>
+              <% deletionRequests.forEach(function(reqItem) { %>
+                <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                  <strong style="display:block;"><%= reqItem.className %></strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 4px 0;">Requested by <%= reqItem.requestedByName || 'a manager' %></p>
+                  <% if (reqItem.reason) { %>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin: 4px 0;">"<%= reqItem.reason %>"</p>
+                  <% } %>
+                  <div style="display: flex; gap: 8px; margin-top: 8px;">
+                    <form action="/admin/class-requests/approve/<%= reqItem._id %>" method="POST" style="flex: 1;" onsubmit="return confirm('Delete this class? This cannot be undone.')">
+                      <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 0.8rem;">Approve &amp; Delete</button>
+                    </form>
+                    <form action="/admin/class-requests/reject/<%= reqItem._id %>" method="POST" style="flex: 1;">
+                      <button type="submit" class="btn btn-ghost" style="width: 100%; font-size: 0.8rem;">Reject</button>
+                    </form>
+                  </div>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">No pending deletion requests.</p>
+            <% } %>
+
             <h3 style="margin-bottom: 20px;">Class Stats</h3>
             <div class="stat-grid" style="gap: 12px; margin-bottom: 24px;">
               <div class="stat"><strong><%= typeof classes !== 'undefined' ? classes.length : 0 %></strong><span>Total Classes</span></div>
