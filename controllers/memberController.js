@@ -192,14 +192,14 @@ exports.getPersonalTraining = async (req, res, next) => {
 
 exports.requestPersonalTraining = async (req, res, next) => {
   try {
-    const { trainerName, trainerId, sessionType, date, time, notes } = req.body;
+    const { trainerId, sessionType, date, time, notes } = req.body;
 
     // Validate inputs
-    if (!trainerName || !trainerId || !sessionType || !date || !time) {
+    if (!trainerId || !sessionType || !date || !time) {
       throw new AppError('All fields are required', 400);
     }
 
-    // Verify trainer exists
+    // Verify trainer exists (and get the canonical name from the database)
     const trainer = await User.findById(trainerId);
     if (!trainer || trainer.role !== 'trainer') {
       throw new AppError('Invalid trainer selected', 400);
@@ -214,7 +214,7 @@ exports.requestPersonalTraining = async (req, res, next) => {
       memberId: req.session.user.id,
       memberName: req.session.user.name,
       trainerId,
-      trainerName,
+      trainerName: trainer.name,
       sessionType,
       date,
       time,

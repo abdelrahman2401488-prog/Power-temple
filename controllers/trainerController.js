@@ -7,7 +7,10 @@ exports.getAttendance = (req, res) => res.render('trainer/attendance',    { titl
 
 exports.getMembers = async (req, res) => {
   const trainerName = req.session.user.name;
-  const requests = await PTRequest.find({ trainerName }).sort({ createdAt: -1 });
+  // Match by trainerId (reliable); fall back to name for any older records.
+  const requests = await PTRequest.find({
+    $or: [{ trainerId: req.session.user.id }, { trainerName }],
+  }).sort({ createdAt: -1 });
   const classes   = await GymClass.find({ trainer: trainerName });
   const classIds  = classes.map((c) => c._id);
   const bookings  = await Booking.find({ classId: { $in: classIds }, status: 'confirmed' });

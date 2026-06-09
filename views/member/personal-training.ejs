@@ -20,27 +20,14 @@
           <!-- Request Form -->
           <div class="form-card fade-in">
             <h3 style="margin-bottom: 16px;">Request a Session</h3>
-            <%
-              var staticTrainers = [
-                { name: 'Coach Omar',   specialty: 'Strength & Power' },
-                { name: 'Coach Yasmine', specialty: 'Cardio & Combat' },
-                { name: 'Coach Zeyad',  specialty: 'Mobility & Recovery' },
-              ];
-              var dbTrainerNames = trainers.map(function(t){ return t.name.toLowerCase(); });
-              var allTrainers = staticTrainers.concat(
-                trainers.map(function(t){ return { name: t.name, specialty: t.specialty || 'General Fitness' }; })
-              ).filter(function(t, i, arr){
-                return arr.findIndex(function(x){ return x.name === t.name; }) === i;
-              });
-            %>
-            <% if (allTrainers.length === 0) { %>
+            <% if (trainers.length === 0) { %>
               <p style="color: var(--text-muted);">No trainers available at the moment.</p>
             <% } else { %>
               <form action="/member/personal-training/request" method="POST">
                 <label>Trainer
-                  <select name="trainerName" required>
-                    <% allTrainers.forEach(function(t) { %>
-                      <option value="<%= t.name %>"><%= t.name %><%= t.specialty ? ' — ' + t.specialty : '' %></option>
+                  <select name="trainerId" required>
+                    <% trainers.forEach(function(t) { %>
+                      <option value="<%= t._id %>"><%= t.name %><%= t.specialty ? ' — ' + t.specialty : '' %></option>
                     <% }) %>
                   </select>
                 </label>
@@ -70,7 +57,7 @@
           <aside class="panel fade-in">
             <h3 style="margin-bottom: 16px;">Our Trainers</h3>
             <div style="display: grid; gap: 12px;">
-              <% allTrainers.forEach(function(t) { %>
+              <% trainers.forEach(function(t) { %>
                 <article style="padding: 12px; background: var(--glass); border-radius: 8px;">
                   <strong>👤 <%= t.name %></strong>
                   <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">
